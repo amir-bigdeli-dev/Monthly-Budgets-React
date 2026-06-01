@@ -1,4 +1,6 @@
 import Header from "./Header.jsx";
+import Charts from "./Charts.jsx";
+
 const App = () => {
     const stat = {
         total:100000,
@@ -9,6 +11,7 @@ const App = () => {
   return (
     <div className="App">
       <Header stat={stat}  />
+        <Charts/>
     </div>
   );
 };
