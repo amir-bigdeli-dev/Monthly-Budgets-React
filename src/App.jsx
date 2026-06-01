@@ -1,10 +1,8 @@
+import Header from "./Header.jsx";
 const App = () => {
   return (
     <>
       <Header />
-      <Charts />
-      <Budgets />
-      <Reports />
     </>
   );
 };
