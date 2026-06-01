@@ -1,10 +1,6 @@
-.inter-Inter {
-            font-family: "Inter", sans-serif;
-            font-optical-sizing: auto;
-            font-weight:700;
-            font-style: normal;
-        }
-
+body{
+    font-family: 'DM Sans', sans-serif;
+}
 *{
     padding: 0;
     margin: 0;
@@ -26,7 +22,6 @@
     flex-direction: column;
     justify-content: center;
     gap: 0.6rem;
-    font-family: "Inter", sans-serif;
 }
 .Header__total-money{
     background: linear-gradient(-45deg,#ffd219, #ffdd00, #ffb700);
@@ -35,6 +30,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
     width: 100%;
     padding: 0.7rem;
@@ -80,8 +76,8 @@
     font-weight:400;
 }
 .Header__stat-label--incomes, .Header__stat-label--expenses{
-    flex: 3;
+    flex: 3 1 0;
 }
 .Header__stat-label--monBudget{
-    flex: 5;
+    flex: 5 1 0;
 }
