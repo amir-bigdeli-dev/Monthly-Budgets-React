@@ -51,19 +51,21 @@
     align-items: center;
     justify-content: space-around;
     gap: 0.5rem;
-    padding: 0.5rem;
+    padding: 0.6rem;
     border-radius: 0.5rem;
     border: 1px solid rgb(187 187 187 / 0.65);
 }
 .Header__stat-label--incomes{
-    background: linear-gradient(45deg, #27fc00, #1fc702, #c0f6b6);
+    background: #f3fce5;
+    box-shadow: inset 3px 3px 8px #b1e85e, inset -3px -3px 8px #b1e85e;
 }
 .Header__stat-label--monBudget{
     background: linear-gradient(-45deg, #ffdd00, #ffc400, #ffdd00);
     box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
 }
 .Header__stat-label--expenses{
-    background: linear-gradient(135deg, #ffc49e, #fd7373, #ffc49e);
+    background: #f5d8d8;
+    box-shadow: inset 3px 3px 8px #ea8686, inset -3px -3px 8px #ea8686;
 }
 .Header__stat-label--icon{
     font-size: small;
