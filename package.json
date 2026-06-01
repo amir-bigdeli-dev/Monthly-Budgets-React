@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,scss,html\""
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,scss,html}\""
   },
   "dependencies": {
     "react": "^19.2.6",
