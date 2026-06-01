@@ -1,3 +1,10 @@
+.inter-Inter {
+            font-family: "Inter", sans-serif;
+            font-optical-sizing: auto;
+            font-weight:600;
+            font-style: normal;
+        }
+
 *{
     padding: 0;
     margin: 0;
@@ -19,6 +26,7 @@
     flex-direction: column;
     justify-content: center;
     gap: 0.6rem;
+    font-family: "Inter", sans-serif;
 }
 .Header__total-money{
     background: linear-gradient(-45deg,#ffd219, #ffdd00, #ffb700);
