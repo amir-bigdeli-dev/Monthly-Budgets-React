@@ -1,0 +1,67 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.App{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.4rem;
+}
+.Header{
+    width: 98%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.6rem;
+}
+.Header__total-money{
+    background: linear-gradient(-45deg,#ffd219, #ffdd00, #ffb700);
+    box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
+    border-radius: 0.6rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.7rem;
+}
+.Header__total-money-title{
+    font-size: small;
+    font-weight: 400;
+}
+.Header__total-money-amount{
+    font-size: large;
+}
+.Header__stat{
+    width: 100%;
+    display: flex;
+    gap: 0.5rem;
+    font-size: smaller;
+    text-align: center;
+}
+.Header__stat-label{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 2px solid black;
+}
+.Header__stat-label--icon{
+    font-size: small;
+    font-weight:400;
+}
+.Header__stat-label--incomes, .Header__stat-label--expenses{
+    flex: 3;
+}
+.Header__stat-label--monBudget{
+    flex: 5;
+}
