@@ -67,18 +67,20 @@ body {
 .Header__stat-label--incomes {
   background: #f3fce5;
   box-shadow:
-    inset 3px 3px 8px #b1e85e,
-    inset -3px -3px 8px #b1e85e;
+    inset 3px 3px 8px #d3f89b,
+    inset -3px -3px 8px #d3f89b;
+  border: 1px solid rgb(177 232 94 / 0.65);
 }
 .Header__stat-label--monBudget {
   background: linear-gradient(-45deg, #ffdd00, #ffc400, #ffdd00);
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
 }
 .Header__stat-label--expenses {
+  border:1px solid #f5a9a9;
   background: #f5d8d8;
   box-shadow:
-    inset 3px 3px 8px #ea8686,
-    inset -3px -3px 8px #ea8686;
+    inset 3px 3px 8px #fcbebe,
+    inset -3px -3px 8px #fcbebe;
 }
 .Header__stat-label--icon {
   font-size: small;
@@ -130,4 +132,10 @@ body {
 }
 .charts__type-label--incomes{
   background: #f3fce5;
+}
+.charts__type-label--money{
+  background: linear-gradient(-45deg, #ffdd00, #ffc400, #ffdd00);
+}
+.charts__type-label--expenses{
+  background: #f5d8d8;
 }
