@@ -13,6 +13,7 @@ export default function Charts() {
           </li>
         ))}
       </ul>
+        <div className="charts__chart"></div>
     </div>
   );
 }
