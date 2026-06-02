@@ -1,4 +1,4 @@
-const types = ["Incomes", "Expenses", "Money"];
+const types = ["Incomes","Money","Expenses"];
 
 export default function Charts() {
   return (
