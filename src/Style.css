@@ -69,10 +69,7 @@ body {
   border: var(--section-border);
 }
 .Header__stat-label--incomes {
-  background: #f3fce5;
-  box-shadow:
-    inset 3px 3px 8px #d3f89b,
-    inset -3px -3px 8px #d3f89b;
+  background: #eafac3;
   border:var(--incomes-border-color);
 }
 .Header__stat-label--monBudget {
