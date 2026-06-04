@@ -83,6 +83,8 @@ body {
 .Header__stat-label-title{
   display: flex;
     flex-direction: row;
+   align-items: center;
+  justify-content: center;
   font-size: small;
   font-weight: 400;
 }
@@ -91,6 +93,10 @@ body {
     width: 16px;
     display: inline;
   margin-left: 0.25rem;
+}
+.Header__stat-label-icon-money{
+  width:20px;
+  height: 20px;
 }
 .Header__stat-label--incomes,
 .Header__stat-label--expenses {

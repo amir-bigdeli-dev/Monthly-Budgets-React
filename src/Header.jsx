@@ -1,5 +1,7 @@
 import formatPrice from "./priceFormater.jsx";
 import downArrow from "./assets/icons/down-arrow-1-svgrepo-com.svg";
+import upArrow from "./assets/icons/down-arrow-1-svgrepo-com (1).svg";
+import moneyIcon from "./assets/icons/icons8-money-25.png"
 
 export default function Header({ stat }) {
   return (
@@ -14,11 +16,11 @@ export default function Header({ stat }) {
           {formatPrice(stat.income)}
         </div>
         <div className="Header__stat-label Header__stat-label--monBudget">
-          <h3 className="Header__stat-label-title">Monthly Budget</h3>
+          <h3 className="Header__stat-label-title">Monthly Budget <img className="Header__stat-label-icon  Header__stat-label-icon-money" src={moneyIcon} alt="down arrow"/></h3>
           {formatPrice(stat.monBudget)}
         </div>
         <div className="Header__stat-label Header__stat-label--expenses">
-          <h3 className="Header__stat-label-title">Expense</h3>
+          <h3 className="Header__stat-label-title">Expense <img className="Header__stat-label-icon" src={upArrow} alt="down arrow"/></h3>
           {formatPrice(stat.expenses)}
         </div>
       </div>
