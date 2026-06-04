@@ -80,9 +80,17 @@ body {
   border:var(--expenses-border-color);
   background: #f5d8d8;
 }
-.Header__stat-label--icon {
+.Header__stat-label-title{
+  display: flex;
+    flex-direction: row;
   font-size: small;
   font-weight: 400;
+}
+.Header__stat-label-icon{
+    height: 16px;
+    width: 16px;
+    display: inline;
+  margin-left: 0.25rem;
 }
 .Header__stat-label--incomes,
 .Header__stat-label--expenses {
