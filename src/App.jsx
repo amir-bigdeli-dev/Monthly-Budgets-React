@@ -1,5 +1,6 @@
 import Header from "./Header.jsx";
 import Charts from "./Charts.jsx";
+import Budgets from "./Budgets.jsx"
 
 const App = () => {
   const stat = {
@@ -11,7 +12,8 @@ const App = () => {
   return (
     <div className="App">
       <Header stat={stat} />
-      <Charts />
+      <Charts/>
+      <Budgets/>
     </div>
   );
 };

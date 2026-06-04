@@ -1,9 +1,11 @@
 :root {
   --sections-border-radius: 0.6rem;
-  --boxShadow:3px 3px 10px rgb(98 98 98 / 0.2);
+  --boxShadow:3px 3px 10px rgb(197 197 197 / 0.2);
   --section-border:1px solid rgb(187 187 187 / 0.65);
   --incomes-border-color:1px solid rgb(163 220 77 / 0.65);
   --expenses-border-color:1px solid #f5a9a9;
+  --padding-parent:0.8rem;
+  --parts-bg: #fffdf8;
 }
 body {
   font-family: "DM Sans", sans-serif;
@@ -114,12 +116,12 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0.8rem;
+  padding: var(--padding-parent);
   gap: 0.8rem;
   border: 1px solid rgb(203 203 203);
   box-shadow:var(--boxShadow);
   border-radius: .7rem;
-  background: #fffdf3;
+  background: var(--parts-bg);
 }
 .charts__type {
   display: flex;
@@ -153,10 +155,46 @@ body {
   border:var(--incomes-border-color);
 }
 .charts__type-label--money-active{
-  background: #fffff3;
+  background: #fcfbda;
   border: 1px solid rgb(255 210 25);
 }
 .charts__type-label--expenses-active{
   border:var(--expenses-border-color);
   background: #fff7f7;
+}
+
+/*Budgets*/
+.budgets{
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    border: var(--section-border);
+    box-shadow:var(--boxShadow);
+    background: var(--parts-bg);
+  border:var(--section-border);
+  border-radius: var(--sections-border-radius);
+}
+.budgets__list{
+  position: relative;
+  flex:1;
+  border-radius: var(--sections-border-radius);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  padding: var(--padding-parent);
+}
+.budgets__list-title{
+  width: 100%;
+  border-radius: var(--sections-border-radius) var(--sections-border-radius) 0 0;
+  text-align: center;
+  z-index: 10;
+  background: #d6e5d4;
+  font-size: 1rem;
+  padding: 0.6rem;
+  box-sizing: border-box;
+  border-bottom: 2px solid #98bd94;
 }
