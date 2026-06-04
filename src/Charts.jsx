@@ -1,17 +1,23 @@
+import { useContext,useState } from "react";
+
 const types = ["Incomes","Money","Expenses"];
 
 export default function Charts() {
+    const [chart_type,setChart_type]=useState('Incomes');
   return (
     <div className="charts">
       <ul className="charts__type">
-        {types.map((type) => (
-          <li
-            key={type}
-            className={`charts__type-label charts__type-label--${type.toLowerCase()}`}
-          >
-            {type}
-          </li>
-        ))}
+        {types.map((type) => {
+            const active = type === chart_type;
+            return(
+            <li
+                key={type}
+                className={`charts__type-label charts__type-label--${type.toLowerCase()}${active?'-active':''}`}
+                onClick={() => setChart_type(type)}
+            >
+                {type}
+            </li>
+            )})}
       </ul>
         <div className="charts__chart"></div>
     </div>
