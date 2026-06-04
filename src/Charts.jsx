@@ -1,6 +1,6 @@
 import { useContext,useState } from "react";
 
-const types = ["Incomes","Money","Expenses"];
+const types = ["Incomes","Money","Expenses","Budgets"];
 
 export default function Charts() {
     const [chart_type,setChart_type]=useState('Incomes');
