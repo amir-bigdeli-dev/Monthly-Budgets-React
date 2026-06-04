@@ -122,7 +122,6 @@ body {
   border-radius: 0.5rem;
   font-size: 0.7rem;
   padding: 0.3rem 0.7rem;
-  box-shadow: 1px 1px 4px rgb(143 143 143 / 0.22);
   cursor: pointer;
 }
 .charts__chart {
@@ -133,6 +132,10 @@ body {
   box-shadow: inset 2px 2px 10px #f3f3f3,
     inset -2px -2px 10px #f1f1f1;;
   background: white;
+}
+.charts__type-label--incomes-active,.charts__type-label--expenses-active,.charts__type-label--money-active{
+  box-shadow: 1px 1px 4px rgb(190 190 190 / 0.47);
+  font-weight: bold;
 }
 .charts__type-label--incomes-active{
   background: #fbfff8;
