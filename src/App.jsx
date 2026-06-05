@@ -1,6 +1,6 @@
 import Header from "./Header.jsx";
 import Charts from "./Charts.jsx";
-import Budgets from "./Budgets.jsx"
+import Budgets from "./Budgets.jsx";
 import QuickAccess from "./QuickAccess.jsx";
 
 const App = () => {
@@ -11,14 +11,14 @@ const App = () => {
     monBudget: 10000 - 500,
   };
 
-    const types = ["Incomes","Money","Expenses","Budgets"];
+  const types = ["Incomes", "Money", "Expenses", "Budgets"];
 
-    return (
+  return (
     <div className="App">
       <Header stat={stat} />
-      <Charts types={types}/>
-      <Budgets/>
-        <QuickAccess types={types}/>
+      <Charts types={types} />
+      <Budgets />
+      <QuickAccess types={types} />
     </div>
   );
 };

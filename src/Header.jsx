@@ -1,7 +1,7 @@
 import formatPrice from "./priceFormater.jsx";
 import downArrow from "./assets/icons/down-arrow-1-svgrepo-com.svg";
 import upArrow from "./assets/icons/down-arrow-1-svgrepo-com (1).svg";
-import moneyIcon from "./assets/icons/icons8-money-25.png"
+import moneyIcon from "./assets/icons/icons8-money-25.png";
 
 export default function Header({ stat }) {
   return (
@@ -12,15 +12,36 @@ export default function Header({ stat }) {
       </div>
       <div className="Header__stat">
         <div className="Header__stat-label Header__stat-label--incomes">
-          <h3 className="Header__stat-label-title">Incomes <img className="Header__stat-label-icon" src={downArrow} alt="down arrow"/></h3>
+          <h3 className="Header__stat-label-title">
+            Incomes{" "}
+            <img
+              className="Header__stat-label-icon"
+              src={downArrow}
+              alt="down arrow"
+            />
+          </h3>
           {formatPrice(stat.income)}
         </div>
         <div className="Header__stat-label Header__stat-label--monBudget">
-          <h3 className="Header__stat-label-title">Monthly Budget <img className="Header__stat-label-icon  Header__stat-label-icon-money" src={moneyIcon} alt="down arrow"/></h3>
+          <h3 className="Header__stat-label-title">
+            Monthly Budget{" "}
+            <img
+              className="Header__stat-label-icon  Header__stat-label-icon-money"
+              src={moneyIcon}
+              alt="down arrow"
+            />
+          </h3>
           {formatPrice(stat.monBudget)}
         </div>
         <div className="Header__stat-label Header__stat-label--expenses">
-          <h3 className="Header__stat-label-title">Expense <img className="Header__stat-label-icon" src={upArrow} alt="down arrow"/></h3>
+          <h3 className="Header__stat-label-title">
+            Expense{" "}
+            <img
+              className="Header__stat-label-icon"
+              src={upArrow}
+              alt="down arrow"
+            />
+          </h3>
           {formatPrice(stat.expenses)}
         </div>
       </div>

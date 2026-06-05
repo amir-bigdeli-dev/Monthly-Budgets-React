@@ -1,10 +1,10 @@
 :root {
   --sections-border-radius: 0.6rem;
-  --boxShadow:3px 3px 10px rgb(197 197 197 / 0.2);
-  --section-border:1px solid rgb(187 187 187 / 0.65);
-  --incomes-border-color:1px solid rgb(163 220 77 / 0.65);
-  --expenses-border-color:1px solid #f5a9a9;
-  --padding-parent:0.8rem;
+  --boxShadow: 3px 3px 10px rgb(197 197 197 / 0.2);
+  --section-border: 1px solid rgb(187 187 187 / 0.65);
+  --incomes-border-color: 1px solid rgb(163 220 77 / 0.65);
+  --expenses-border-color: 1px solid #f5a9a9;
+  --padding-parent: 0.8rem;
   --parts-bg: #fffdf8;
 }
 body {
@@ -36,7 +36,7 @@ body {
 }
 .Header__total-money {
   background: linear-gradient(-45deg, #ffd219, #ffdd00, #ffb700);
-  box-shadow:var(--boxShadow);
+  box-shadow: var(--boxShadow);
   border-radius: var(--sections-border-radius);
   display: flex;
   flex-direction: row;
@@ -72,32 +72,32 @@ body {
 }
 .Header__stat-label--incomes {
   background: #eafac3;
-  border:var(--incomes-border-color);
+  border: var(--incomes-border-color);
 }
 .Header__stat-label--monBudget {
   background: linear-gradient(-45deg, #ffdd00, #ffc400, #ffdd00);
-  box-shadow:var(--boxShadow);
+  box-shadow: var(--boxShadow);
 }
 .Header__stat-label--expenses {
-  border:var(--expenses-border-color);
+  border: var(--expenses-border-color);
   background: #f5d8d8;
 }
-.Header__stat-label-title{
+.Header__stat-label-title {
   display: flex;
-    flex-direction: row;
-   align-items: center;
+  flex-direction: row;
+  align-items: center;
   justify-content: center;
   font-size: small;
   font-weight: 400;
 }
-.Header__stat-label-icon{
-    height: 16px;
-    width: 16px;
-    display: inline;
+.Header__stat-label-icon {
+  height: 16px;
+  width: 16px;
+  display: inline;
   margin-left: 0.25rem;
 }
-.Header__stat-label-icon-money{
-  width:20px;
+.Header__stat-label-icon-money {
+  width: 20px;
   height: 20px;
 }
 .Header__stat-label--incomes,
@@ -119,8 +119,8 @@ body {
   /*padding: var(--padding-parent);*/
   /*gap: 0.8rem;*/
   border: 1px solid rgb(203 203 203);
-  box-shadow:var(--boxShadow);
-  border-radius: .7rem;
+  box-shadow: var(--boxShadow);
+  border-radius: 0.7rem;
   background: var(--parts-bg);
 }
 .charts__type {
@@ -143,55 +143,58 @@ body {
   height: 30vh;
   border-radius: 0 0 var(--sections-border-radius) var(--sections-border-radius);
   border: var(--section-border);
-  box-shadow: inset 2px 2px 10px #f3f3f3,
-    inset -2px -2px 10px #f1f1f1;;
+  box-shadow:
+    inset 2px 2px 10px #f3f3f3,
+    inset -2px -2px 10px #f1f1f1;
   background: white;
 }
-.charts__type-label--incomes-active,.charts__type-label--expenses-active,.charts__type-label--money-active{
+.charts__type-label--incomes-active,
+.charts__type-label--expenses-active,
+.charts__type-label--money-active {
   box-shadow: 1px 1px 4px rgb(190 190 190 / 0.47);
   font-weight: bold;
 }
-.charts__type-label--incomes-active{
+.charts__type-label--incomes-active {
   background: #fbfff8;
-  border:var(--incomes-border-color);
+  border: var(--incomes-border-color);
 }
-.charts__type-label--money-active{
+.charts__type-label--money-active {
   background: #fcf4da;
   border: 1px solid rgb(255 210 25);
 }
-.charts__type-label--expenses-active{
-  border:var(--expenses-border-color);
+.charts__type-label--expenses-active {
+  border: var(--expenses-border-color);
   background: #fff7f7;
 }
-.charts__type-label--budgets-active{
+.charts__type-label--budgets-active {
   background: #faeede;
   border: 2px solid #c2ab8e;
 }
 /*Budgets*/
-.budgets{
-    width: 100%;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.2rem;
-    border: var(--section-border);
-    box-shadow:var(--boxShadow);
-    background: var(--parts-bg);
-  border:var(--section-border);
+.budgets {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  border: var(--section-border);
+  box-shadow: var(--boxShadow);
+  background: var(--parts-bg);
+  border: var(--section-border);
   border-radius: var(--sections-border-radius);
 }
-.budgets__list{
+.budgets__list {
   position: relative;
-  flex:1;
+  flex: 1;
   border-radius: var(--sections-border-radius);
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
   padding: var(--padding-parent);
 }
-.budgets__list-title{
+.budgets__list-title {
   width: 100%;
   border-radius: var(--sections-border-radius) var(--sections-border-radius) 0 0;
   text-align: center;
@@ -204,7 +207,7 @@ body {
 }
 
 /*QuickAccess*/
-.quick-access{
+.quick-access {
   position: fixed;
   bottom: 2rem;
   left: 2rem;
@@ -213,8 +216,8 @@ body {
   flex-direction: column;
   border-radius: var(--sections-border-radius);
 }
-.quick-access__btn{
-  border:var(--section-border);
+.quick-access__btn {
+  border: var(--section-border);
   border-radius: 30%;
   box-shadow: var(--boxShadow);
   display: flex;
@@ -227,24 +230,24 @@ body {
   cursor: pointer;
   transition: all 0.2s ease-in;
 }
-.quick-access__btn--isOpen{
+.quick-access__btn--isOpen {
   background: #ffffff;
 }
-.quick-access__btn:hover{
-  filter:brightness(0.92);
+.quick-access__btn:hover {
+  filter: brightness(0.92);
 }
-.quick-access__btn-icon{
-  width:50%;
+.quick-access__btn-icon {
+  width: 50%;
   height: fit-content;
   background: transparent;
 }
-.quick-access__list{
+.quick-access__list {
   display: flex;
   flex-direction: column;
   border-radius: var(--sections-border-radius);
   border: var(--section-border);
 }
-.quick-access__list-item{
+.quick-access__list-item {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -254,14 +257,14 @@ body {
   text-align: center;
   border-bottom: 1px solid rgb(187 187 187 / 0.35);
 }
-.quick-access__list-item:hover{
-    background: rgb(187 187 187 / 0.35);
+.quick-access__list-item:hover {
+  background: rgb(187 187 187 / 0.35);
   border-radius: inherit;
   cursor: pointer;
 }
-.quick-access__list-item:last-child{
+.quick-access__list-item:last-child {
   border-bottom: none;
 }
-.quick-access__list-item-icon{
+.quick-access__list-item-icon {
   width: 18px;
 }
