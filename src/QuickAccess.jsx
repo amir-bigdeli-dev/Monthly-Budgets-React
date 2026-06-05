@@ -2,7 +2,7 @@ import { useState } from "react";
 import addIcon from "./assets/icons/add-plus-svgrepo-com.svg"
 import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg"
 
-export default function QuickAccess(){
+export default function QuickAccess({types}){
     let [isOpen,setIsOpen]=useState(false);
     return(
         <div className="quick-access">

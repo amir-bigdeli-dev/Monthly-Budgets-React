@@ -10,12 +10,15 @@ const App = () => {
     expenses: 500,
     monBudget: 10000 - 500,
   };
-  return (
+
+    const types = ["Incomes","Money","Expenses","Budgets"];
+
+    return (
     <div className="App">
       <Header stat={stat} />
-      <Charts/>
+      <Charts types={types}/>
       <Budgets/>
-        <QuickAccess/>
+        <QuickAccess types={types}/>
     </div>
   );
 };
