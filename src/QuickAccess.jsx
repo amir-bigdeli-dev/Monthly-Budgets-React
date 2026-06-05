@@ -1,5 +1,5 @@
 import { useState } from "react";
-import addIcon from "./assets/icons/add-square-svgrepo-com.svg"
+import addIcon from "./assets/icons/add-plus-svgrepo-com.svg"
 
 export default function QuickAccess(){
     let [isOpen,setIsOpen]=useState(false);

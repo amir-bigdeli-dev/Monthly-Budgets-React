@@ -202,3 +202,30 @@ body {
   box-sizing: border-box;
   border-bottom: 2px solid #c2ab8e;
 }
+
+/*QuickAccess*/
+.quick-access{
+  position: fixed;
+  bottom: 1.7rem;
+  right: 1.7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: var(--sections-border-radius);
+}
+.quick-access__btn{
+  border:var(--section-border);
+  border-radius: 30%;
+  box-shadow: var(--boxShadow);
+  display: flex;
+  width: 3rem;
+  height: 3rem;
+  background: #bcef84;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.quick-access__btn-icon{
+  width:50%;
+  height: fit-content;
+}
