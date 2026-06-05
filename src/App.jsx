@@ -1,6 +1,7 @@
 import Header from "./Header.jsx";
 import Charts from "./Charts.jsx";
 import Budgets from "./Budgets.jsx"
+import QuickAccess from "./QuickAccess.jsx";
 
 const App = () => {
   const stat = {
@@ -14,6 +15,7 @@ const App = () => {
       <Header stat={stat} />
       <Charts/>
       <Budgets/>
+        <QuickAccess/>
     </div>
   );
 };
