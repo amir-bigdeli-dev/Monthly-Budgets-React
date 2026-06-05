@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useState, useEffect, useRef} from "react";
 import addIcon from "./assets/icons/add-plus-svgrepo-com.svg";
 import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg";
 import incomesIcon from "./assets/icons/down-arrow-1-svgrepo-com.svg";
@@ -15,9 +15,22 @@ export default function QuickAccess({ types }) {
     Budgets: budgetsIcon,
     Money: moneyIcon,
   };
+    const quickAccessRef = useRef(null)
+    useEffect(() => {
+        function closeQuickAccess(e) {
+            if(quickAccessRef.current && !quickAccessRef.current.contains(e.target)) {
+                setIsOpen(false)
+            }
+        }
+        
+        document.addEventListener("mousedown", closeQuickAccess)
+        return () => {
+            document.removeEventListener("mousedown", closeQuickAccess)
+        }
+    }, []);
 
   return (
-    <div className="quick-access">
+    <div className="quick-access" ref={quickAccessRef}>
       {isOpen ? (
         <ul className="quick-access__list">
           {types.map((type) => (
