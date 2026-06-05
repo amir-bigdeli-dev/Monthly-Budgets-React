@@ -156,14 +156,17 @@ body {
   border:var(--incomes-border-color);
 }
 .charts__type-label--money-active{
-  background: #fcfbda;
+  background: #fcf4da;
   border: 1px solid rgb(255 210 25);
 }
 .charts__type-label--expenses-active{
   border:var(--expenses-border-color);
   background: #fff7f7;
 }
-
+.charts__type-label--budgets-active{
+  background: #faeede;
+  border: 2px solid #c2ab8e;
+}
 /*Budgets*/
 .budgets{
     width: 100%;
@@ -193,9 +196,9 @@ body {
   border-radius: var(--sections-border-radius) var(--sections-border-radius) 0 0;
   text-align: center;
   z-index: 10;
-  background: #eff6ed;
+  background: #faeede;
   font-size: 1rem;
   padding: 0.6rem;
   box-sizing: border-box;
-  border-bottom: 2px solid #b9d9b6;
+  border-bottom: 2px solid #c2ab8e;
 }
