@@ -268,3 +268,69 @@ body {
 .quick-access__list-item-icon {
   width: 18px;
 }
+/*TransActionForm*/
+.actionsForm{
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  z-index: 100;
+  padding: var(--padding-parent);
+  padding-bottom: 0;
+}
+.actionsForm-form{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: white;
+  border-radius: 1.2rem 1.2rem 0 0;
+  padding: 1.5rem;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.actionsForm-title{
+  text-align: center;
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding-bottom: 1rem;
+}
+.actionsForm-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 1rem;
+}
+.actionsForm-form input,
+.actionsForm-form select {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: var(--section-border);
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-family: "DM Sans", sans-serif;
+  outline: none;
+  background: #fafafa;
+}
+.actionsForm-form input:focus,
+.actionsForm-form select:focus {
+  border-color: #ffd219;
+  background: white;
+}
+.transactionForm__submit {
+  width: 100%;
+  padding: 0.7rem;
+  margin-top: 0.5rem;
+  background: #bcef84;
+  border: none;
+  border-radius: 0.6rem;
+  font-size: 1rem;
+  font-family: "DM Sans", sans-serif;
+  cursor: pointer;
+}
+.actionsForm-form span {
+  font-size: 0.75rem;
+  color: #888;
+}

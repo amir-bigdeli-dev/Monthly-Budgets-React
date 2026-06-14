@@ -44,12 +44,12 @@ export default function TransactionForm({ formType }) {
   const fields = FIELDS[formType] || [];
   return (
     <div className="actionsForm">
-      <h2 className="actionsForm-title">Add {formType}</h2>
       <form action="#" className="actionsForm-form">
+        <h2 className="actionsForm-title">Add {formType}</h2>
         {fields.map((field) => (
-          <label key={field.id} style={{ display: "block", marginBottom: 8 }}>
-            <span style={{ display: "block", fontSize: 12, marginBottom: 4 }}>
-              {field.id}
+          <label key={field.id}>
+            <span>
+              {field.id}:
             </span>
             {field.type === "select" ? (
               <select name={field.id}>
@@ -65,6 +65,8 @@ export default function TransactionForm({ formType }) {
             )}
           </label>
         ))}
+
+        <button className="transactionForm__submit">Submit</button>
       </form>
     </div>
   );
