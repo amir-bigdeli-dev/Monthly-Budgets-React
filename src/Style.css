@@ -322,12 +322,34 @@ body {
     to {
         opacity: 0;
     }
-  
+
+}
+.actionsFrom__form-header{
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  padding-bottom:1rem ;
+}
+.actionsForm__close{
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+}
+.actionsForm__close-icon{
+  width: 1.4rem;
+  height: fit-content;
+  background: transparent;
 }
 .actionsForm-title{
   text-align: center;
-    font-size: 1.2rem;
-    font-weight: 500;
+  font-size: 1.2rem;
+  font-weight: 500;
+  width: 100%;
 }
 .actionsForm__form label {
   display: flex;

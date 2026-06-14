@@ -1,4 +1,5 @@
 import {useState, useRef, useEffect} from "react";
+import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg";
 
 const FIELDS = {
   Incomes: [
@@ -54,8 +55,10 @@ export default function TransactionForm({ formType , onClose}) {
   return (
     <div className={`actionsForm actionsForm${formIsClosing ? "--fadeOut" : ""}`} onClick={handleClose}>
       <form action="#" className={`actionsForm__form actionsForm__form${formIsClosing ? "--close" : ""}`} onClick={(e) => e.stopPropagation()}>
+        <div className="actionsFrom__form-header">
         <h2 className="actionsForm-title">Add {formType}</h2>
-        <span className="actionsForm__close-icon"></span>
+        <span className="actionsForm__close" onClick={handleClose}><img className="actionsForm__close-icon" src={closeIcon} alt="close-icon"/></span>
+        </div>
         {fields.map((field) => (
           <label key={field.id}>
             <span>
@@ -76,7 +79,7 @@ export default function TransactionForm({ formType , onClose}) {
           </label>
         ))}
 
-        <button className="transactionForm__submit" onClick={() => setIsOpen(false)}>Submit</button>
+        <button className="transactionForm__submit" onClick={handleClose}>Submit</button>
       </form>
     </div>
   );
