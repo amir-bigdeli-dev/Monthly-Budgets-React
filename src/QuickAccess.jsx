@@ -41,8 +41,8 @@ export default function QuickAccess({ types }) {
               key={type}
               className="quick-access__list-item"
               onClick={() => {
-                onSelect(type);
                 setIsOpen(false);
+                onselect(type)
               }}
             >
               <img
