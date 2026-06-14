@@ -6,7 +6,7 @@ import expensesIcon from "./assets/icons/down-arrow-1-svgrepo-com (1).svg";
 import moneyIcon from "./assets/icons/icons8-money-25.png";
 import budgetsIcon from "./assets/icons/budget-cost-svgrepo-com.svg";
 
-export default function QuickAccess({ types }) {
+export default function QuickAccess({ types , onSelect}) {
   let [isOpen, setIsOpen] = useState(false);
 
   const iconMap = {
@@ -42,7 +42,7 @@ export default function QuickAccess({ types }) {
               className="quick-access__list-item"
               onClick={() => {
                 setIsOpen(false);
-                onselect(type)
+                onSelect(type)
               }}
             >
               <img
