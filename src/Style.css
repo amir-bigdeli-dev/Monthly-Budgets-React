@@ -168,7 +168,7 @@ body {
 }
 .charts__type-label--budgets-active {
   background: #faeede;
-  border: 2px solid #c2ab8e;
+  border: 1px solid #c2ab8e;
 }
 /*Budgets*/
 .budgets {
