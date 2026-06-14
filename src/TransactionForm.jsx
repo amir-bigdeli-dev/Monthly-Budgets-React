@@ -44,7 +44,7 @@ export default function TransactionForm({ formType , onClose}) {
   const fields = FIELDS[formType] || [];
   return (
     <div className="actionsForm" onClick={() => onClose()}>
-      <form action="#" className="actionsForm-form">
+      <form action="#" className="actionsForm-form" onClick={(e) => e.stopPropagation()}>
         <h2 className="actionsForm-title">Add {formType}</h2>
         {fields.map((field) => (
           <label key={field.id}>
