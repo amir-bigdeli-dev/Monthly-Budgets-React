@@ -53,8 +53,9 @@ export default function TransactionForm({ formType , onClose}) {
   
   return (
     <div className={`actionsForm actionsForm${formIsClosing ? "--fadeOut" : ""}`} onClick={handleClose}>
-      <form action="#" className={`actionsForm-form actionsForm-form${formIsClosing ? "--close" : ""}`} onClick={(e) => e.stopPropagation()}>
+      <form action="#" className={`actionsForm__form actionsForm__form${formIsClosing ? "--close" : ""}`} onClick={(e) => e.stopPropagation()}>
         <h2 className="actionsForm-title">Add {formType}</h2>
+        <span className="actionsForm__close-icon"></span>
         {fields.map((field) => (
           <label key={field.id}>
             <span>

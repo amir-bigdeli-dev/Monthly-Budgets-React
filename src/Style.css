@@ -285,7 +285,7 @@ body {
 .actionsForm--fadeout{
   animation: FadeOut 0.3s ease-out;
 }
-.actionsForm-form{
+.actionsForm__form{
   display: flex;
   animation: slideUp 0.3s ease-out;
   flex-direction: column;
@@ -296,7 +296,7 @@ body {
   max-height: 90vh;
   overflow-y: auto;
 }
-.actionsForm-form--close{
+.actionsForm__form--close{
     animation: slideDown 0.3s ease-out;
 }
 @keyframes slideUp{
@@ -329,14 +329,14 @@ body {
     font-size: 1.2rem;
     font-weight: 500;
 }
-.actionsForm-form label {
+.actionsForm__form label {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
   margin-bottom: 1rem;
 }
-.actionsForm-form input,
-.actionsForm-form select {
+.actionsForm__form input,
+.actionsForm__form select {
   width: 100%;
   padding: 0.6rem 0.8rem;
   border: var(--section-border);
@@ -346,8 +346,8 @@ body {
   outline: none;
   background: #fafafa;
 }
-.actionsForm-form input:focus,
-.actionsForm-form select:focus {
+.actionsForm__form input:focus,
+.actionsForm__form select:focus {
   border-color: #888888;
   caret-color:initial;
   background: white;
@@ -363,7 +363,7 @@ body {
   font-family: "DM Sans", sans-serif;
   cursor: pointer;
 }
-.actionsForm-form span {
+.actionsForm__form span {
   font-size: 0.75rem;
   color: #888;
 }
