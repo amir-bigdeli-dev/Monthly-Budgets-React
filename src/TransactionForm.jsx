@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useState, useRef, useEffect} from "react";
 
 const FIELDS = {
   Incomes: [
@@ -40,10 +40,10 @@ const FIELDS = {
   ],
 };
 
-export default function TransactionForm({ formType }) {
+export default function TransactionForm({ formType , onClose}) {
   const fields = FIELDS[formType] || [];
   return (
-    <div className="actionsForm">
+    <div className="actionsForm" onClick={() => onClose()}>
       <form action="#" className="actionsForm-form">
         <h2 className="actionsForm-title">Add {formType}</h2>
         {fields.map((field) => (
@@ -66,7 +66,7 @@ export default function TransactionForm({ formType }) {
           </label>
         ))}
 
-        <button className="transactionForm__submit">Submit</button>
+        <button className="transactionForm__submit" onClick={() => setIsOpen(false)}>Submit</button>
       </form>
     </div>
   );

@@ -22,7 +22,7 @@ const App = () => {
       <Charts types={types} />
       <Budgets />
       <QuickAccess types={types} onSelect={setFormType} />
-      {formType ? <TransactionForm formType={formType} /> : null}
+      {formType ? <TransactionForm formType={formType} onClose={() => setFormType(null)} /> : null}
     </div>
   );
 };

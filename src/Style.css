@@ -270,6 +270,7 @@ body {
 }
 /*TransActionForm*/
 .actionsForm{
+  cursor: pointer;
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.35);
@@ -295,7 +296,6 @@ body {
   text-align: center;
     font-size: 1.2rem;
     font-weight: 500;
-    padding-bottom: 1rem;
 }
 .actionsForm-form label {
   display: flex;
@@ -316,7 +316,8 @@ body {
 }
 .actionsForm-form input:focus,
 .actionsForm-form select:focus {
-  border-color: #ffd219;
+  border-color: #888888;
+  caret-color:initial;
   background: white;
 }
 .transactionForm__submit {
