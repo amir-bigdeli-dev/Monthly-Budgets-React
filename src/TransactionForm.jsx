@@ -70,7 +70,7 @@ export default function TransactionForm({ formType, onClose }) {
       input.setSelectionRange(pos, pos);
       cursorRef.current = null;
     }
-  });
+  },[formValues.amount]);
   function handleClose() {
     setFormIsClosing(true);
     setTimeout(() => {
