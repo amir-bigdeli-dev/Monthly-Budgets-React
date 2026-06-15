@@ -86,7 +86,7 @@ export default function TransactionForm({ formType , onClose}) {
                 ))}
               </select>
             ) : (
-              <input id={field.id} name={field.id} type={field.type} key={field.id} onChange={DisplayValueHandle}  onFocus={(e) => e.target.scrollIntoView({ behavior: "smooth", block: "center" })} />
+              <input id={field.id} inputMode={field.id === "amount" ? "numeric" : "text"} name={field.id} type={field.type} key={field.id} onChange={DisplayValueHandle}  onFocus={(e) => e.target.scrollIntoView({ behavior: "smooth", block: "center" })} />
             )}
           </label>
         ))}
