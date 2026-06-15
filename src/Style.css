@@ -271,7 +271,7 @@ body {
   width: 18px;
 }
 /*TransActionForm*/
-.actionsForm{
+.actionsForm {
   cursor: pointer;
   position: fixed;
   inset: 0;
@@ -284,10 +284,10 @@ body {
   padding: var(--padding-parent);
   padding-bottom: 0;
 }
-.actionsForm--fadeout{
+.actionsForm--fadeout {
   animation: FadeOut 0.3s ease-out;
 }
-.actionsForm__form{
+.actionsForm__form {
   display: flex;
   animation: slideUp 0.3s ease-out;
   flex-direction: column;
@@ -298,42 +298,43 @@ body {
   max-height: 90vh;
   overflow-y: auto;
 }
-.actionsForm__form--close{
-    animation: slideDown 0.3s ease-out;
+.actionsForm__form--close {
+  animation: slideDown 0.3s ease-out;
 }
-@keyframes slideUp{
+@keyframes slideUp {
   from {
     transform: translateY(100%);
   }
   to {
     transform: translateY(0);
-  } }
+  }
+}
 
-@keyframes slideDown{
+@keyframes slideDown {
   from {
     transform: translateY(0);
   }
   to {
     transform: translateY(100%);
-  } }
+  }
+}
 
 @keyframes FadeOut {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-    }
-
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
-.actionsFrom__form-header{
+.actionsFrom__form-header {
   display: flex;
   position: relative;
   align-items: center;
   justify-content: center;
-  padding-bottom:1rem ;
+  padding-bottom: 1rem;
 }
-.actionsForm__close{
+.actionsForm__close {
   position: absolute;
   top: 0;
   right: 0;
@@ -342,12 +343,12 @@ body {
   justify-content: flex-end;
   cursor: pointer;
 }
-.actionsForm__close-icon{
+.actionsForm__close-icon {
   width: 1.4rem;
   height: fit-content;
   background: transparent;
 }
-.actionsForm-title{
+.actionsForm-title {
   text-align: center;
   font-size: 1.2rem;
   font-weight: 500;
@@ -373,7 +374,7 @@ body {
 .actionsForm__form input:focus,
 .actionsForm__form select:focus {
   border-color: #888888;
-  caret-color:initial;
+  caret-color: initial;
   background: white;
 }
 .transactionForm__submit {
