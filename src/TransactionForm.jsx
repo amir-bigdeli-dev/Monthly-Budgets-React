@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState,useRef,useEffect} from "react";
 import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg";
 
 const FIELDS = {
@@ -44,19 +44,34 @@ const FIELDS = {
 export default function TransactionForm({ formType , onClose}) {
   const fields = FIELDS[formType] || [];
   const [formIsClosing, setFormIsClosing] = useState(false);
+  const [formValues, setFormValues] = useState({});
 
-  function DisplayValueHandle(e){
-    const rawAmount = e.target.value.replace(/,/g, "");
-    if (e.target.id !== "amount") return;
-    if (rawAmount === "") return;
-    if (isNaN(rawAmount)) {
-      e.target.value = e.target.value.slice(0, -1);
-      console.error("Invalid input: Amount must be a number.");
-      return;
-    }
-    e.target.value = Number(rawAmount).toLocaleString("en-US");
-    }
 
+  const cursorRef = useRef(null);
+  
+  function DisplayValueHandle(field,value,e){
+    if (field.id === "amount") {
+      const input = e.target;
+      const cursorPos = input.selectionStart;
+      const oldLength = input.value.length;
+      const raw = value.replace(/,/g, "");
+      if (raw && isNaN(raw)) return;
+      const formatted = raw ? Number(raw).toLocaleString("en-US") : "";
+      const lengthDiff = formatted.length - oldLength;
+      cursorRef.current = { input, pos: cursorPos + lengthDiff };
+      setFormValues(prev => ({ ...prev, amount: formatted }));
+    } else {
+      setFormValues(prev => ({ ...prev, [field.id]: value }));
+    }
+  }
+
+  useEffect(() => {
+    if (cursorRef.current) {
+      const { input, pos } = cursorRef.current;
+      input.setSelectionRange(pos, pos);
+      cursorRef.current = null;
+    }
+  });
   function handleClose() {
     setFormIsClosing(true);
     setTimeout(() => {
@@ -86,7 +101,7 @@ export default function TransactionForm({ formType , onClose}) {
                 ))}
               </select>
             ) : (
-              <input id={field.id} inputMode={field.id === "amount" ? "decimal" : "text"} name={field.id} type={field.id === "amount" ? "number" : field.type} key={field.id} onChange={DisplayValueHandle}  onFocus={(e) => e.target.scrollIntoView({ behavior: "smooth", block: "center" })} />
+              <input id={field.id} value={formValues[field.id] || ""} pattern={field.id === "amount" ? "[0-9.]*" : undefined} inputMode={field.id === "amount" ? "decimal" : "text"} name={field.id} type={field.type} key={field.id} onChange={(e) => DisplayValueHandle(field, e.target.value,e)}  onFocus={(e) => e.target.scrollIntoView({ behavior: "smooth", block: "center" })} />
             )}
           </label>
         ))}
