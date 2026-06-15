@@ -86,15 +86,7 @@ export default function TransactionForm({ formType , onClose}) {
                 ))}
               </select>
             ) : (
-              <input
-                id={field.id}
-                name={field.id}
-                type={field.id === "amount" ? "tel" : field.type}
-                inputMode={field.id === "amount" ? "decimal" : "text"}
-                pattern={field.id === "amount" ? "[0-9,]*" : undefined}
-                onChange={DisplayValueHandle}
-                onFocus={(e) => e.target.scrollIntoView({ behavior: "smooth", block: "center" })}
-              />
+              <input id={field.id} inputMode={field.id === "amount" ? "decimal" : "text"} name={field.id} type={field.id === "amount" ? "number" : field.type} key={field.id} onChange={DisplayValueHandle}  onFocus={(e) => e.target.scrollIntoView({ behavior: "smooth", block: "center" })} />
             )}
           </label>
         ))}
