@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect,useContext } from "react";
+import TransActionsContext from "./contexts.js";
 import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg";
 
 const FIELDS = {
@@ -45,6 +46,8 @@ export default function TransactionForm({ formType, onClose }) {
   const fields = FIELDS[formType] || [];
   const [formIsClosing, setFormIsClosing] = useState(false);
   const [formValues, setFormValues] = useState({});
+  const [transactions, addTransaction] = useContext(TransActionsContext);
+  
 
   const cursorRef = useRef(null);
 
@@ -78,16 +81,23 @@ export default function TransactionForm({ formType, onClose }) {
       setFormIsClosing(false);
     }, 300);
   }
-
+  
+  function handleSubmit(e) {
+    e.preventDefault();
+    const isEmpty = fields.some(f => !formValues[f.id]);
+    if (isEmpty) { console.error("Please fill all fields"); return; }
+    addTransaction(formType, formValues);
+    handleClose()
+  }
   return (
     <div
       className={`actionsForm actionsForm${formIsClosing ? "--fadeOut" : ""}`}
       onClick={handleClose}
     >
       <form
-        action="#"
         className={`actionsForm__form actionsForm__form${formIsClosing ? "--close" : ""}`}
         onClick={(e) => e.stopPropagation()}
+        onSubmit={handleSubmit}
       >
         <div className="actionsFrom__form-header">
           <h2 className="actionsForm-title">Add {formType}</h2>
@@ -103,7 +113,12 @@ export default function TransactionForm({ formType, onClose }) {
           <label key={field.id}>
             <span>{field.id}:</span>
             {field.type === "select" ? (
-              <select id={field.id} name={field.id}>
+              <select
+                id={field.id}
+                name={field.id}
+                value={formValues[field.id] || ""}
+                onChange={(e) => DisplayValueHandle(field, e.target.value, e)}
+              >
                 <option value="">Select</option>
                 {field.options.map((opt) => (
                   <option key={opt} value={opt}>
@@ -115,7 +130,6 @@ export default function TransactionForm({ formType, onClose }) {
               <input
                 id={field.id}
                 value={formValues[field.id] || ""}
-                pattern={field.id === "amount" ? "[0-9.]*" : undefined}
                 inputMode={field.id === "amount" ? "decimal" : "text"}
                 name={field.id}
                 type={field.type}
@@ -132,7 +146,7 @@ export default function TransactionForm({ formType, onClose }) {
           </label>
         ))}
 
-        <button className="transactionForm__submit" onClick={handleClose}>
+        <button type="submit" className="transactionForm__submit">
           Submit
         </button>
       </form>
