@@ -5,6 +5,7 @@ const dataCalculator = (transactions) => ({
     Expenses : transactions.Expenses.reduce((sum,item) => sum + parseAmount(item.amount), 0),
     Money: transactions.Money.amount,
     Budgets : transactions.Budgets.reduce((sum,item) => sum + parseAmount(item.amount), 0),
+    MonthlyBudget : transactions.MonthlyBudget.reduce((sum,item) => sum + parseAmount(item.amount), 0),
 })
 
 export default dataCalculator;
