@@ -3,12 +3,6 @@ import TransActionsContext from "./contexts.js";
 import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg";
 import CreatableSelect from "react-select/creatable";
 
-const CATEGORIES = {
-    Incomes: [{value:"Salary", label: "Salary" }, {value:"Gift", label: "Gift" }, {value:"Investment", label: "Investment" }],
-    Expenses: [{value:"Food", label: "Food" }, {value:"Rent", label: "Rent" }, {value:"Entertainment", label: "Entertainment" }],
-    get Budgets(){return this.Expenses}
-}
- 
 const FIELDS = {
   Incomes: [
     { id: "title", type: "text", label: "Title" },
@@ -17,7 +11,6 @@ const FIELDS = {
       id: "category",
       type: "select",
       label: "Category",
-      options: CATEGORIES.Incomes,
     },
     { id: "date", type: "date", label: "Date" },
   ],
@@ -28,7 +21,6 @@ const FIELDS = {
       id: "category",
       type: "select",
       label: "Category",
-      options: CATEGORIES.Expenses,
     },
     { id: "date", type: "date", label: "Date" },
   ],
@@ -43,7 +35,6 @@ const FIELDS = {
       id: "category",
       type: "select",
       label: "Category",
-      options: CATEGORIES.Budgets,
     },
     { id: "date", type: "date", label: "Date" },
   ],
@@ -54,7 +45,6 @@ export default function TransactionForm({ formType, onClose }) {
   const [formIsClosing, setFormIsClosing] = useState(false);
   const [formValues, setFormValues] = useState({});
   const {addTransaction, categoryOptions , addCategoryOption} = useContext(TransActionsContext);
-  const [categories,setCategories] = useState(categoryOptions[formType] || [])
   const cursorRef = useRef(null);
 
   function DisplayValueHandle(field, value, e) {
@@ -98,7 +88,6 @@ export default function TransactionForm({ formType, onClose }) {
   
   function handleNewOption(Value) {
     const newOption = {value:Value,label:Value};
-    setCategories(prev => [...prev,newOption]);
     setFormValues(prev => ({...prev,category:Value}))
     addCategoryOption(formType,newOption)
   }
@@ -127,8 +116,8 @@ export default function TransactionForm({ formType, onClose }) {
             <span>{field.id}:</span>
             {field.type === "select" ? (
                 <CreatableSelect
-                    options={categories}
-                    value={categories.find(opt => opt.value === formValues.category) || null}
+                    options={categoryOptions[formType] || []}
+                    value={(categoryOptions[formType].find(opt => opt.value === formValues.category) || null)}
                     onChange={(selected) => setFormValues(prev => ({ ...prev, category: selected.value }))}
                     onCreateOption={handleNewOption}
                     placeholder="Select or add new..."

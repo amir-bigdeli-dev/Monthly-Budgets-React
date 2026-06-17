@@ -13,7 +13,14 @@ export default function useTransactions() {
 
     const [categoryOptions,setCategoryOptions] = useState(() => {
         const stored = localStorage.getItem("Categories");
-        return stored ? JSON.parse(stored) : initialCategories;
+        if(stored){
+            const parsed = JSON.parse(stored);
+            return{
+                ...parsed,
+                get Budgets(){return this.Expenses},
+            }
+        }
+        return initialCategories;
     })
 
     useEffect(() => {
