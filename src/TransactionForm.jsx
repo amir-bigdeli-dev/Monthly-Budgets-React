@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect,useContext } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import TransActionsContext from "./contexts.js";
 import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg";
 import CreatableSelect from "react-select/creatable";
@@ -44,7 +44,8 @@ export default function TransactionForm({ formType, onClose }) {
   const fields = FIELDS[formType] || [];
   const [formIsClosing, setFormIsClosing] = useState(false);
   const [formValues, setFormValues] = useState({});
-  const {addTransaction, categoryOptions , addCategoryOption} = useContext(TransActionsContext);
+  const { addTransaction, categoryOptions, addCategoryOption } =
+    useContext(TransActionsContext);
   const cursorRef = useRef(null);
 
   function DisplayValueHandle(field, value, e) {
@@ -69,7 +70,7 @@ export default function TransactionForm({ formType, onClose }) {
       input.setSelectionRange(pos, pos);
       cursorRef.current = null;
     }
-  },[formValues.amount]);
+  }, [formValues.amount]);
   function handleClose() {
     setFormIsClosing(true);
     setTimeout(() => {
@@ -77,19 +78,22 @@ export default function TransactionForm({ formType, onClose }) {
       setFormIsClosing(false);
     }, 300);
   }
-  
+
   function handleSubmit(e) {
     e.preventDefault();
-    const isEmpty = fields.some(f => !formValues[f.id]);
-    if (isEmpty) { console.error("Please fill all fields"); return; }
+    const isEmpty = fields.some((f) => !formValues[f.id]);
+    if (isEmpty) {
+      console.error("Please fill all fields");
+      return;
+    }
     addTransaction(formType, formValues);
-    handleClose()
+    handleClose();
   }
-  
+
   function handleNewOption(Value) {
-    const newOption = {value:Value,label:Value};
-    setFormValues(prev => ({...prev,category:Value}))
-    addCategoryOption(formType,newOption)
+    const newOption = { value: Value, label: Value };
+    setFormValues((prev) => ({ ...prev, category: Value }));
+    addCategoryOption(formType, newOption);
   }
   return (
     <div
@@ -115,14 +119,23 @@ export default function TransactionForm({ formType, onClose }) {
           <label key={field.id}>
             <span>{field.id}:</span>
             {field.type === "select" ? (
-                <CreatableSelect
-                    options={categoryOptions[formType] || []}
-                    value={(categoryOptions[formType].find(opt => opt.value === formValues.category) || null)}
-                    onChange={(selected) => setFormValues(prev => ({ ...prev, category: selected.value }))}
-                    onCreateOption={handleNewOption}
-                    placeholder="Select or add new..."
-                    formatCreateLabel={(input) => `+ Add "${input}"`}
-                />
+              <CreatableSelect
+                options={categoryOptions[formType] || []}
+                value={
+                  categoryOptions[formType].find(
+                    (opt) => opt.value === formValues.category,
+                  ) || null
+                }
+                onChange={(selected) =>
+                  setFormValues((prev) => ({
+                    ...prev,
+                    category: selected.value,
+                  }))
+                }
+                onCreateOption={handleNewOption}
+                placeholder="Select or add new..."
+                formatCreateLabel={(input) => `+ Add "${input}"`}
+              />
             ) : (
               <input
                 id={field.id}

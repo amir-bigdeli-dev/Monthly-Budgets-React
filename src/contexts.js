@@ -1,7 +1,12 @@
 import { createContext } from "react";
 
-const TransActionsContext = createContext([{ transactions: {},
+const TransActionsContext = createContext([
+  {
+    transactions: {},
     addTransaction: () => {},
     categories: {},
-    addCategory: () => {},}, function () {}]);
+    addCategory: () => {},
+  },
+  function () {},
+]);
 export default TransActionsContext;
