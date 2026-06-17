@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const initialState = { Incomes: [], Expenses: [], Money: [], Budgets: []};
+const initialState = { Incomes: [], Expenses: [], Money: [], Budgets: [] , "Monthly Budget": [] };
 const initialCategories = {  Incomes: [{value:"Salary", label: "Salary" }, {value:"Gift", label: "Gift" }, {value:"Investment", label: "Investment" }],
     Expenses: [{value:"Food", label: "Food" }, {value:"Rent", label: "Rent" }, {value:"Entertainment", label: "Entertainment" }],
     get Budgets(){return this.Expenses}}

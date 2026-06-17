@@ -15,7 +15,15 @@ const App = () => {
     monBudget: 10000 - 500,
   };
 
-  const types = ["Incomes", "Money", "Expenses", "Budgets"];
+  const Types_Labels = {
+    Incomes: "Income",
+    Expenses: "Expense",
+    Money: "Money",
+    Budgets: "Budget",
+    MonthlyBudget: "Monthly Budget",
+  };
+
+  const types = ["Incomes", "Money", "Expenses", "Budgets", "MonthlyBudget"];
   const [formType, setFormType] = useState(null);
   const {transactions, addTransaction , categoryOptions , addCategoryOption} = useTransactions()
 
@@ -23,9 +31,9 @@ const App = () => {
       <TransActionsContext.Provider value={{transactions, addTransaction , categoryOptions , addCategoryOption}}>
     <div className="App">
       <Header stat={stat} />
-      <Charts types={types} />
+      <Charts types={types} type_label={Types_Labels} />
       <Budgets />
-      <QuickAccess types={types} onSelect={setFormType} />
+      <QuickAccess types={types} type_label={Types_Labels} onSelect={setFormType} />
       {formType ? (
         <TransactionForm
           formType={formType}

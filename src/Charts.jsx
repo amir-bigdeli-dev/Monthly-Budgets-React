@@ -1,7 +1,8 @@
 import { useContext, useState } from "react";
 
-export default function Charts({ types }) {
+export default function Charts({ types , type_label}) {
   const [chart_type, setChart_type] = useState("Incomes");
+  types = types.filter((type) => type !== "MonthlyBudget");
   return (
     <div className="charts">
       <ul className="charts__type">
@@ -13,7 +14,7 @@ export default function Charts({ types }) {
               className={`charts__type-label charts__type-label--${type.toLowerCase()}${active ? "-active" : ""}`}
               onClick={() => setChart_type(type)}
             >
-              {type}
+              {type_label[type]}
             </li>
           );
         })}

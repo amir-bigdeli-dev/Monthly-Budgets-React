@@ -38,6 +38,10 @@ const FIELDS = {
     },
     { id: "date", type: "date", label: "Date" },
   ],
+  "MonthlyBudget": [
+    { id: "amount", type: "text", label: "Amount" },
+    { id: "date", type: "date", label: "Date" },
+  ],
 };
 
 export default function TransactionForm({ formType, onClose }) {
