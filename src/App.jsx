@@ -17,10 +17,10 @@ const App = () => {
 
   const types = ["Incomes", "Money", "Expenses", "Budgets"];
   const [formType, setFormType] = useState(null);
-  const {transactions, addTransaction} = useTransactions()
+  const {transactions, addTransaction , categoryOptions , addCategoryOption} = useTransactions()
 
   return (
-      <TransActionsContext.Provider value={[transactions, addTransaction]}>
+      <TransActionsContext.Provider value={{transactions, addTransaction , categoryOptions , addCategoryOption}}>
     <div className="App">
       <Header stat={stat} />
       <Charts types={types} />

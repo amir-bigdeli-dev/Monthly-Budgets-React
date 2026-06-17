@@ -53,8 +53,8 @@ export default function TransactionForm({ formType, onClose }) {
   const fields = FIELDS[formType] || [];
   const [formIsClosing, setFormIsClosing] = useState(false);
   const [formValues, setFormValues] = useState({});
-  const [addTransaction] = useContext(TransActionsContext);
-  const [categoryOptions,setCategoryOptions] = useState(CATEGORIES[formType] || [])
+  const {addTransaction, categoryOptions , addCategoryOption} = useContext(TransActionsContext);
+  const [categories,setCategories] = useState(categoryOptions[formType] || [])
   const cursorRef = useRef(null);
 
   function DisplayValueHandle(field, value, e) {
@@ -98,8 +98,9 @@ export default function TransactionForm({ formType, onClose }) {
   
   function handleNewOption(Value) {
     const newOption = {value:Value,label:Value};
-    setCategoryOptions(prev => [...prev,newOption]);
-    setFormValues(prev => ({...prev,category:newOption}))
+    setCategories(prev => [...prev,newOption]);
+    setFormValues(prev => ({...prev,category:Value}))
+    addCategoryOption(formType,newOption)
   }
   return (
     <div
@@ -126,8 +127,8 @@ export default function TransactionForm({ formType, onClose }) {
             <span>{field.id}:</span>
             {field.type === "select" ? (
                 <CreatableSelect
-                    options={categoryOptions}
-                    value={categoryOptions.find(opt => opt.value === formValues.category) || null}
+                    options={categories}
+                    value={categories.find(opt => opt.value === formValues.category) || null}
                     onChange={(selected) => setFormValues(prev => ({ ...prev, category: selected.value }))}
                     onCreateOption={handleNewOption}
                     placeholder="Select or add new..."
