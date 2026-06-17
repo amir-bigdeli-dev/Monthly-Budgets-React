@@ -1,7 +1,14 @@
 import { useState, useRef, useEffect,useContext } from "react";
 import TransActionsContext from "./contexts.js";
 import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg";
+import CreatableSelect from "react-select/creatable";
 
+const CATEGORIES = {
+    Incomes: [{value:"Salary", label: "Salary" }, {value:"Gift", label: "Gift" }, {value:"Investment", label: "Investment" }],
+    Expenses: [{value:"Food", label: "Food" }, {value:"Rent", label: "Rent" }, {value:"Entertainment", label: "Entertainment" }],
+    get Budgets(){return this.Expenses}
+}
+ 
 const FIELDS = {
   Incomes: [
     { id: "title", type: "text", label: "Title" },
@@ -10,7 +17,7 @@ const FIELDS = {
       id: "category",
       type: "select",
       label: "Category",
-      options: ["Salary", "Freelance", "Investment", "Gift", "Other"],
+      options: CATEGORIES.Incomes,
     },
     { id: "date", type: "date", label: "Date" },
   ],
@@ -21,7 +28,7 @@ const FIELDS = {
       id: "category",
       type: "select",
       label: "Category",
-      options: ["Food", "Transport", "Entertainment", "Health", "Other"],
+      options: CATEGORIES.Expenses,
     },
     { id: "date", type: "date", label: "Date" },
   ],
@@ -36,7 +43,7 @@ const FIELDS = {
       id: "category",
       type: "select",
       label: "Category",
-      options: ["Food", "Transport", "Entertainment", "Health", "Other"],
+      options: CATEGORIES.Budgets,
     },
     { id: "date", type: "date", label: "Date" },
   ],
@@ -46,9 +53,8 @@ export default function TransactionForm({ formType, onClose }) {
   const fields = FIELDS[formType] || [];
   const [formIsClosing, setFormIsClosing] = useState(false);
   const [formValues, setFormValues] = useState({});
-  const [transactions, addTransaction] = useContext(TransActionsContext);
-  
-
+  const [addTransaction] = useContext(TransActionsContext);
+  const [categoryOptions,setCategoryOptions] = useState(CATEGORIES[formType] || [])
   const cursorRef = useRef(null);
 
   function DisplayValueHandle(field, value, e) {
@@ -89,6 +95,12 @@ export default function TransactionForm({ formType, onClose }) {
     addTransaction(formType, formValues);
     handleClose()
   }
+  
+  function handleNewOption(Value) {
+    const newOption = {value:Value,label:Value};
+    setCategoryOptions(prev => [...prev,newOption]);
+    setFormValues(prev => ({...prev,category:newOption}))
+  }
   return (
     <div
       className={`actionsForm actionsForm${formIsClosing ? "--fadeOut" : ""}`}
@@ -113,19 +125,14 @@ export default function TransactionForm({ formType, onClose }) {
           <label key={field.id}>
             <span>{field.id}:</span>
             {field.type === "select" ? (
-              <select
-                id={field.id}
-                name={field.id}
-                value={formValues[field.id] || ""}
-                onChange={(e) => DisplayValueHandle(field, e.target.value, e)}
-              >
-                <option value="">Select</option>
-                {field.options.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
+                <CreatableSelect
+                    options={categoryOptions}
+                    value={categoryOptions.find(opt => opt.value === formValues.category) || null}
+                    onChange={(selected) => setFormValues(prev => ({ ...prev, category: selected.value }))}
+                    onCreateOption={handleNewOption}
+                    placeholder="Select or add new..."
+                    formatCreateLabel={(input) => `+ Add "${input}"`}
+                />
             ) : (
               <input
                 id={field.id}
