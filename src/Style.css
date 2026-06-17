@@ -206,7 +206,12 @@ body {
   box-sizing: border-box;
   border-bottom: 2px solid #c2ab8e;
 }
-
+.budgets__list-item{
+ border:2px solid red;
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+}
 /*QuickAccess*/
 .quick-access {
   position: fixed;
