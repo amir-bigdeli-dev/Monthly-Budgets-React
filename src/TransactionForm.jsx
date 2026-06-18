@@ -35,6 +35,7 @@ const FIELDS = {
       label: "Category",
     },
     { id: "amount", type: "text", label: "Amount" },
+    {id:"percent", type: "number", label: "Percent"},
     { id: "date", type: "date", label: "Date" },
   ],
   MonthlyBudget: [
@@ -107,6 +108,7 @@ export default function TransactionForm({ formType, onClose }) {
         className={`actionsForm__form actionsForm__form${formIsClosing ? "--close" : ""}`}
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleSubmit}
+        data-type={formType}
       >
         <div className="actionsFrom__form-header">
           <h2 className="actionsForm-title">Add {formType}</h2>
@@ -119,7 +121,7 @@ export default function TransactionForm({ formType, onClose }) {
           </span>
         </div>
         {fields.map((field) => (
-          <label key={field.id}>
+          <label key={field.id} className={`actionsForm__label--${field.id}`}>
             <span>{field.id}:</span>
             {field.type === "select" ? (
               <CreatableSelect

@@ -184,6 +184,7 @@ body {
   background: var(--parts-bg);
   border: var(--section-border);
   border-radius: var(--sections-border-radius);
+  overflow-y: auto ;
 }
 .budgets__list {
   position: relative;
@@ -193,7 +194,7 @@ body {
   flex-direction: column;
   gap: 0.5rem;
   width: 100%;
-  padding: var(--padding-parent);
+  padding: 0.3rem;
 }
 .budgets__list-title {
   width: 100%;
@@ -206,7 +207,23 @@ body {
   box-sizing: border-box;
   border-bottom: 2px solid #c2ab8e;
 }
-
+.budgets__list-item{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border: var(--section-border);
+  padding: 0.6rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+.budgets__list-item {
+  padding: 0.5rem;
+  border:1px solid blue
+}
+.list-item__counter{
+  padding: 0.3rem 0.5rem;
+  border: 2px solid red;
+}
 /*QuickAccess*/
 .quick-access {
   position: fixed;
@@ -392,4 +409,18 @@ body {
 .actionsForm__form span {
   font-size: 0.75rem;
   color: #888;
+}
+.actionsForm__form[data-type="Budgets"] {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  column-gap: 0.8rem;
+}
+.actionsForm__form[data-type="Budgets"] > * {
+  grid-column: 1 / -1;
+}
+.actionsForm__form[data-type="Budgets"] label:has(input[name="amount"]){
+  grid-column: 2 span;
+}
+.actionsForm__form[data-type="Budgets"] label:has(input[name="percent"]) {
+  grid-column: span 1;
 }
