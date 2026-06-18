@@ -29,13 +29,12 @@ const FIELDS = {
     { id: "date", type: "date", label: "Date" },
   ],
   Budgets: [
-    { id: "title", type: "text", label: "Title" },
-    { id: "amount", type: "text", label: "Amount" },
     {
       id: "category",
       type: "select",
       label: "Category",
     },
+    { id: "amount", type: "text", label: "Amount" },
     { id: "date", type: "date", label: "Date" },
   ],
   MonthlyBudget: [
