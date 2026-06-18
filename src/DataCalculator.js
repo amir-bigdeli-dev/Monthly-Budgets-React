@@ -1,36 +1,38 @@
 const parseAmount = (amount) =>
   parseFloat(String(amount).replace(/,/g, "")) || 0;
 
-const dataCalculator = (transactions) => ({
-  Incomes: transactions.Incomes.reduce(
+const dataCalculator = (transactions) => {
+  const Incomes =  transactions.Incomes.reduce(
     (sum, item) => sum + parseAmount(item.amount),
     0,
-  ),
-  Expenses: transactions.Expenses.reduce(
+  )
+  const Expenses = transactions.Expenses.reduce(
     (sum, item) => sum + parseAmount(item.amount),
     0,
-  ),
-  Money:
+  )
+  const Money =
     transactions.Money.reduce(
       (sum, item) => sum + parseAmount(item.amount),
       0,
-    ) +
-    transactions.Incomes.reduce(
-      (sum, item) => sum + parseAmount(item.amount),
-      0,
-    ) -
-    transactions.Expenses.reduce(
-      (sum, item) => sum + parseAmount(item.amount),
-      0,
-    ),
-  Budgets: transactions.Budgets.reduce(
+    ) 
+
+  const Budgets = transactions.Budgets.reduce(
     (sum, item) => sum + parseAmount(item.amount),
     0,
-  ),
-  MonthlyBudget: transactions.MonthlyBudget.reduce(
+  )
+  const MonthlyBudget = transactions.MonthlyBudget.reduce(
     (sum, item) => sum + parseAmount(item.amount),
     0,
-  ),
-});
+  )
+
+    return(
+        {
+            Incomes: Incomes,
+            Expenses : Expenses,
+            Money: (Money + Incomes) - Expenses,
+            MonthlyBudget: MonthlyBudget
+        }
+    )
+};
 
 export default dataCalculator;
