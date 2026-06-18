@@ -65,7 +65,7 @@ export default function TransactionForm({ formType, onClose }) {
       cursorRef.current = { input, pos: cursorPos + lengthDiff };
       if(formType === "Budgets"){
         const ValuePercent = ((Number(raw) * 100) / TransactionsCalculator.MonthlyBudget).toFixed(2);
-        setFormValues((prev) => ({ ...prev,amount:formatted,percent: `${ValuePercent} %` }));
+        setFormValues((prev) => ({ ...prev,amount:formatted,percent: `${ValuePercent}%` }));
       }
       setFormValues((prev) => ({ ...prev, amount: formatted }));
     }else if(field.id === "percent"){
@@ -80,7 +80,7 @@ export default function TransactionForm({ formType, onClose }) {
         ? ((Number(percentValue) * TransactionsCalculator.MonthlyBudget) / 100).toLocaleString("en-US")
         : "";
       cursorRef.current = { input, pos: Math.min(cursorPos, percentValue.length) };
-      setFormValues((prev) => ({ ...prev, percent: `${percentValue} %`, amount: PercentToValue }));
+      setFormValues((prev) => ({ ...prev, percent: `${percentValue}%`, amount: PercentToValue }));
     } else {
       setFormValues((prev) => ({ ...prev, [field.id]: value }));
     }
