@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 
-export default function Charts({ types , type_label}) {
+export default function Charts({ types, type_label }) {
   const [chart_type, setChart_type] = useState("Incomes");
   types = types.filter((type) => type !== "MonthlyBudget");
   return (

@@ -5,9 +5,9 @@ import incomesIcon from "./assets/icons/down-arrow-1-svgrepo-com.svg";
 import expensesIcon from "./assets/icons/down-arrow-1-svgrepo-com (1).svg";
 import moneyIcon from "./assets/icons/icons8-money-25.png";
 import budgetsIcon from "./assets/icons/budget-cost-svgrepo-com.svg";
-import monthlyBudgetIcon from "./assets/icons/monthly-budget-icon.png"
+import monthlyBudgetIcon from "./assets/icons/monthly-budget-icon.png";
 
-export default function QuickAccess({ types, onSelect , type_label }) {
+export default function QuickAccess({ types, onSelect, type_label }) {
   let [isOpen, setIsOpen] = useState(false);
 
   const iconMap = {

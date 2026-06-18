@@ -3,7 +3,7 @@ import downArrow from "./assets/icons/down-arrow-1-svgrepo-com.svg";
 import upArrow from "./assets/icons/down-arrow-1-svgrepo-com (1).svg";
 import moneyIcon from "./assets/icons/icons8-money-25.png";
 
-export default function Header({ data}) {
+export default function Header({ data }) {
   return (
     <div className="Header">
       <div className="Header__total-money">
