@@ -6,14 +6,9 @@ import TransactionForm from "./TransactionForm.jsx";
 import { useState} from "react";
 import TransActionsContext from "./contexts.js";
 import useTransactions from "./useTransactions.jsx";
+import dataCalculator from "./DataCalculator.js";
 
 const App = () => {
-  const stat = {
-    total: 100000,
-    income: 10000,
-    expenses: 500,
-    monBudget: 10000 - 500,
-  };
 
   const Types_Labels = {
     Incomes: "Income",
@@ -22,15 +17,15 @@ const App = () => {
     Budgets: "Budget",
     MonthlyBudget: "Monthly Budget",
   };
-
+  
   const types = ["Incomes", "Money", "Expenses", "Budgets", "MonthlyBudget"];
   const [formType, setFormType] = useState(null);
-  const {transactions, addTransaction , categoryOptions , addCategoryOption} = useTransactions()
+  const {transactions, addTransaction , categoryOptions , addCategoryOption , TransactionsCalculator} = useTransactions()
 
   return (
-      <TransActionsContext.Provider value={{transactions, addTransaction , categoryOptions , addCategoryOption}}>
+      <TransActionsContext.Provider value={{transactions, addTransaction , categoryOptions , addCategoryOption , TransactionsCalculator}}>
     <div className="App">
-      <Header stat={stat} />
+      <Header  data={TransactionsCalculator} />
       <Charts types={types} type_label={Types_Labels} />
       <Budgets />
       <QuickAccess types={types} type_label={Types_Labels} onSelect={setFormType} />
