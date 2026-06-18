@@ -3,5 +3,6 @@ import { createContext } from "react";
 const TransActionsContext = createContext([{ transactions: {},
     addTransaction: () => {},
     categories: {},
-    addCategory: () => {},}, function () {}]);
+    addCategory: () => {},
+    TransactionsCalculator: {}}, function () {}]);
 export default TransActionsContext;

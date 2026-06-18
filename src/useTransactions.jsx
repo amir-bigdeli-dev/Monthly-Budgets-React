@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import dataCalculator from "./DataCalculator.js";
 
-const initialState = { Incomes: [], Expenses: [], Money: [], Budgets: [] , "Monthly Budget": [] };
+const initialState = { Incomes: [], Expenses: [], Money: [], Budgets: [] , MonthlyBudget: [] };
 const initialCategories = {  Incomes: [{value:"Salary", label: "Salary" }, {value:"Gift", label: "Gift" }, {value:"Investment", label: "Investment" }],
     Expenses: [{value:"Food", label: "Food" }, {value:"Rent", label: "Rent" }, {value:"Entertainment", label: "Entertainment" }],
     get Budgets(){return this.Expenses}}
@@ -44,6 +45,8 @@ export default function useTransactions() {
             [type] : [...prev[type], option],
         }))
     }
+    
+    const TransactionsCalculator = dataCalculator(transactions);
 
-    return { transactions, addTransaction , categoryOptions ,addCategoryOption};
+    return { transactions, addTransaction , categoryOptions ,addCategoryOption , TransactionsCalculator};
 }
