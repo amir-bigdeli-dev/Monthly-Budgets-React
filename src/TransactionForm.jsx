@@ -35,7 +35,7 @@ const FIELDS = {
       label: "Category",
     },
     { id: "amount", type: "text", label: "Amount" },
-    {id:"percent", type: "number", label: "Percent"},
+    {id:"percent", type: "text", label: "Percent"},
     { id: "date", type: "date", label: "Date" },
   ],
   MonthlyBudget: [
@@ -48,7 +48,7 @@ export default function TransactionForm({ formType, onClose }) {
   const fields = FIELDS[formType] || [];
   const [formIsClosing, setFormIsClosing] = useState(false);
   const [formValues, setFormValues] = useState({});
-  const { addTransaction, categoryOptions, addCategoryOption } =
+  const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator } =
     useContext(TransActionsContext);
   const cursorRef = useRef(null);
 
@@ -62,7 +62,25 @@ export default function TransactionForm({ formType, onClose }) {
       const formatted = raw ? Number(raw).toLocaleString("en-US") : "";
       const lengthDiff = formatted.length - oldLength;
       cursorRef.current = { input, pos: cursorPos + lengthDiff };
+      if(formType === "Budgets"){
+        const ValuePercent = ((Number(raw) * 100) / TransactionsCalculator.MonthlyBudget).toFixed(2);
+        setFormValues((prev) => ({ ...prev,amount:formatted,percent: `${ValuePercent} %` }));
+      }
       setFormValues((prev) => ({ ...prev, amount: formatted }));
+    }else if(field.id === "percent"){
+      const input = e.target;
+      const cursorPos = input.selectionStart;
+      const percentValue = value.replace(/[^0-9]/g, "");
+      const PercentToValue = percentValue
+        ? ((Number(percentValue) * TransactionsCalculator.MonthlyBudget) / 100).toLocaleString("en-US")
+        : "";
+      console.log(cursorPos,percentValue.length)
+      cursorRef.current = { input, pos: Math.min(cursorPos, percentValue.length) };
+      setFormValues((prev) => ({
+        ...prev,
+        percent: percentValue ? `${percentValue}%` : "",
+        amount: PercentToValue,
+      }));
     } else {
       setFormValues((prev) => ({ ...prev, [field.id]: value }));
     }

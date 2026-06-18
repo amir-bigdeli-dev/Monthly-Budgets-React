@@ -263,6 +263,7 @@ body {
 .quick-access__list {
   display: flex;
   flex-direction: column;
+  background-color: ghostwhite;
   border-radius: var(--sections-border-radius);
   border: var(--section-border);
   box-shadow: var(--boxShadow);
