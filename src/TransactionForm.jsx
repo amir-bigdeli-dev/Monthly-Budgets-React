@@ -48,6 +48,7 @@ export default function TransactionForm({ formType, onClose }) {
   const fields = FIELDS[formType] || [];
   const [formIsClosing, setFormIsClosing] = useState(false);
   const [formValues, setFormValues] = useState({});
+  const [cursorTrigger, setCursorTrigger] = useState(0);
   const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator } =
     useContext(TransActionsContext);
   const cursorRef = useRef(null);
@@ -71,16 +72,15 @@ export default function TransactionForm({ formType, onClose }) {
       const input = e.target;
       const cursorPos = input.selectionStart;
       const percentValue = value.replace(/[^0-9]/g, "");
+      if (Number(percentValue) > 100) {
+        cursorRef.current = { input, pos: Math.min(cursorPos - 1, percentValue.length ?? 0) };
+        setCursorTrigger((prev) => prev + 1);
+        return}
       const PercentToValue = percentValue
         ? ((Number(percentValue) * TransactionsCalculator.MonthlyBudget) / 100).toLocaleString("en-US")
         : "";
-      console.log(cursorPos,percentValue.length)
       cursorRef.current = { input, pos: Math.min(cursorPos, percentValue.length) };
-      setFormValues((prev) => ({
-        ...prev,
-        percent: percentValue ? `${percentValue}%` : "",
-        amount: PercentToValue,
-      }));
+      setFormValues((prev) => ({ ...prev, percent: `${percentValue} %`, amount: PercentToValue }));
     } else {
       setFormValues((prev) => ({ ...prev, [field.id]: value }));
     }
@@ -92,7 +92,7 @@ export default function TransactionForm({ formType, onClose }) {
       input.setSelectionRange(pos, pos);
       cursorRef.current = null;
     }
-  }, [formValues.amount]);
+  }, [formValues.amount, formValues.percent, cursorTrigger]);
   function handleClose() {
     setFormIsClosing(true);
     setTimeout(() => {
