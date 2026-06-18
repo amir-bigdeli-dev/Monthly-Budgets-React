@@ -6,7 +6,6 @@ import TransactionForm from "./TransactionForm.jsx";
 import { useState } from "react";
 import TransActionsContext from "./contexts.js";
 import useTransactions from "./useTransactions.jsx";
-import dataCalculator from "./DataCalculator.js";
 
 const App = () => {
   const Types_Labels = {
