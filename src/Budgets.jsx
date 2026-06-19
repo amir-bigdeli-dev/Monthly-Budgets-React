@@ -23,7 +23,7 @@ export default function Budgets() {
           {budgets.map((item,index) => (
               <li className="budgets__list-item" key={item.id} style={{background:item.color}}>
                   <span className="list-item__counter">{index + 1}</span>
-                  <h3 className="list-item__title">{item.category}</h3>
+                  <h3 className="list-item__title" title={item.category}>{item.category}</h3>
                   <span className="list-item__percent">{item.percent}</span>
                   <span className="list-item__amount">{priceFormater(budgetsAmountNum(item.amount))}</span>
                   <span className="list-item__remain">{priceFormater((budgetsAmountNum(item.amount)) - BudgetRemainCal(item.category))}</span>
