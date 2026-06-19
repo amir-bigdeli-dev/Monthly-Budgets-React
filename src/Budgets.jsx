@@ -16,7 +16,6 @@ export default function Budgets() {
     );
 
     const titleTimerRef = useRef(null)
-
     function ShowFullTitle(title,e) {
         if(titleTimerRef.current) {
             clearTimeout(titleTimerRef.current)
@@ -25,7 +24,7 @@ export default function Budgets() {
         const element = e.currentTarget
         if(element.scrollWidth <= element.clientWidth) return;
         setTitleToolTip(title)
-        setTimeout(() => {
+        titleTimerRef.current = setTimeout(() => {
             setTitleToolTip(null)
         },3000)
     }
