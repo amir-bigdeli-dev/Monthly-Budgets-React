@@ -206,7 +206,7 @@ body {
   font-size: 1rem;
   padding: 0.6rem;
   box-sizing: border-box;
-  border-bottom: 2px solid #c2ab8e;
+  border-bottom: 2px solid #e8decf;
 }
 .budgets__list-item{
   display: flex;
@@ -219,9 +219,8 @@ body {
 }
 .budgets__list-item {
   padding: 0.5rem;
-  border:1px solid blue;
+  border:var(--section-border);
   box-shadow: var(--boxShadow);
-  font-weight: bolder;
 }
 .list-item__counter{
   width:2rem;
