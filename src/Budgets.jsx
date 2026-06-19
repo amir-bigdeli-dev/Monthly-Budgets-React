@@ -1,4 +1,4 @@
-import {useState,useEffect,useContext} from "react";
+import {useState,useEffect,useContext,useRef} from "react";
 import TransActionsContext from "./contexts.js";
 import priceFormater from "./priceFormater.jsx";
 
@@ -14,8 +14,14 @@ export default function Budgets() {
             .filter(expense => expense.category === category)
             .reduce((acc, expense) => acc + (budgetsAmountNum(expense.amount) || 0), 0)
     );
-    
+
+    const titleTimerRef = useRef(null)
+
     function ShowFullTitle(title,e) {
+        if(titleTimerRef.current) {
+            clearTimeout(titleTimerRef.current)
+            titleTimerRef.current = null
+        }
         const element = e.currentTarget
         if(element.scrollWidth <= element.clientWidth) return;
         setTitleToolTip(title)
