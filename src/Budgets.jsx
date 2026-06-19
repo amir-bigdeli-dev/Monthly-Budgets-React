@@ -15,7 +15,9 @@ export default function Budgets() {
             .reduce((acc, expense) => acc + (budgetsAmountNum(expense.amount) || 0), 0)
     );
     
-    function ShowFullTitle(title) {
+    function ShowFullTitle(title,e) {
+        const element = e.currentTarget
+        if(element.scrollWidth <= element.clientWidth) return;
         setTitleToolTip(title)
         setTimeout(() => {
             setTitleToolTip(null)
@@ -31,7 +33,7 @@ export default function Budgets() {
           {budgets.map((item,index) => (
               <li className={`budgets__list-item ${titleToolTip === item.id ? "list-item__title-tooltip" : ""}`} data-full-title={item.category}  key={item.id} style={{background:item.color}}>
                   <span className="list-item__counter">{index + 1}</span>
-                  <h3 className={`list-item__title`} data-full-title={item.category} onClick={() => ShowFullTitle(item.id)} title={item.category}>{item.category}</h3>
+                  <h3 className={`list-item__title`}  onClick={(e) => ShowFullTitle(item.id,e)} title={item.category}>{item.category}</h3>
                   <span className="list-item__percent">{item.percent}</span>
                   <span className="list-item__amount">{priceFormater(budgetsAmountNum(item.amount))}</span>
                   <span className="list-item__remain">{priceFormater((budgetsAmountNum(item.amount)) - BudgetRemainCal(item.category))}</span>
