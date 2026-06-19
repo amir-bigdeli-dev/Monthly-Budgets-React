@@ -65,6 +65,7 @@ export default function useTransactions() {
       ...prev,
       [type]: [...prev[type], option],
     }));
+    localStorage.setItem("Categories", JSON.stringify(categoryOptions));
   }
 
   const TransactionsCalculator = dataCalculator(transactions);
