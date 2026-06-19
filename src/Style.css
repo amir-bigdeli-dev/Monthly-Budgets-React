@@ -210,6 +210,7 @@ body {
 }
 .budgets__list-item{
   display: grid;
+  position: relative;
   grid-template-columns: auto repeat(4, 1fr);
   align-items: center;
   border: var(--section-border);
@@ -219,13 +220,21 @@ body {
   text-align: center;
 }
 .list-item__title {
+  position: relative;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;}
-.budgets__list-item {
-  padding: 0.5rem;
-  border:var(--section-border);
-  box-shadow: var(--boxShadow);
+.list-item__title-tooltip::after{
+ content: attr(data-full-title);
+  position: absolute;
+  bottom: 60%;
+  border-radius: 10%;
+  padding: 0.1rem 0.2rem;
+  box-shadow: 2px 2px 5px rgb(42 42 42 / 0.47);
+  border: var(--section-border);
+  left:10%;
+  background-color: rgb(255 255 255 / 0.8);
+  color: #484848;
 }
 .list-item__counter{
   width:2rem;
