@@ -49,11 +49,13 @@ export default function TransactionForm({ formType, onClose }) {
   const [formIsClosing, setFormIsClosing] = useState(false);
   const [formValues, setFormValues] = useState({});
   const [cursorTrigger, setCursorTrigger] = useState(0);
+  const [invalidValue,setInvalidValue] = useState(false)
   const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator } =
     useContext(TransActionsContext);
   const cursorRef = useRef(null);
 
   function DisplayValueHandle(field, value, e) {
+    setInvalidValue(false)
     if (field.id === "amount") {
       const input = e.target;
       const cursorPos = input.selectionStart;
@@ -64,6 +66,10 @@ export default function TransactionForm({ formType, onClose }) {
       const lengthDiff = formatted.length - oldLength;
       cursorRef.current = { input, pos: cursorPos + lengthDiff };
       if(formType === "Budgets"){
+        if((Number(raw) + TransactionsCalculator.Budgets) > TransactionsCalculator.MonthlyBudget) {
+          setInvalidValue(true)
+          return;
+        }
         const ValuePercent = ((Number(raw) * 100) / TransactionsCalculator.MonthlyBudget).toFixed(2);
         setFormValues((prev) => ({ ...prev,amount:formatted,percent: `${ValuePercent}%` }));
       }
@@ -77,10 +83,14 @@ export default function TransactionForm({ formType, onClose }) {
         setCursorTrigger((prev) => prev + 1);
         return}
       const PercentToValue = percentValue
-        ? ((Number(percentValue) * TransactionsCalculator.MonthlyBudget) / 100).toLocaleString("en-US")
+        ? ((Number(percentValue) * TransactionsCalculator.MonthlyBudget) / 100)
         : "";
+      if(PercentToValue + TransactionsCalculator.Budgets > TransactionsCalculator.MonthlyBudget) {
+        setInvalidValue(true)
+        return;
+      }
       cursorRef.current = { input, pos: Math.min(cursorPos, percentValue.length) };
-      setFormValues((prev) => ({ ...prev, percent: `${percentValue}%`, amount: PercentToValue }));
+      setFormValues((prev) => ({ ...prev, percent: `${percentValue}%`, amount: PercentToValue.toLocaleString("en-US") }));
     } else {
       setFormValues((prev) => ({ ...prev, [field.id]: value }));
     }
@@ -140,7 +150,7 @@ export default function TransactionForm({ formType, onClose }) {
         </div>
         {fields.map((field) => (
           <label key={field.id} className={`actionsForm__label--${field.id}`}>
-            <span>{field.id}:</span>
+            <span>{field.id}:{invalidValue && field.id === "amount" ? <h4 className="inputInvalidAlert">Exceeds monthly budget</h4> : null}</span>
             {field.type === "select" ? (
               <CreatableSelect
                 options={categoryOptions[formType] || []}
@@ -174,6 +184,7 @@ export default function TransactionForm({ formType, onClose }) {
                     block: "center",
                   })
                 }
+                className={`${invalidValue && field.id === "amount" ? "inputInvalid" : ""}`}
               />
             )}
           </label>
