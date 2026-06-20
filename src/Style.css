@@ -469,8 +469,8 @@ body {
 }
 .EmptyFields{
   outline:1px solid red !important;
-
 }
+/*alert*/
 .errorAlert{
   display: flex;
   align-items: center;
@@ -501,8 +501,8 @@ body {
 .errorAlert::before{
   content: "";
   display: block;
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   background-image: url(assets/icons/alert-svgrepo-com.svg);
   background-size: contain;
   background-repeat: no-repeat;
