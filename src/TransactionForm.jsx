@@ -51,15 +51,13 @@ export default function TransactionForm({ formType, onClose }) {
   const [cursorTrigger, setCursorTrigger] = useState(0);
   const [invalidValue,setInvalidValue] = useState(false);
   const [EmptyFields,setEmptyFields] = useState([]);
-  const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator } =
+  const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator , transactions } =
     useContext(TransActionsContext);
   const cursorRef = useRef(null);
 
   function DisplayValueHandle(field, value, e) {
-    const Empty = (fields.filter((field => !formValues[field.id])).map((fields) => fields.id))
-    setEmptyFields(Empty)
     setInvalidValue(false)
-    setEmptyFields(prev => prev.filter(id => id !== field.id))
+    setEmptyFields((fields.filter((field => !formValues[field.id])).map((fields) => fields.id)))
     if (field.id === "amount") {
       const input = e.target;
       const cursorPos = input.selectionStart;
@@ -130,6 +128,9 @@ export default function TransactionForm({ formType, onClose }) {
   }
 
   function handleCategoryChange(selected) {
+    if(transactions.Budgets.some(budget => budget.category === selected.value)) {
+      alert("Exist")
+    }
     setFormValues(prev => ({ ...prev, category: selected.value }));
     setEmptyFields(prev => prev.filter(id => id !== "category"));
   }
