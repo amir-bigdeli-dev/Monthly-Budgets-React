@@ -173,6 +173,7 @@ body {
 }
 /*Budgets*/
 .budgets {
+  position: relative;
   width: 100%;
   flex: 1;
   display: flex;
@@ -469,4 +470,46 @@ body {
 .EmptyFields{
   outline:1px solid red !important;
 
+}
+.errorAlert{
+  display: flex;
+  gap: 0.5rem;
+  text-align: left;
+  width: 80%;
+  padding: .8rem 1rem;
+  position: absolute;
+  border-radius: .5rem;
+  top: 0.5rem;
+  left: 50%;
+  overflow: hidden;
+  z-index: 9999;
+  transform: translateX(-50%);
+  background: rgb(215 25 25);
+  color: #ffffff;
+}
+.errorAlert::after{
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  animation: statusBar 3s linear forwards;
+  background: rgb(255 255 255 / 0.55);
+}
+.errorAlert::before{
+  content: "";
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-image: url(assets/icons/alert-svgrepo-com.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+@keyframes statusBar {
+  from{
+    width:0;
+  }
+  to{
+    width: 100%;
+  }
 }

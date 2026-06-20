@@ -50,6 +50,8 @@ export default function TransactionForm({ formType, onClose }) {
   const [formValues, setFormValues] = useState({});
   const [cursorTrigger, setCursorTrigger] = useState(0);
   const [invalidValue,setInvalidValue] = useState(false);
+  const [inputError,setInputError] = useState(false);
+  const [errorAlert,setErrorAlert] = useState("");
   const [EmptyFields,setEmptyFields] = useState([]);
   const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator , transactions } =
     useContext(TransActionsContext);
@@ -116,7 +118,7 @@ export default function TransactionForm({ formType, onClose }) {
   function handleSubmit(e) {
     e.preventDefault();
     const Empty = (fields.filter((field => !formValues[field.id])).map((fields) => fields.id));
-    if (Empty.length > 0) { console.error("Please fill all fields"); setEmptyFields(Empty);return;}
+    if (Empty.length > 0) { errorHandle("Fill the Form!!"); setEmptyFields(Empty);return;}
     addTransaction(formType, formValues);
     handleClose();
   }
@@ -129,12 +131,32 @@ export default function TransactionForm({ formType, onClose }) {
 
   function handleCategoryChange(selected) {
     if(transactions.Budgets.some(budget => budget.category === selected.value)) {
-      alert("Exist")
+      errorHandle("This category already exists as a budget!");
+      return;
     }
     setFormValues(prev => ({ ...prev, category: selected.value }));
     setEmptyFields(prev => prev.filter(id => id !== "category"));
   }
+  
+  const ErrorRef = useRef(null);
+  
+  function errorHandle(message) {
+    setInputError(true);
+    setErrorAlert(message);
+    ErrorRef.current = setTimeout(() => {
+      setInputError(false);
+      setErrorAlert("");
+    }, 3000);
+    
+  }
+  useEffect(() => {
+    if (ErrorRef.current) {
+      clearTimeout(ErrorRef.current)
+      ErrorRef.current = null
+    }}, []);
   return (
+      <>
+        {inputError ? <div className="errorAlert">{errorAlert}</div> : null}
     <div
       className={`actionsForm actionsForm${formIsClosing ? "--fadeOut" : ""}`}
       onClick={handleClose}
@@ -193,5 +215,6 @@ export default function TransactionForm({ formType, onClose }) {
         </button>
       </form>
     </div>
+      </>
   );
 }
