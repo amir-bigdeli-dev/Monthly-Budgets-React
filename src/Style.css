@@ -340,6 +340,7 @@ body {
   animation: FadeOut 0.3s ease-out;
 }
 .actionsForm__form {
+  position: relative;
   display: flex;
   animation: slideUp 0.3s ease-out;
   flex-direction: column;
@@ -348,7 +349,6 @@ body {
   border-radius: 1.2rem 1.2rem 0 0;
   padding: 1.5rem;
   max-height: 90vh;
-  overflow-y: auto;
 }
 .actionsForm__form--close {
   animation: slideDown 0.3s ease-out;
@@ -473,13 +473,15 @@ body {
 }
 .errorAlert{
   display: flex;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 0.8rem;
   text-align: left;
-  width: 80%;
+  width: 90%;
+  max-height: 400px;
   padding: .8rem 1rem;
-  position: fixed;
+  position: absolute;
   border-radius: .5rem;
-  top: 0.5rem;
+  bottom: 105%;
   left: 50%;
   overflow: hidden;
   z-index: 9999;
