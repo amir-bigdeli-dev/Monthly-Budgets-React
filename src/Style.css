@@ -477,7 +477,7 @@ body {
   text-align: left;
   width: 80%;
   padding: .8rem 1rem;
-  position: absolute;
+  position: fixed;
   border-radius: .5rem;
   top: 0.5rem;
   left: 50%;
