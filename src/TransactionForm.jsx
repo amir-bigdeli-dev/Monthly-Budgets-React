@@ -56,6 +56,8 @@ export default function TransactionForm({ formType, onClose }) {
   const cursorRef = useRef(null);
 
   function DisplayValueHandle(field, value, e) {
+    const Empty = (fields.filter((field => !formValues[field.id])).map((fields) => fields.id))
+    setEmptyFields(Empty)
     setInvalidValue(false)
     setEmptyFields(prev => prev.filter(id => id !== field.id))
     if (field.id === "amount") {
@@ -180,7 +182,7 @@ export default function TransactionForm({ formType, onClose }) {
                     block: "center",
                   })
                 }
-                className={`${invalidValue && field.id === "amount" ? "inputInvalid" : ""} ${EmptyFields.includes("category") ? "EmptyFields" : ""}`}
+                className={`${invalidValue && field.id === "amount" ? "inputInvalid" : ""} ${EmptyFields.includes(field.id) ? "EmptyFields" : ""}`}
               />
             )}
           </label>
