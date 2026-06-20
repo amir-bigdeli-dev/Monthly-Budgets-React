@@ -252,6 +252,7 @@ body {
   left:10%;
   background-color: rgb(255 255 255 / 0.8);
   color: #484848;
+  z-index: 999999;
 }
 .list-item__counter{
   width:2rem;
