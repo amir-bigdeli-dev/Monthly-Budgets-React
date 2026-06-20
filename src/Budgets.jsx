@@ -44,7 +44,7 @@ export default function Budgets() {
                   <h3 className={`list-item__title`}  onClick={(e) => ShowFullTitle(item.id,e)} title={item.category}>{item.category}</h3>
                   <span className="list-item__percent">{item.percent}</span>
                   <span className="list-item__amount">{priceFormater(budgetsAmountNum(item.amount))}</span>
-                  <span className="list-item__remain">{BudgetRemainCal(item)}</span>
+                  <span className={`list-item__remain ${BudgetRemainCal(item) < 0 ? "list-item__remain--overFlow" : ""}`}>{BudgetRemainCal(item)}</span>
               </li>
           ))}
       </ul>

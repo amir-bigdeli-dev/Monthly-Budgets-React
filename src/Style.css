@@ -272,6 +272,10 @@ body {
   font-weight: lighter;
   font-size: smaller;
 }
+.list-item__remain--overFlow{
+    background: rgb(250 215 215);
+    border: 1px solid rgb(245 169 169 / 0.65);
+}
 /*QuickAccess*/
 .quick-access {
   position: fixed;
