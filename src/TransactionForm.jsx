@@ -139,10 +139,11 @@ export default function TransactionForm({ formType, onClose }) {
   }
   
   const ErrorRef = useRef(null);
-  
+
   function errorHandle(message) {
     setInputError(true);
     setErrorAlert(message);
+
     ErrorRef.current = setTimeout(() => {
       setInputError(false);
       setErrorAlert("");
@@ -150,6 +151,12 @@ export default function TransactionForm({ formType, onClose }) {
     
   }
   useEffect(() => {
+    if (inputError && ErrorRef.current) {
+      ErrorRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
     if (ErrorRef.current) {
       clearTimeout(ErrorRef.current)
       ErrorRef.current = null
