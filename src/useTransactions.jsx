@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import dataCalculator from "./DataCalculator.js";
+import ColorGenerator from "./ColorGenerator.js";
 
 const initialState = {
   Incomes: [],
@@ -47,7 +48,7 @@ export default function useTransactions() {
   useEffect(() => {
     localStorage.setItem("transactions", JSON.stringify(transactions));
   }, [transactions]);
-
+  
   useEffect(() => {
     localStorage.setItem("Categories", JSON.stringify(categoryOptions));
   }, [categoryOptions]);
@@ -55,7 +56,7 @@ export default function useTransactions() {
   function addTransaction(type, data) {
     setTransactions((prev) => ({
       ...prev,
-      [type]: [...prev[type], { id: Date.now(), ...data }],
+      [type]: [...prev[type], { id: Date.now(),color: ColorGenerator(), ...data }],
     }));
   }
 
@@ -64,6 +65,7 @@ export default function useTransactions() {
       ...prev,
       [type]: [...prev[type], option],
     }));
+    localStorage.setItem("Categories", JSON.stringify(categoryOptions));
   }
 
   const TransactionsCalculator = dataCalculator(transactions);

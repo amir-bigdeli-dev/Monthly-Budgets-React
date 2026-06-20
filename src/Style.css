@@ -178,7 +178,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.2rem;
   border: var(--section-border);
   box-shadow: var(--boxShadow);
   background: var(--parts-bg);
@@ -440,6 +439,8 @@ body {
   cursor: pointer;
 }
 .actionsForm__form span {
+  display: flex;
+  gap: 0.3rem;
   font-size: 0.75rem;
   color: #888;
 }
@@ -456,4 +457,11 @@ body {
 }
 .actionsForm__form[data-type="Budgets"] label:has(input[name="percent"]) {
   grid-column: span 1;
+}
+.inputInvalidAlert {
+  font-size: 0.7rem;
+  color: darkred;
+}
+.inputInvalid{
+  border-color: red !important;
 }

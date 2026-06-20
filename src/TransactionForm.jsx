@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect,useContext } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import TransActionsContext from "./contexts.js";
 import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg";
 import CreatableSelect from "react-select/creatable";
@@ -29,13 +29,17 @@ const FIELDS = {
     { id: "date", type: "date", label: "Date" },
   ],
   Budgets: [
-    { id: "title", type: "text", label: "Title" },
-    { id: "amount", type: "text", label: "Amount" },
     {
       id: "category",
       type: "select",
       label: "Category",
     },
+    { id: "amount", type: "text", label: "Amount" },
+    {id:"percent", type: "text", label: "Percent"},
+    { id: "date", type: "date", label: "Date" },
+  ],
+  MonthlyBudget: [
+    { id: "amount", type: "text", label: "Amount" },
     { id: "date", type: "date", label: "Date" },
   ],
 };
@@ -98,7 +102,7 @@ export default function TransactionForm({ formType, onClose }) {
       input.setSelectionRange(pos, pos);
       cursorRef.current = null;
     }
-  },[formValues.amount]);
+  }, [formValues.amount, formValues.percent, cursorTrigger]);
   function handleClose() {
     setFormIsClosing(true);
     setTimeout(() => {
@@ -109,16 +113,19 @@ export default function TransactionForm({ formType, onClose }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const isEmpty = fields.some(f => !formValues[f.id]);
-    if (isEmpty) { console.error("Please fill all fields"); return; }
+    const isEmpty = fields.some((f) => !formValues[f.id]);
+    if (isEmpty) {
+      console.error("Please fill all fields");
+      return;
+    }
     addTransaction(formType, formValues);
-    handleClose()
+    handleClose();
   }
 
   function handleNewOption(Value) {
-    const newOption = {value:Value,label:Value};
-    setFormValues(prev => ({...prev,category:Value}))
-    addCategoryOption(formType,newOption)
+    const newOption = { value: Value, label: Value };
+    setFormValues((prev) => ({ ...prev, category: Value }));
+    addCategoryOption(formType, newOption);
   }
   return (
     <div
@@ -129,6 +136,7 @@ export default function TransactionForm({ formType, onClose }) {
         className={`actionsForm__form actionsForm__form${formIsClosing ? "--close" : ""}`}
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleSubmit}
+        data-type={formType}
       >
         <div className="actionsFrom__form-header">
           <h2 className="actionsForm-title">Add {formType}</h2>
@@ -144,14 +152,23 @@ export default function TransactionForm({ formType, onClose }) {
           <label key={field.id} className={`actionsForm__label--${field.id}`}>
             <span>{field.id}:{invalidValue && field.id === "amount" ? <h4 className="inputInvalidAlert">Exceeds monthly budget</h4> : null}</span>
             {field.type === "select" ? (
-                <CreatableSelect
-                    options={categoryOptions[formType] || []}
-                    value={(categoryOptions[formType].find(opt => opt.value === formValues.category) || null)}
-                    onChange={(selected) => setFormValues(prev => ({ ...prev, category: selected.value }))}
-                    onCreateOption={handleNewOption}
-                    placeholder="Select or add new..."
-                    formatCreateLabel={(input) => `+ Add "${input}"`}
-                />
+              <CreatableSelect
+                options={categoryOptions[formType] || []}
+                value={
+                  categoryOptions[formType].find(
+                    (opt) => opt.value === formValues.category,
+                  ) || null
+                }
+                onChange={(selected) =>
+                  setFormValues((prev) => ({
+                    ...prev,
+                    category: selected.value,
+                  }))
+                }
+                onCreateOption={handleNewOption}
+                placeholder="Select or add new..."
+                formatCreateLabel={(input) => `+ Add "${input}"`}
+              />
             ) : (
               <input
                 id={field.id}
@@ -172,6 +189,7 @@ export default function TransactionForm({ formType, onClose }) {
             )}
           </label>
         ))}
+
         <button type="submit" className="transactionForm__submit">
           Submit
         </button>
