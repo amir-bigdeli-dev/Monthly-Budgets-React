@@ -45,12 +45,14 @@ export default function TransactionForm({ formType, onClose }) {
   const [formIsClosing, setFormIsClosing] = useState(false);
   const [formValues, setFormValues] = useState({});
   const [cursorTrigger, setCursorTrigger] = useState(0);
-  const [invalidValue,setInvalidValue] = useState(false)
+  const [invalidValue,setInvalidValue] = useState(false);
+  const [EmptyFields,setEmptyFields] = useState([]);
   const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator } =
     useContext(TransActionsContext);
   const cursorRef = useRef(null);
 
   function DisplayValueHandle(field, value, e) {
+    setEmptyFields(prev => prev.filter(id => id !== field.id))
     setInvalidValue(false)
     if (field.id === "amount") {
       const input = e.target;
@@ -109,8 +111,8 @@ export default function TransactionForm({ formType, onClose }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const isEmpty = fields.some(f => !formValues[f.id]);
-    if (isEmpty) { console.error("Please fill all fields"); return; }
+    const Empty = (fields.filter((field => !formValues[field.id])).map((fields) => fields.id));
+    if (Empty.length > 0) { console.error("Please fill all fields"); setEmptyFields(Empty);return;}
     addTransaction(formType, formValues);
     handleClose()
   }
@@ -147,10 +149,11 @@ export default function TransactionForm({ formType, onClose }) {
                 <CreatableSelect
                     options={categoryOptions[formType] || []}
                     value={(categoryOptions[formType].find(opt => opt.value === formValues.category) || null)}
-                    onChange={(selected) => setFormValues(prev => ({ ...prev, category: selected.value }))}
+                    onChange={(selected) => {setFormValues(prev => ({ ...prev, category: selected.value }));setEmptyFields(prev => prev.filter(id => id !== "category"))}}
                     onCreateOption={handleNewOption}
                     placeholder="Select or add new..."
                     formatCreateLabel={(input) => `+ Add "${input}"`}
+                    className={`${EmptyFields.includes("category") ? "EmptyFields" : ""}`}
                 />
             ) : (
               <input
@@ -167,7 +170,7 @@ export default function TransactionForm({ formType, onClose }) {
                     block: "center",
                   })
                 }
-                className={`${invalidValue && field.id === "amount" ? "inputInvalid" : ""}`}
+                className={`${invalidValue && field.id === "amount" ? "inputInvalid" : ""}  ${EmptyFields.includes(field.id) ? "EmptyFields" : ""}`}
               />
             )}
           </label>

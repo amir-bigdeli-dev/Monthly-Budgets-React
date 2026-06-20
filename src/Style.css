@@ -457,3 +457,6 @@ body {
 .actionsForm__form[data-type="Budgets"] label:has(input[name="percent"]) {
   grid-column: span 1;
 }
+.EmptyFields{
+  outline:1px solid red !important;
+}
