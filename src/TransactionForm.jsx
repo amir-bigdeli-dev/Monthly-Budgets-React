@@ -136,7 +136,7 @@ export default function TransactionForm({ formType, onClose }) {
   }
 
   function handleCategoryChange(selected) {
-    if(transactions.Budgets.some(budget => budget.category === selected.value)) {
+    if(transactions.Budgets.some(budget => budget.category === selected.value) && formType === "Budgets"){
       errorHandle("This category already exists as a budget!");
       return;
     }
