@@ -44,7 +44,6 @@ export default function TransactionForm({ formType, onClose }) {
   const fields = FIELDS[formType] || [];
   const [formIsClosing, setFormIsClosing] = useState(false);
   const [formValues, setFormValues] = useState({});
-  const {addTransaction, categoryOptions , addCategoryOption} = useContext(TransActionsContext);
   const [cursorTrigger, setCursorTrigger] = useState(0);
   const [invalidValue,setInvalidValue] = useState(false)
   const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator } =
@@ -142,8 +141,6 @@ export default function TransactionForm({ formType, onClose }) {
           </span>
         </div>
         {fields.map((field) => (
-          <label key={field.id}>
-            <span>{field.id}:</span>
           <label key={field.id} className={`actionsForm__label--${field.id}`}>
             <span>{field.id}:{invalidValue && field.id === "amount" ? <h4 className="inputInvalidAlert">Exceeds monthly budget</h4> : null}</span>
             {field.type === "select" ? (
@@ -175,7 +172,6 @@ export default function TransactionForm({ formType, onClose }) {
             )}
           </label>
         ))}
-
         <button type="submit" className="transactionForm__submit">
           Submit
         </button>
