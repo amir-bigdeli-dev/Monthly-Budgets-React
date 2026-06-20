@@ -122,6 +122,11 @@ export default function TransactionForm({ formType, onClose }) {
     setFormValues(prev => ({...prev,category:Value}))
     addCategoryOption(formType,newOption)
   }
+
+  function handleCategoryChange(selected) {
+    setFormValues(prev => ({ ...prev, category: selected.value }));
+    setEmptyFields(prev => prev.filter(id => id !== "category"));
+  }
   return (
     <div
       className={`actionsForm actionsForm${formIsClosing ? "--fadeOut" : ""}`}
@@ -149,7 +154,7 @@ export default function TransactionForm({ formType, onClose }) {
                 <CreatableSelect
                     options={categoryOptions[formType] || []}
                     value={(categoryOptions[formType].find(opt => opt.value === formValues.category) || null)}
-                    onChange={(selected) => {setFormValues(prev => ({ ...prev, category: selected.value }));setEmptyFields(prev => prev.filter(id => id !== "category"))}}
+                    onChange={(selected) => handleCategoryChange(selected)}
                     onCreateOption={handleNewOption}
                     placeholder="Select or add new..."
                     formatCreateLabel={(input) => `+ Add "${input}"`}
