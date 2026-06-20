@@ -59,7 +59,7 @@ export default function TransactionForm({ formType, onClose }) {
 
   function DisplayValueHandle(field, value, e) {
     setInvalidValue(false)
-    setEmptyFields((fields.filter((field => !formValues[field.id])).map((fields) => fields.id)))
+    setEmptyFields(prev => prev.filter(id => id !== field.id))
     if (field.id === "amount") {
       const input = e.target;
       const cursorPos = input.selectionStart;
@@ -76,6 +76,12 @@ export default function TransactionForm({ formType, onClose }) {
         }
         const ValuePercent = ((Number(raw) * 100) / TransactionsCalculator.MonthlyBudget).toFixed(2);
         setFormValues((prev) => ({ ...prev,amount:formatted,percent: `${ValuePercent}%` }));
+      }else if (formType === "MonthlyBudget"){
+        if(Number(raw) > TransactionsCalculator.Money){
+            errorHandle("Monthly budget cannot exceed total money!");
+            setInvalidValue(true);
+            return;
+        }
       }
       setFormValues((prev) => ({ ...prev, amount: formatted }));
     }else if(field.id === "percent"){
@@ -95,7 +101,7 @@ export default function TransactionForm({ formType, onClose }) {
       }
       cursorRef.current = { input, pos: Math.min(cursorPos, percentValue.length) };
       setFormValues((prev) => ({ ...prev, percent: `${percentValue}%`, amount: PercentToValue.toLocaleString("en-US") }));
-    } else {
+    }else {
       setFormValues((prev) => ({ ...prev, [field.id]: value }));
     }
   }
@@ -187,7 +193,7 @@ export default function TransactionForm({ formType, onClose }) {
         </div>
         {fields.map((field) => (
           <label key={field.id} className={`actionsForm__label--${field.id}`}>
-            <span>{field.id}:{invalidValue && field.id === "amount" ? <h4 className="inputInvalidAlert">Exceeds monthly budget</h4> : null}</span>
+            <span>{field.id}:{invalidValue && field.id === "amount" && formType === "Budgets" ? <h4 className="inputInvalidAlert">Exceeds {formType}</h4> : null}</span>
             {field.type === "select" ? (
                 <CreatableSelect
                     options={categoryOptions[formType] || []}
