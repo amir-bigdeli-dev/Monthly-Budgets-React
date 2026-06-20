@@ -178,6 +178,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 0.2rem;
   border: var(--section-border);
   box-shadow: var(--boxShadow);
   background: var(--parts-bg);
@@ -464,4 +465,8 @@ body {
 }
 .inputInvalid{
   border-color: red !important;
+}
+.EmptyFields{
+  outline:1px solid red !important;
+
 }

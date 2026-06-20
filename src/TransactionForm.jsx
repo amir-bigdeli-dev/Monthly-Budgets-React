@@ -49,12 +49,15 @@ export default function TransactionForm({ formType, onClose }) {
   const [formIsClosing, setFormIsClosing] = useState(false);
   const [formValues, setFormValues] = useState({});
   const [cursorTrigger, setCursorTrigger] = useState(0);
-  const [invalidValue,setInvalidValue] = useState(false)
+  const [invalidValue,setInvalidValue] = useState(false);
+  const [EmptyFields,setEmptyFields] = useState([]);
   const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator } =
     useContext(TransActionsContext);
   const cursorRef = useRef(null);
 
   function DisplayValueHandle(field, value, e) {
+    setInvalidValue(false)
+    setEmptyFields(prev => prev.filter(id => id !== field.id))
     setInvalidValue(false)
     if (field.id === "amount") {
       const input = e.target;
@@ -113,19 +116,21 @@ export default function TransactionForm({ formType, onClose }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const isEmpty = fields.some((f) => !formValues[f.id]);
-    if (isEmpty) {
-      console.error("Please fill all fields");
-      return;
-    }
+    const Empty = (fields.filter((field => !formValues[field.id])).map((fields) => fields.id));
+    if (Empty.length > 0) { console.error("Please fill all fields"); setEmptyFields(Empty);return;}
     addTransaction(formType, formValues);
     handleClose();
   }
-
+  
   function handleNewOption(Value) {
     const newOption = { value: Value, label: Value };
     setFormValues((prev) => ({ ...prev, category: Value }));
     addCategoryOption(formType, newOption);
+  }
+
+  function handleCategoryChange(selected) {
+    setFormValues(prev => ({ ...prev, category: selected.value }));
+    setEmptyFields(prev => prev.filter(id => id !== "category"));
   }
   return (
     <div
@@ -152,23 +157,15 @@ export default function TransactionForm({ formType, onClose }) {
           <label key={field.id} className={`actionsForm__label--${field.id}`}>
             <span>{field.id}:{invalidValue && field.id === "amount" ? <h4 className="inputInvalidAlert">Exceeds monthly budget</h4> : null}</span>
             {field.type === "select" ? (
-              <CreatableSelect
-                options={categoryOptions[formType] || []}
-                value={
-                  categoryOptions[formType].find(
-                    (opt) => opt.value === formValues.category,
-                  ) || null
-                }
-                onChange={(selected) =>
-                  setFormValues((prev) => ({
-                    ...prev,
-                    category: selected.value,
-                  }))
-                }
-                onCreateOption={handleNewOption}
-                placeholder="Select or add new..."
-                formatCreateLabel={(input) => `+ Add "${input}"`}
-              />
+                <CreatableSelect
+                    options={categoryOptions[formType] || []}
+                    value={(categoryOptions[formType].find(opt => opt.value === formValues.category) || null)}
+                    onChange={(selected) => handleCategoryChange(selected)}
+                    onCreateOption={handleNewOption}
+                    placeholder="Select or add new..."
+                    formatCreateLabel={(input) => `+ Add "${input}"`}
+                    className={`${EmptyFields.includes("category") ? "EmptyFields" : ""}`}
+                />
             ) : (
               <input
                 id={field.id}
@@ -189,7 +186,6 @@ export default function TransactionForm({ formType, onClose }) {
             )}
           </label>
         ))}
-
         <button type="submit" className="transactionForm__submit">
           Submit
         </button>
