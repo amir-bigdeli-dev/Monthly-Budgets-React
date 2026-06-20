@@ -213,12 +213,12 @@ body {
 .budgets__list-item{
   display: grid;
   position: relative;
-  grid-template-columns: auto repeat(4, 1fr);
+  grid-template-columns: auto repeat(4, 1fr) 1rem;
   align-items: center;
   border: var(--section-border);
   padding: 0.6rem;
   border-radius: 0.5rem;
-  gap: 0.5rem;
+  gap: 0.6rem;
   text-align: center;
 }
 .budgets__list-item > *{
@@ -275,6 +275,14 @@ body {
 .list-item__remain--overFlow{
     background: rgb(250 215 215);
     border: 1px solid rgb(245 169 169 / 0.65);
+}
+.list-item__arrow {
+  display: flex;
+  justify-content: flex-start;
+align-items: center;
+}
+.list-item__arrow img{
+    width: 100%;
 }
 /*QuickAccess*/
 .quick-access {

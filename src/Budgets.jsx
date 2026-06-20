@@ -1,6 +1,7 @@
 import {useState,useEffect,useContext,useRef} from "react";
 import TransActionsContext from "./contexts.js";
 import priceFormater from "./priceFormater.jsx";
+import BudgetsRightArrowIcon from "./assets/icons/right-arrow-backup-2-svgrepo-com.svg";
 
 export default function Budgets() {
     const {TransactionsCalculator,transactions} = useContext(TransActionsContext);
@@ -45,6 +46,7 @@ export default function Budgets() {
                   <span className="list-item__percent">{item.percent}</span>
                   <span className="list-item__amount">{priceFormater(budgetsAmountNum(item.amount))}</span>
                   <span className={`list-item__remain ${BudgetRemainCal(item) < 0 ? "list-item__remain--overFlow" : ""}`}>{BudgetRemainCal(item)}</span>
+                  <span className="list-item__arrow"><img src={BudgetsRightArrowIcon} alt="right-arrow"/></span>
               </li>
           ))}
       </ul>
