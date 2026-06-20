@@ -221,6 +221,21 @@ body {
   gap: 0.5rem;
   text-align: center;
 }
+.budgets__list-item > *{
+    z-index: 1;
+}
+.budgets__list-item::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--remain-percent);
+    height: 100%;
+    border-radius: inherit;
+    background: var(--background-color);
+  transition: width 0.3s ease;
+  z-index: 0;
+}
 .list-item__title {
   position: relative;
   white-space: nowrap;
