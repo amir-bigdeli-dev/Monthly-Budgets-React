@@ -166,6 +166,7 @@ export default function TransactionForm({ formType, onClose }) {
         {inputError ? <div className="errorAlert">{errorAlert}</div> : null}
     <div
       className={`actionsForm actionsForm${formIsClosing ? "--fadeOut" : ""}`}
+      ref={el => el?.scrollIntoView({ behavior: "smooth", block: "center" })}
       onClick={handleClose}
     >
       <form
