@@ -3,6 +3,8 @@ import TransActionsContext from "./contexts.js";
 import priceFormater from "./priceFormater.jsx";
 import BudgetsRightArrowIcon from "./assets/icons/right-arrow-backup-2-svgrepo-com.svg";
 import TrashIcon from "./assets/icons/trash-bin-trash-svgrepo-com.svg";
+import EditIcon from "./assets/icons/edit-3-svgrepo-com (1).svg";
+import RedTrashIcon from "./assets/icons/red-trash-bin.svg";
 
 export default function Budgets() {
     const {TransactionsCalculator,transactions} = useContext(TransActionsContext);
@@ -57,6 +59,10 @@ export default function Budgets() {
                   <span className="list-item__arrow"><img src={BudgetsRightArrowIcon} alt="right-arrow"/></span>
               </li>
                   {expensesShow === item.category && <div className="list-item__expenses">
+                      <div className="budget-actions">
+                          <span className="budget-actions__edit">edit<img src={EditIcon} alt="edit-icon"/></span>
+                          <span className="budget-actions__delete">delete<img src={RedTrashIcon} alt="trash-icon"/></span>
+                      </div>
                   <ul className="items-container__expenses-list">
                         {transactions.Expenses.filter(expense => expense.category === item.category).map((expense,index) => (
                             <li key={expense.id} className={`expenses-list__item ${titleToolTip === expense.id ? "expenses-item__title-tooltip" : ""}`} data-full-title={expense.title}>
