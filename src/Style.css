@@ -175,7 +175,6 @@ body {
 }
 /*Budgets*/
 .budgets {
-  position: relative;
   width: 100%;
   flex: 1;
   display: flex;
@@ -230,6 +229,7 @@ body {
   text-align: center;
   z-index: 11;
   background: white;
+  cursor: pointer;
 }
 .budget-actions{
   display: flex;
@@ -415,6 +415,46 @@ display: flex;
 }
 .expenses-list-item__trash img{
   width: 100%;
+}
+.expenseToRemoveAlert{
+  width: 70%;
+  height: 120px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgb(255 255 255);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0.5rem;
+  text-align: center;
+  border-radius: 0.6rem;
+  z-index: 99999;
+  box-shadow: 4px 4px 10px rgb(61 61 61 / 0.35);
+  border: 1px solid #9f9f9f;
+}
+.expenseToRemoveAlert__actions{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+.expenseToRemoveAlert__actions button{
+  width: 40%;
+  padding: 0.3rem;
+  border-radius: 0.3rem;
+  cursor: pointer;
+}
+.expenseToRemoveAlert__actions-confirm{
+    background: #ea372b;
+    color: white;
+    border: none;
+}
+.expenseToRemoveAlert__actions-cancel{
+  background: white;
+  color: #969696;
+  border: 1px solid #adadad;
 }
 /*QuickAccess*/
 .quick-access {
