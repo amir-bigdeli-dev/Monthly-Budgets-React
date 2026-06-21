@@ -2,11 +2,13 @@ import {useState,useEffect,useContext,useRef} from "react";
 import TransActionsContext from "./contexts.js";
 import priceFormater from "./priceFormater.jsx";
 import BudgetsRightArrowIcon from "./assets/icons/right-arrow-backup-2-svgrepo-com.svg";
+import TrashIcon from "./assets/icons/trash-bin-trash-svgrepo-com.svg";
 
 export default function Budgets() {
     const {TransactionsCalculator,transactions} = useContext(TransActionsContext);
     const [budgets, setBudgets] = useState(transactions.Budgets);
-    const [titleToolTip,setTitleToolTip] = useState(null)
+    const [titleToolTip,setTitleToolTip] = useState(null);
+    const [expensesShow,setExpensesShow] = useState(null);
 
     const budgetsAmountNum = (item) => (Number(item.replace(/[^0-9]/g,"")))
 
@@ -20,6 +22,7 @@ export default function Budgets() {
 
     const titleTimerRef = useRef(null)
     function ShowFullTitle(title,e) {
+        e.stopPropagation();
         if(titleTimerRef.current) {
             clearTimeout(titleTimerRef.current)
             titleTimerRef.current = null
@@ -31,6 +34,10 @@ export default function Budgets() {
             setTitleToolTip(null)
         },3000)
     }
+
+    function ShowExpenses(category) {
+        setExpensesShow(expensesShow === category ? null : category)
+    }
     useEffect(() => {
         setBudgets(transactions.Budgets);
     },[transactions.Budgets])
@@ -40,7 +47,8 @@ export default function Budgets() {
       <h2 className="budgets__list-title">Budgets</h2>
       <ul className="budgets__list">
           {budgets.map((item,index) => (
-              <li className={`budgets__list-item ${titleToolTip === item.id ? "list-item__title-tooltip" : ""}`} data-full-title={item.category}  key={item.id} style={{"--background-color":item.color, "--remain-percent":`${(BudgetRemainCal(item) * 100 ) / budgetsAmountNum(item.amount)}%`}}>
+              <div className="list-items-container" key={item.id}>
+              <li onClick={() => ShowExpenses(item.category)} className={`budgets__list-item ${titleToolTip === item.id ? "list-item__title-tooltip" : ""}`} data-full-title={item.category}  key={item.id} style={{"--background-color":item.color, "--remain-percent":`${(BudgetRemainCal(item) * 100 ) / budgetsAmountNum(item.amount)}%`}}>
                   <span className="list-item__counter">{index + 1}</span>
                   <h3 className={`list-item__title`}  onClick={(e) => ShowFullTitle(item.id,e)} title={item.category}>{item.category}</h3>
                   <span className="list-item__percent">{item.percent}</span>
@@ -48,6 +56,20 @@ export default function Budgets() {
                   <span className={`list-item__remain ${BudgetRemainCal(item) < 0 ? "list-item__remain--overFlow" : ""}`}>{BudgetRemainCal(item)}</span>
                   <span className="list-item__arrow"><img src={BudgetsRightArrowIcon} alt="right-arrow"/></span>
               </li>
+                  {expensesShow === item.category && <div className="list-item__expenses">
+                  <ul className="items-container__expenses-list">
+                        {transactions.Expenses.filter(expense => expense.category === item.category).map((expense,index) => (
+                            <li key={expense.id} className={`expenses-list__item ${titleToolTip === expense.id ? "expenses-item__title-tooltip" : ""}`} data-full-title={expense.title}>
+                                <span className="expenses-list-item-counter">{index + 1}</span>
+                                <h3 className={`expenses-list-item__title`} onClick={(e) => ShowFullTitle(expense.id,e)}>{expense.title}</h3>
+                                <span className="expenses-list-item__date">{expense.date}</span>
+                                <span className="list-item__amount">{priceFormater(expense.amount)}</span>
+                                <span className="expenses-list-item__trash"><img src={TrashIcon} alt="trash"/></span>
+                            </li>
+                        ))}
+                  </ul>
+                  </div>}
+              </div>
           ))}
       </ul>
     </div>
