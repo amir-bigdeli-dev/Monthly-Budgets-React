@@ -63,17 +63,19 @@ export default function Budgets() {
                           <span className="budget-actions__edit">edit<img src={EditIcon} alt="edit-icon"/></span>
                           <span className="budget-actions__delete">delete<img src={RedTrashIcon} alt="trash-icon"/></span>
                       </div>
+                      {transactions.Expenses.filter(expense => expense.category === item.category).length === 0 ? <p className="no-expenses">No expenses for this budget yet.</p> :
                   <ul className="items-container__expenses-list">
                         {transactions.Expenses.filter(expense => expense.category === item.category).map((expense,index) => (
                             <li key={expense.id} className={`expenses-list__item ${titleToolTip === expense.id ? "expenses-item__title-tooltip" : ""}`} data-full-title={expense.title}>
                                 <span className="expenses-list-item-counter">{index + 1}</span>
                                 <h3 className={`expenses-list-item__title`} onClick={(e) => ShowFullTitle(expense.id,e)}>{expense.title}</h3>
                                 <span className="expenses-list-item__date">{expense.date}</span>
-                                <span className="list-item__amount">{priceFormater(expense.amount)}</span>
+                                <span className="list-item__amount">{priceFormater(budgetsAmountNum(expense.amount))}</span>
                                 <span className="expenses-list-item__trash"><img src={TrashIcon} alt="trash"/></span>
                             </li>
                         ))}
                   </ul>
+                      }
                   </div>}
               </div>
           ))}
