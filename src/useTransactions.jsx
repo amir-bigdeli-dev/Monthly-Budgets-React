@@ -15,13 +15,13 @@ const initialCategories = {
     { value: "Gift", label: "Gift" },
     { value: "Investment", label: "Investment" },
   ],
-  Expenses: [
+  Budgets: [
     { value: "Food", label: "Food" },
     { value: "Rent", label: "Rent" },
     { value: "Entertainment", label: "Entertainment" },
   ],
-  get Budgets() {
-    return this.Expenses;
+  get Expenses() {
+    return this.Budgets;
   },
 };
 
@@ -37,8 +37,8 @@ export default function useTransactions() {
       const parsed = JSON.parse(stored);
       return {
         ...parsed,
-        get Budgets() {
-          return this.Expenses;
+        get Expenses() {
+          return this.Budgets;
         },
       };
     }
@@ -65,7 +65,7 @@ export default function useTransactions() {
       ...prev,
       [type]: [...prev[type], option],
     }));
-    localStorage.setItem("Categories", JSON.stringify(categoryOptions));
+    localStorage.setItem("Categories",JSON.stringify(categoryOptions));
   }
 
   function removeExpense(id) {
