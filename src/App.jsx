@@ -14,6 +14,7 @@ const App = () => {
     Money: "Money",
     Budgets: "Budget",
     MonthlyBudget: "Monthly Budget",
+      Transactions : "Transactions"
   };
 
   const types = ["Incomes", "Money", "Expenses", "Budgets", "MonthlyBudget"];
@@ -45,7 +46,6 @@ const App = () => {
         <Charts types={types} type_label={Types_Labels} />
         <Budgets />
         <QuickAccess
-          types={types}
           type_label={Types_Labels}
           onSelect={setFormType}
         />

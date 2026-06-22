@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useContext } from "react";
 import TransActionsContext from "./contexts.js";
 import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg";
 import CreatableSelect from "react-select/creatable";
+import TransactionsLog from "./TransactionsLog.jsx";
 
 const FIELDS = {
   Incomes: [
@@ -179,6 +180,8 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null }
     }}, []);
   return (
       <>
+        {formType === "Transactions" ? 
+        <TransactionsLog transactions={transactions.Expenses} /> :
     <div
       className={`actionsForm actionsForm${formIsClosing ? "--fadeOut" : ""}`}
       ref={el => el?.scrollIntoView({ behavior: "smooth", block: "center" })}
@@ -239,6 +242,7 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null }
         </button>
       </form>
     </div>
+        }
       </>
   );
 }
