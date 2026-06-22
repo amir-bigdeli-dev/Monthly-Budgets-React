@@ -7,11 +7,11 @@ import EditIcon from "./assets/icons/edit-3-svgrepo-com (1).svg";
 import RedTrashIcon from "./assets/icons/red-trash-bin.svg";
 
 export default function Budgets() {
-    const {transactions,removeExpense} = useContext(TransActionsContext);
+    const {transactions,removeItems} = useContext(TransActionsContext);
     const [budgets, setBudgets] = useState(transactions.Budgets);
     const [titleToolTip,setTitleToolTip] = useState(null);
     const [expensesShow,setExpensesShow] = useState(null);
-    const [expenseToRemove,setExpenseToRemove] = useState(null);
+    const [itemToRemove,setItemToRemove] = useState(null);
 
     const budgetsAmountNum = (item) => (Number(item.replace(/[^0-9]/g,"")))
 
@@ -45,22 +45,23 @@ export default function Budgets() {
         setBudgets(transactions.Budgets);
     },[transactions.Budgets])
 
-    function ExpenseRemove(expenseId) {
-        setExpenseToRemove(expenseId)
+    function ItemRemove(Id,type,e) {
+        e.stopPropagation()
+        setItemToRemove({Id , type})
     }
 
-    function ConfirmExpenseRemove(expenseId,e) {
+    function ConfirmItemRemove(expenseToRemove,e) {
         e.stopPropagation()
-        removeExpense(expenseId)
-        setExpenseToRemove(null)
+        removeItems(expenseToRemove)
+        setItemToRemove(null)
     }
   return (
     <div className="budgets">
-        {expenseToRemove ? <div className="expenseToRemoveAlert" onClick={(e) => e.stopPropagation()}>
+        {itemToRemove ? <div className="expenseToRemoveAlert" onClick={(e) => e.stopPropagation()}>
             <p>Are you sure you want to delete this expense?</p>
             <div className="expenseToRemoveAlert__actions">
-                <button className="expenseToRemoveAlert__actions-confirm" onClick={(e) => ConfirmExpenseRemove(expenseToRemove,e)}>Confirm</button>
-                <button className="expenseToRemoveAlert__actions-cancel" onClick={() => setExpenseToRemove(null)}>Cancel</button>
+                <button className="expenseToRemoveAlert__actions-confirm" onClick={(e) => ConfirmItemRemove(itemToRemove,e)}>Confirm</button>
+                <button className="expenseToRemoveAlert__actions-cancel" onClick={() => setItemToRemove(null)}>Cancel</button>
             </div>
         </div> : null}
       <h2 className="budgets__list-title">Budgets</h2>
@@ -78,7 +79,7 @@ export default function Budgets() {
                   {expensesShow === item.category && <div className="list-item__expenses">
                       <div className="budget-actions">
                           <span className="budget-actions__edit">edit<img src={EditIcon} alt="edit-icon"/></span>
-                          <span className="budget-actions__delete">delete<img src={RedTrashIcon} alt="trash-icon"/></span>
+                          <span className="budget-actions__delete" onClick={(e) => ItemRemove(item.id,"Budgets",e)}>delete<img src={RedTrashIcon} alt="trash-icon"/></span>
                       </div>
                       {transactions.Expenses.filter(expense => expense.category === item.category).length === 0 ? <p className="no-expenses">No expenses for this budget yet.</p> :
                   <ul className="items-container__expenses-list">
@@ -88,7 +89,7 @@ export default function Budgets() {
                                 <h3 className={`expenses-list-item__title`} onClick={(e) => ShowFullTitle(expense.id,e)}>{expense.title}</h3>
                                 <span className="expenses-list-item__date">{expense.date}</span>
                                 <span className="list-item__amount">{priceFormater(budgetsAmountNum(expense.amount))}</span>
-                                <span className="expenses-list-item__trash" onClick={(e) => {ExpenseRemove(expense.id);e.stopPropagation()}}><img src={TrashIcon} alt="trash"/></span>
+                                <span className="expenses-list-item__trash" onClick={(e) => {ItemRemove(expense.id,"Expenses",e)}}><img src={TrashIcon} alt="trash"/></span>
                             </li>
                         ))}
                   </ul>

@@ -20,7 +20,7 @@ const App = () => {
   const [formType, setFormType] = useState(null);
   const {
     transactions,
-    removeExpense,
+      removeItems,
     addTransaction,
     categoryOptions,
     addCategoryOption,
@@ -30,7 +30,7 @@ const App = () => {
   return (
     <TransActionsContext.Provider
       value={{
-        removeExpense,
+          removeItems,
         transactions,
         addTransaction,
         categoryOptions,

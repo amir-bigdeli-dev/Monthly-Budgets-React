@@ -68,17 +68,17 @@ export default function useTransactions() {
     localStorage.setItem("Categories",JSON.stringify(categoryOptions));
   }
 
-  function removeExpense(id) {
+  function removeItems({Id , type}) {
     setTransactions(prev => ({
       ...prev,
-      Expenses: prev.Expenses.filter(expense => expense.id !== id),
+      [type]: prev[type].filter(expense => expense.id !== Id),
     }));
   }
 
   const TransactionsCalculator = dataCalculator(transactions);
 
   return {
-    removeExpense,
+    removeItems,
     transactions,
     addTransaction,
     categoryOptions,
