@@ -5,6 +5,7 @@ import BudgetsRightArrowIcon from "./assets/icons/right-arrow-backup-2-svgrepo-c
 import TrashIcon from "./assets/icons/trash-bin-trash-svgrepo-com.svg";
 import EditIcon from "./assets/icons/edit-3-svgrepo-com (1).svg";
 import RedTrashIcon from "./assets/icons/red-trash-bin.svg";
+import TransactionForm from "./TransactionForm.jsx";
 
 export default function Budgets() {
     const {transactions,removeItems} = useContext(TransActionsContext);
@@ -12,6 +13,8 @@ export default function Budgets() {
     const [titleToolTip,setTitleToolTip] = useState(null);
     const [expensesShow,setExpensesShow] = useState(null);
     const [itemToRemove,setItemToRemove] = useState(null);
+    const [itemToEdit,setItemToEdit] = useState(null)
+
 
     const budgetsAmountNum = (item) => (Number(item.replace(/[^0-9]/g,"")))
 
@@ -57,6 +60,7 @@ export default function Budgets() {
     }
   return (
     <div className="budgets">
+        {itemToEdit ? <TransactionForm formType="Budgets" onClose={() => setItemToEdit(null)} ItemValues={itemToEdit}/> : null}
         {itemToRemove ? <div className="expenseToRemoveAlert" onClick={(e) => e.stopPropagation()}>
             <p>Are you sure you want to delete this expense?</p>
             <div className="expenseToRemoveAlert__actions">
@@ -78,7 +82,7 @@ export default function Budgets() {
               </li>
                   {expensesShow === item.category && <div className="list-item__expenses">
                       <div className="budget-actions">
-                          <span className="budget-actions__edit">edit<img src={EditIcon} alt="edit-icon"/></span>
+                          <span className="budget-actions__edit" onClick={() => setItemToEdit(item)}>edit<img src={EditIcon} alt="edit-icon"/></span>
                           <span className="budget-actions__delete" onClick={(e) => ItemRemove(item.id,"Budgets",e)}>delete<img src={RedTrashIcon} alt="trash-icon"/></span>
                       </div>
                       {transactions.Expenses.filter(expense => expense.category === item.category).length === 0 ? <p className="no-expenses">No expenses for this budget yet.</p> :

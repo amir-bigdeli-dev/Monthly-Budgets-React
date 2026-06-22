@@ -74,10 +74,17 @@ export default function useTransactions() {
       [type]: prev[type].filter(expense => expense.id !== Id),
     }));
   }
-
-  const TransactionsCalculator = dataCalculator(transactions);
+  
+  function EditItem(id,type,newData){
+    setTransactions(prev => ({
+        ...prev,
+        [type]: prev[type].map(item => item.id === id ? {...item,...newData} : item),
+    }))
+  }
+    const TransactionsCalculator = dataCalculator(transactions);
 
   return {
+    EditItem,
     removeItems,
     transactions,
     addTransaction,

@@ -44,7 +44,7 @@ const FIELDS = {
   ],
 };
 
-export default function TransactionForm({ formType, onClose }) {
+export default function TransactionForm({ formType, onClose ,ItemValues = null }) {
   const fields = FIELDS[formType] || [];
   const [formIsClosing, setFormIsClosing] = useState(false);
   const [formValues, setFormValues] = useState({});
@@ -53,10 +53,16 @@ export default function TransactionForm({ formType, onClose }) {
   const [inputError,setInputError] = useState(false);
   const [errorAlert,setErrorAlert] = useState("");
   const [EmptyFields,setEmptyFields] = useState([]);
-  const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator , transactions } =
+  const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator , transactions , EditItem} =
     useContext(TransActionsContext);
+  
+  useEffect(() => {
+    if(ItemValues) {
+      setFormValues(ItemValues)
+    }
+  },[ItemValues])
   const cursorRef = useRef(null);
-
+  
   function DisplayValueHandle(field, value, e) {
     setInvalidValue(false)
     setEmptyFields(prev => prev.filter(id => id !== field.id))
@@ -125,7 +131,11 @@ export default function TransactionForm({ formType, onClose }) {
     e.preventDefault();
     const Empty = (fields.filter((field => !formValues[field.id])).map((fields) => fields.id));
     if (Empty.length > 0) { errorHandle("Fill the Form!!"); setEmptyFields(Empty);return;}
-    addTransaction(formType, formValues);
+    if(ItemValues){
+        EditItem(ItemValues.id,formType,formValues);
+    }else{
+      addTransaction(formType, formValues);
+    }
     handleClose();
   }
   

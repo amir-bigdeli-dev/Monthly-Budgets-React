@@ -20,6 +20,7 @@ const App = () => {
   const [formType, setFormType] = useState(null);
   const {
     transactions,
+      EditItem,
       removeItems,
     addTransaction,
     categoryOptions,
@@ -30,6 +31,7 @@ const App = () => {
   return (
     <TransActionsContext.Provider
       value={{
+          EditItem,
           removeItems,
         transactions,
         addTransaction,
