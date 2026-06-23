@@ -763,3 +763,12 @@ display: flex;
 .transactionsLog__list--incomes{
   background: #d0f8a3 !important;
 }
+.transactionsLog__close{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 10%;
+}

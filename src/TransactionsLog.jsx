@@ -3,15 +3,17 @@ import TrashIcon from "./assets/icons/trash-bin-trash-svgrepo-com.svg";
 import {createPortal} from "react-dom";
 import {use, useState} from "react";
 import Select from "react-select";
+import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg"
 
 
-export default function TransactionsLog({transactions}){
+export default function TransactionsLog({transactions , status}){
     const sortOptions = ["Date", "Amount", "Category"];
     const [action,setAction] = useState('Incomes')
     const budgetsAmountNum = (item) => (Number(item.replace(/[^0-9]/g,"")))
 
     return createPortal(
         <div className="transactionsLog">
+            <span className="transactionsLog__close" onClick={() => {status()}}><img className="actionsForm__close-icon" src={closeIcon} alt="close-icon"/></span>
             <h2 className="transactionsLog__title">Transactions Log</h2>
             <div className="transactionsLog__actionBar">
                 <span onClick={() => setAction('Incomes')} className={`charts__type-label ${action === "Incomes" ? 'charts__type-label charts__type-label--incomes-active':""}`}>Incomes</span>

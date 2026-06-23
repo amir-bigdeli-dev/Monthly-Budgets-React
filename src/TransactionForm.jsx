@@ -54,6 +54,7 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null }
   const [inputError,setInputError] = useState(false);
   const [errorAlert,setErrorAlert] = useState("");
   const [EmptyFields,setEmptyFields] = useState([]);
+  const [transactionLogOpen,setTransactionLogOpen] = useState(true);
   const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator , transactions , EditItem} =
     useContext(TransActionsContext);
   
@@ -180,8 +181,8 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null }
     }}, []);
   return (
       <>
-        {formType === "Transactions" ? 
-        <TransactionsLog transactions={transactions} /> :
+        {formType === "Transactions" ?
+        <TransactionsLog transactions={transactions} status={onClose} /> :
     <div
       className={`actionsForm actionsForm${formIsClosing ? "--fadeOut" : ""}`}
       ref={el => el?.scrollIntoView({ behavior: "smooth", block: "center" })}
