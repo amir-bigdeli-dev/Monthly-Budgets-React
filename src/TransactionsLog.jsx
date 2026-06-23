@@ -1,15 +1,19 @@
 import priceFormater from "./priceFormater.jsx";
 import TrashIcon from "./assets/icons/trash-bin-trash-svgrepo-com.svg";
 import {createPortal} from "react-dom";
-import {useRef,useEffect, useState} from "react";
+import {useRef,useEffect, useState ,useContext} from "react";
 import Select from "react-select";
 import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg"
+import TransActionsContext from "./contexts.js";
+import TransactionForm from "./TransactionForm.jsx";
 
 
 export default function TransactionsLog({transactions , status}){
     const sortOptions = ["Date", "Amount", "Category"];
     const [action,setAction] = useState('Incomes')
-    const budgetsAmountNum = (item) => (Number(item.replace(/[^0-9]/g,"")))
+    const budgetsAmountNum = (item) => (Number(item.replace(/[^0-9]/g,"")));
+    const { removeItems } = useContext(TransActionsContext)
+    const [itemToRemove,setItemToRemove] = useState(null);
 
 
     const LogRef = useRef(null)
@@ -31,6 +35,13 @@ export default function TransactionsLog({transactions , status}){
     },[status])
     return createPortal(
         <div className="transactionsLog" ref={LogRef}>
+            {itemToRemove ? <div className="expenseToRemoveAlert" onClick={(e) => e.stopPropagation()}>
+                <p>Are you sure you want to delete this expense?</p>
+                <div className="expenseToRemoveAlert__actions">
+                    <button className="expenseToRemoveAlert__actions-confirm" onClick={(e) => {removeItems(itemToRemove);setItemToRemove(null)}}>Confirm</button>
+                    <button className="expenseToRemoveAlert__actions-cancel" onClick={() => setItemToRemove(null)}>Cancel</button>
+                </div>
+                </div> : null}
             <span className="transactionsLog__close" onClick={() => {status()}}><img className="actionsForm__close-icon" src={closeIcon} alt="close-icon"/></span>
             <h2 className="transactionsLog__title">Transactions Log</h2>
             <div className="transactionsLog__actionBar">
@@ -85,7 +96,7 @@ export default function TransactionsLog({transactions , status}){
                         <h3 className={`expenses-list-item__title`}>{item.title}</h3>
                         <span className="expenses-list-item__date">{item.date}</span>
                         <span className="list-item__amount">{priceFormater(budgetsAmountNum(item.amount))}</span>
-                        <span className="expenses-list-item__trash"><img src={TrashIcon} alt="trash"/></span>
+                        <span className="expenses-list-item__trash" onClick={() => setItemToRemove({Id:item.id,type:action})}><img src={TrashIcon} alt="trash"/></span>
                     </li>
                 ))}
                 </ul>
