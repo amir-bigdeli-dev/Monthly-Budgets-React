@@ -6,9 +6,11 @@ import expensesIcon from "./assets/icons/down-arrow-1-svgrepo-com (1).svg";
 import moneyIcon from "./assets/icons/icons8-money-25.png";
 import budgetsIcon from "./assets/icons/budget-cost-svgrepo-com.svg";
 import monthlyBudgetIcon from "./assets/icons/monthly-budget-icon.png";
+import historyIcon from "./assets/icons/history-svgrepo-com.svg"
 
-export default function QuickAccess({ types, onSelect, type_label }) {
+export default function QuickAccess({onSelect, type_label }) {
   let [isOpen, setIsOpen] = useState(false);
+  const actions = ["Incomes", "Money", "Expenses", "Budgets", "MonthlyBudget","Transactions"];
 
   const iconMap = {
     Incomes: incomesIcon,
@@ -16,6 +18,7 @@ export default function QuickAccess({ types, onSelect, type_label }) {
     Budgets: budgetsIcon,
     Money: moneyIcon,
     MonthlyBudget: monthlyBudgetIcon,
+    Transactions: historyIcon
   };
   const quickAccessRef = useRef(null);
   useEffect(() => {
@@ -38,7 +41,7 @@ export default function QuickAccess({ types, onSelect, type_label }) {
     <div className="quick-access" ref={quickAccessRef}>
       {isOpen ? (
         <ul className="quick-access__list">
-          {types.map((type) => (
+          {actions.map((type) => (
             <li
               key={type}
               className="quick-access__list-item"

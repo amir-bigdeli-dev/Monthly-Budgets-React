@@ -15,13 +15,13 @@ const initialCategories = {
     { value: "Gift", label: "Gift" },
     { value: "Investment", label: "Investment" },
   ],
-  Expenses: [
+  Budgets: [
     { value: "Food", label: "Food" },
     { value: "Rent", label: "Rent" },
     { value: "Entertainment", label: "Entertainment" },
   ],
-  get Budgets() {
-    return this.Expenses;
+  get Expenses() {
+    return this.Budgets;
   },
 };
 
@@ -37,8 +37,8 @@ export default function useTransactions() {
       const parsed = JSON.parse(stored);
       return {
         ...parsed,
-        get Budgets() {
-          return this.Expenses;
+        get Expenses() {
+          return this.Budgets;
         },
       };
     }
@@ -54,9 +54,10 @@ export default function useTransactions() {
   }, [categoryOptions]);
 
   function addTransaction(type, data) {
+    const color = type === "Budgets" ? ColorGenerator() : undefined;
     setTransactions((prev) => ({
       ...prev,
-      [type]: [...prev[type], { id: Date.now(),color: ColorGenerator(), ...data }],
+      [type]: [...prev[type], { id: Date.now(), ...(color ? { color } : {}), ...data }],
     }));
   }
 
@@ -65,12 +66,27 @@ export default function useTransactions() {
       ...prev,
       [type]: [...prev[type], option],
     }));
-    localStorage.setItem("Categories", JSON.stringify(categoryOptions));
+    localStorage.setItem("Categories",JSON.stringify(categoryOptions));
   }
 
-  const TransactionsCalculator = dataCalculator(transactions);
+  function removeItems({Id , type}) {
+    setTransactions(prev => ({
+      ...prev,
+      [type]: prev[type].filter(expense => expense.id !== Id),
+    }));
+  }
+  
+  function EditItem(id,type,newData){
+    setTransactions(prev => ({
+        ...prev,
+        [type]: prev[type].map(item => item.id === id ? {...item,...newData} : item),
+    }))
+  }
+    const TransactionsCalculator = dataCalculator(transactions);
 
   return {
+    EditItem,
+    removeItems,
     transactions,
     addTransaction,
     categoryOptions,

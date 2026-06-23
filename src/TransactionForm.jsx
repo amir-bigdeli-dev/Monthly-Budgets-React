@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useContext } from "react";
 import TransActionsContext from "./contexts.js";
 import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg";
 import CreatableSelect from "react-select/creatable";
+import TransactionsLog from "./TransactionsLog.jsx";
 
 const FIELDS = {
   Incomes: [
@@ -44,18 +45,29 @@ const FIELDS = {
   ],
 };
 
-export default function TransactionForm({ formType, onClose }) {
+export default function TransactionForm({ formType, onClose ,ItemValues = null }) {
   const fields = FIELDS[formType] || [];
   const [formIsClosing, setFormIsClosing] = useState(false);
   const [formValues, setFormValues] = useState({});
   const [cursorTrigger, setCursorTrigger] = useState(0);
-  const [invalidValue,setInvalidValue] = useState(false)
-  const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator } =
+  const [invalidValue,setInvalidValue] = useState(false);
+  const [inputError,setInputError] = useState(false);
+  const [errorAlert,setErrorAlert] = useState("");
+  const [EmptyFields,setEmptyFields] = useState([]);
+  const [transactionLogOpen,setTransactionLogOpen] = useState(true);
+  const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator , transactions , EditItem} =
     useContext(TransActionsContext);
+  
+  useEffect(() => {
+    if(ItemValues) {
+      setFormValues(ItemValues)
+    }
+  },[ItemValues])
   const cursorRef = useRef(null);
-
+  
   function DisplayValueHandle(field, value, e) {
     setInvalidValue(false)
+    setEmptyFields(prev => prev.filter(id => id !== field.id))
     if (field.id === "amount") {
       const input = e.target;
       const cursorPos = input.selectionStart;
@@ -72,6 +84,12 @@ export default function TransactionForm({ formType, onClose }) {
         }
         const ValuePercent = ((Number(raw) * 100) / TransactionsCalculator.MonthlyBudget).toFixed(2);
         setFormValues((prev) => ({ ...prev,amount:formatted,percent: `${ValuePercent}%` }));
+      }else if (formType === "MonthlyBudget"){
+        if(Number(raw) > TransactionsCalculator.Money){
+            errorHandle("Monthly budget cannot exceed total money!");
+            setInvalidValue(true);
+            return;
+        }
       }
       setFormValues((prev) => ({ ...prev, amount: formatted }));
     }else if(field.id === "percent"){
@@ -91,7 +109,7 @@ export default function TransactionForm({ formType, onClose }) {
       }
       cursorRef.current = { input, pos: Math.min(cursorPos, percentValue.length) };
       setFormValues((prev) => ({ ...prev, percent: `${percentValue}%`, amount: PercentToValue.toLocaleString("en-US") }));
-    } else {
+    }else {
       setFormValues((prev) => ({ ...prev, [field.id]: value }));
     }
   }
@@ -113,23 +131,61 @@ export default function TransactionForm({ formType, onClose }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const isEmpty = fields.some((f) => !formValues[f.id]);
-    if (isEmpty) {
-      console.error("Please fill all fields");
-      return;
+    const Empty = (fields.filter((field => !formValues[field.id])).map((fields) => fields.id));
+    if (Empty.length > 0) { errorHandle("Fill the Form!!"); setEmptyFields(Empty);return;}
+    if(ItemValues){
+        EditItem(ItemValues.id,formType,formValues);
+    }else{
+      addTransaction(formType, formValues);
     }
-    addTransaction(formType, formValues);
     handleClose();
   }
-
+  
   function handleNewOption(Value) {
     const newOption = { value: Value, label: Value };
     setFormValues((prev) => ({ ...prev, category: Value }));
     addCategoryOption(formType, newOption);
   }
+
+  function handleCategoryChange(selected) {
+    if(transactions.Budgets.some(budget => budget.category === selected.value) && formType === "Budgets"){
+      errorHandle("This category already exists as a budget!");
+      return;
+    }
+    setFormValues(prev => ({ ...prev, category: selected.value }));
+    setEmptyFields(prev => prev.filter(id => id !== "category"));
+  }
+  
+  const ErrorRef = useRef(null);
+
+  function errorHandle(message) {
+    setInputError(true);
+    setErrorAlert(message);
+
+    ErrorRef.current = setTimeout(() => {
+      setInputError(false);
+      setErrorAlert("");
+    }, 3000);
+    
+  }
+  useEffect(() => {
+    if (inputError && ErrorRef.current) {
+      ErrorRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+    if (ErrorRef.current) {
+      clearTimeout(ErrorRef.current)
+      ErrorRef.current = null
+    }}, []);
   return (
+      <>
+        {formType === "Transactions" ?
+        <TransactionsLog  status={onClose} /> :
     <div
       className={`actionsForm actionsForm${formIsClosing ? "--fadeOut" : ""}`}
+      ref={el => el?.scrollIntoView({ behavior: "smooth", block: "center" })}
       onClick={handleClose}
     >
       <form
@@ -138,6 +194,7 @@ export default function TransactionForm({ formType, onClose }) {
         onSubmit={handleSubmit}
         data-type={formType}
       >
+        {inputError ? <div className="errorAlert">{errorAlert}</div> : null}
         <div className="actionsFrom__form-header">
           <h2 className="actionsForm-title">Add {formType}</h2>
           <span className="actionsForm__close" onClick={handleClose}>
@@ -150,25 +207,17 @@ export default function TransactionForm({ formType, onClose }) {
         </div>
         {fields.map((field) => (
           <label key={field.id} className={`actionsForm__label--${field.id}`}>
-            <span>{field.id}:{invalidValue && field.id === "amount" ? <h4 className="inputInvalidAlert">Exceeds monthly budget</h4> : null}</span>
+            <span>{field.id}:{invalidValue && field.id === "amount" && formType === "Budgets" ? <h4 className="inputInvalidAlert">Exceeds {formType}</h4> : null}</span>
             {field.type === "select" ? (
-              <CreatableSelect
-                options={categoryOptions[formType] || []}
-                value={
-                  categoryOptions[formType].find(
-                    (opt) => opt.value === formValues.category,
-                  ) || null
-                }
-                onChange={(selected) =>
-                  setFormValues((prev) => ({
-                    ...prev,
-                    category: selected.value,
-                  }))
-                }
-                onCreateOption={handleNewOption}
-                placeholder="Select or add new..."
-                formatCreateLabel={(input) => `+ Add "${input}"`}
-              />
+                <CreatableSelect
+                    options={categoryOptions[formType] || []}
+                    value={(categoryOptions[formType].find(opt => opt.value === formValues.category) || null)}
+                    onChange={(selected) => handleCategoryChange(selected)}
+                    onCreateOption={handleNewOption}
+                    placeholder="Select or add new..."
+                    formatCreateLabel={(input) => `+ Add "${input}"`}
+                    className={`${EmptyFields.includes("category") ? "EmptyFields" : ""}`}
+                />
             ) : (
               <input
                 id={field.id}
@@ -184,16 +233,17 @@ export default function TransactionForm({ formType, onClose }) {
                     block: "center",
                   })
                 }
-                className={`${invalidValue && field.id === "amount" ? "inputInvalid" : ""}`}
+                className={`${invalidValue && field.id === "amount" ? "inputInvalid" : ""} ${EmptyFields.includes(field.id) ? "EmptyFields" : ""}`}
               />
             )}
           </label>
         ))}
-
         <button type="submit" className="transactionForm__submit">
           Submit
         </button>
       </form>
     </div>
+        }
+      </>
   );
 }

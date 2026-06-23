@@ -14,12 +14,15 @@ const App = () => {
     Money: "Money",
     Budgets: "Budget",
     MonthlyBudget: "Monthly Budget",
+      Transactions : "Transactions"
   };
 
   const types = ["Incomes", "Money", "Expenses", "Budgets", "MonthlyBudget"];
   const [formType, setFormType] = useState(null);
   const {
     transactions,
+      EditItem,
+      removeItems,
     addTransaction,
     categoryOptions,
     addCategoryOption,
@@ -29,6 +32,8 @@ const App = () => {
   return (
     <TransActionsContext.Provider
       value={{
+          EditItem,
+          removeItems,
         transactions,
         addTransaction,
         categoryOptions,
@@ -41,7 +46,6 @@ const App = () => {
         <Charts types={types} type_label={Types_Labels} />
         <Budgets />
         <QuickAccess
-          types={types}
           type_label={Types_Labels}
           onSelect={setFormType}
         />
