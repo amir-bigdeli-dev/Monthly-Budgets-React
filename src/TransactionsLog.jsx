@@ -5,15 +5,17 @@ import {useRef,useEffect, useState ,useContext} from "react";
 import Select from "react-select";
 import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg"
 import TransActionsContext from "./contexts.js";
+import sortItems from "./sort_Items.js";
 import TransactionForm from "./TransactionForm.jsx";
 
 
 export default function TransactionsLog({transactions , status}){
     const sortOptions = ["Date", "Amount", "Category"];
-    const [action,setAction] = useState('Incomes')
+    const [action,setAction] = useState('Expenses')
     const budgetsAmountNum = (item) => (Number(item.replace(/[^0-9]/g,"")));
     const { removeItems } = useContext(TransActionsContext)
     const [itemToRemove,setItemToRemove] = useState(null);
+    const [sortBy,setSortBy] = useState("date");
 
 
     const LogRef = useRef(null)
@@ -48,6 +50,7 @@ export default function TransactionsLog({transactions , status}){
                 <span onClick={() => setAction('Incomes')} className={`charts__type-label ${action === "Incomes" ? 'charts__type-label charts__type-label--incomes-active':""}`}>Incomes</span>
                 <span onClick={() => setAction('Expenses')} className={`charts__type-label ${action === "Expenses" ? 'charts__type-label charts__type-label--expenses-active':""}`}>Expenses</span>
                 <Select
+                    onChange={(selectedOption) => setSortBy(selectedOption.value)}
                     defaultValue={{ value: 'Date', label: 'Date' }}
                     id="transactionsLog__actionBar-sortby"
                     options={sortOptions.map(v => ({ value: v, label: v }))}
@@ -90,7 +93,7 @@ export default function TransactionsLog({transactions , status}){
                 />
             </div>
                 <ul className="items-container__expenses-list">
-                {transactions[action].map((item , index) => (
+                {sortItems(transactions[action],sortBy).map((item , index) => (
                     <li key={item.id} className={`expenses-list__item transactionsLog__list${action === "Incomes" ? "--incomes" : ""}`}>
                         <span className="expenses-list-item-counter">{index + 1}</span>
                         <h3 className={`expenses-list-item__title`}>{item.title}</h3>
