@@ -78,8 +78,41 @@ body {
   border: var(--incomes-border-color);
 }
 .Header__stat-label--monBudget {
-  background: linear-gradient(-45deg, #ffdd00, #ffc400, #ffdd00);
+  background: white;
   box-shadow: var(--boxShadow);
+  position: relative;
+  z-index: 50;
+}
+.Header__stat-label--monBudget > * {
+    z-index: 50;
+}
+
+.Header__stat-label--monBudget::before{
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width:100%;
+  background: linear-gradient(-45deg, #ffdd00, #ffc400, #ffdd00);
+  height: var(--monthly-progress-height,50%);
+  pointer-events: none;
+  transition: height 0.3s;
+  border-radius: inherit;
+  z-index: 38;
+}
+.Header__stat-label--monBudget::after{
+  content: attr(data-progress-text);
+  position: absolute;
+  right: 2px;
+  top: clamp(0%,calc(100% - var(--monthly-progress-height, 100%)),75%);
+  color: #222;
+  font-size: 0.5rem;
+  background: rgb(255 255 255 / 0.37);
+  padding: 0.1rem 0.2rem;
+  border-radius: 0.2rem;
+  margin-top: 0.2rem;
+  pointer-events: none;
+  transition: top 0.3s;
+  z-index: 550;
 }
 .Header__stat-label--expenses {
   border: var(--expenses-border-color);
