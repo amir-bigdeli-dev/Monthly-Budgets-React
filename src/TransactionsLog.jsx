@@ -1,7 +1,7 @@
 import priceFormater from "./priceFormater.jsx";
 import TrashIcon from "./assets/icons/trash-bin-trash-svgrepo-com.svg";
 import {createPortal} from "react-dom";
-import {use, useState} from "react";
+import {useRef,useEffect, useState} from "react";
 import Select from "react-select";
 import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg"
 
@@ -11,8 +11,26 @@ export default function TransactionsLog({transactions , status}){
     const [action,setAction] = useState('Incomes')
     const budgetsAmountNum = (item) => (Number(item.replace(/[^0-9]/g,"")))
 
+
+    const LogRef = useRef(null)
+
+    useEffect(() => {
+        function closeLog(e) {
+            if(LogRef.current && !LogRef.current.contains(e.target)) {
+                status()
+            }
+        }
+
+        document.addEventListener("mousedown", closeLog)
+        document.addEventListener("touchcancel", closeLog)
+
+        return() => {
+            document.removeEventListener("mousedown", closeLog)
+            document.removeEventListener("touchcancel", closeLog)
+        }
+    },[status])
     return createPortal(
-        <div className="transactionsLog">
+        <div className="transactionsLog" ref={LogRef}>
             <span className="transactionsLog__close" onClick={() => {status()}}><img className="actionsForm__close-icon" src={closeIcon} alt="close-icon"/></span>
             <h2 className="transactionsLog__title">Transactions Log</h2>
             <div className="transactionsLog__actionBar">
