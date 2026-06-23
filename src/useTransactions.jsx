@@ -54,9 +54,10 @@ export default function useTransactions() {
   }, [categoryOptions]);
 
   function addTransaction(type, data) {
+    const color = type === "Budgets" ? ColorGenerator() : undefined;
     setTransactions((prev) => ({
       ...prev,
-      [type]: [...prev[type], { id: Date.now(),color: ColorGenerator(), ...data }],
+      [type]: [...prev[type], { id: Date.now(), ...(color ? { color } : {}), ...data }],
     }));
   }
 
