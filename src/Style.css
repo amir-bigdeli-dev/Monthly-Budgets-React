@@ -375,15 +375,14 @@ display: flex;
   margin-top: -0.5rem;
   background: transparent;
   border: 1px solid rgb(192 192 192 / 0.53);
-  padding-top:0.5rem ;
-  padding-bottom: 0.3rem;
+  padding: 0.5rem 0.3rem 0.3rem 0.3rem;
   border-top: none;
   border-radius: 0 0 0.3rem 0.3rem;
   height: fit-content;
   max-height: 180px;
   z-index: 5;
   box-shadow: inset 3px 3px 10px #e8e8e8,
-  inset -3px -3px 10px #e8e8e8;
+  inset -3px -3px 10px #e8e8e8,0 3px 3px #ababab;
 }
 .expenses-list-item-counter{
   border: 1px solid rgb(192 192 192 / 0.53);
