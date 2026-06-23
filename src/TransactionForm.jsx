@@ -3,6 +3,7 @@ import TransActionsContext from "./contexts.js";
 import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg";
 import CreatableSelect from "react-select/creatable";
 import TransactionsLog from "./TransactionsLog.jsx";
+import priceFormater from "./priceFormater.jsx";
 
 const FIELDS = {
   Incomes: [
@@ -207,7 +208,7 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null }
         </div>
         {fields.map((field) => (
           <label key={field.id} className={`actionsForm__label--${field.id}`}>
-            <span>{field.id}:{invalidValue && field.id === "amount" && formType === "Budgets" ? <h4 className="inputInvalidAlert">Exceeds {formType}</h4> : null}</span>
+            <div className={`budget-form-detail ${field.id === "category" ? "budget-form-available-container" : ""}`}>{field.id}:{invalidValue && field.id === "amount" && formType === "Budgets" ? <h4 className="inputInvalidAlert">Exceeds {formType}</h4> : null}{formType === "Budgets" && field.id === "category" ? <h4 className="form-bugdet-available">available: {priceFormater(TransactionsCalculator.MonthlyBudget - TransactionsCalculator.Budgets)}</h4> : null}</div>
             {field.type === "select" ? (
                 <CreatableSelect
                     options={categoryOptions[formType] || []}

@@ -644,6 +644,21 @@ display: flex;
   font-weight: 500;
   width: 100%;
 }
+.budget-form-detail{
+    display: flex;
+    flex-direction: row;
+  align-items: center;
+    gap: 0.5rem;
+}
+.budget-form-available-container{
+  justify-content: space-between;
+}
+.form-bugdet-available{
+  font-weight: 600;
+  padding: 0.3rem;
+  font-size: smaller;
+  color: #818181;
+}
 .actionsForm__form label {
   display: flex;
   flex-direction: column;
