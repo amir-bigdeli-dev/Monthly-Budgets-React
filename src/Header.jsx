@@ -5,6 +5,7 @@ import upArrow from "./assets/icons/down-arrow-1-svgrepo-com (1).svg";
 import moneyIcon from "./assets/icons/icons8-money-25.png";
 import TransactionsLog from "./TransactionsLog.jsx";
 import TransActionsContext from "./contexts.js";
+import priceFormater from "./priceFormater.jsx";
 
 export default function Header({ data }) {
   const [showIncomesLog, setShowIncomesLog ] = useState(null);
@@ -41,7 +42,7 @@ export default function Header({ data }) {
             </h3>
             {formatPrice(data.Incomes)}
           </div>
-          <div className="Header__stat-label Header__stat-label--monBudget" style={{'--monthly-progress-height': `${RemainPercentFormatted}`}} data-progress-text={RemainPercentFormatted}>
+          <div className="Header__stat-label Header__stat-label--monBudget" style={{'--monthly-progress-height': `${RemainPercentFormatted}`}} data-progress-text={RemainPercentFormatted} title={priceFormater(MonthlyBudget - TransactionsCalculator.Budgets)}>
             <h3 className="Header__stat-label-title">
               Monthly Budget{" "}
               <img
