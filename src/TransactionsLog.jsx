@@ -1,12 +1,11 @@
 import priceFormater from "./priceFormater.jsx";
 import TrashIcon from "./assets/icons/trash-bin-trash-svgrepo-com.svg";
 import {createPortal} from "react-dom";
-import {useRef,useEffect, useState ,useContext} from "react";
+import {Fragment, useRef,useEffect, useState ,useContext} from "react";
 import Select from "react-select";
 import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg"
 import TransActionsContext from "./contexts.js";
 import sortItems from "./sort_Items.js";
-import TransactionForm from "./TransactionForm.jsx";
 
 
 export default function TransactionsLog({transactions , status}){
@@ -40,7 +39,7 @@ export default function TransactionsLog({transactions , status}){
             {itemToRemove ? <div className="expenseToRemoveAlert" onClick={(e) => e.stopPropagation()}>
                 <p>Are you sure you want to delete this expense?</p>
                 <div className="expenseToRemoveAlert__actions">
-                    <button className="expenseToRemoveAlert__actions-confirm" onClick={(e) => {removeItems(itemToRemove);setItemToRemove(null)}}>Confirm</button>
+                    <button className="expenseToRemoveAlert__actions-confirm" onClick={() => {removeItems(itemToRemove);setItemToRemove(null)}}>Confirm</button>
                     <button className="expenseToRemoveAlert__actions-cancel" onClick={() => setItemToRemove(null)}>Cancel</button>
                 </div>
                 </div> : null}
@@ -92,17 +91,43 @@ export default function TransactionsLog({transactions , status}){
                     }}
                 />
             </div>
+            {transactions[action].length > 0 ?
                 <ul className="items-container__expenses-list">
-                {sortItems(transactions[action],sortBy).map((item , index) => (
-                    <li key={item.id} className={`expenses-list__item transactionsLog__list${action === "Incomes" ? "--incomes" : ""}`}>
-                        <span className="expenses-list-item-counter">{index + 1}</span>
-                        <h3 className={`expenses-list-item__title`}>{item.title}</h3>
-                        <span className="expenses-list-item__date">{item.date}</span>
-                        <span className="list-item__amount">{priceFormater(budgetsAmountNum(item.amount))}</span>
-                        <span className="expenses-list-item__trash" onClick={() => setItemToRemove({Id:item.id,type:action})}><img src={TrashIcon} alt="trash"/></span>
-                    </li>
-                ))}
+                {sortBy === "Category"
+                    ? Object.entries(
+                        sortItems(transactions[action], sortBy).reduce((groups, item) => {
+                            const category = item.category || "Uncategorized";
+                            if (!groups[category]) groups[category] = [];
+                            groups[category].push(item);
+                            return groups;
+                        }, {})
+                    ).map(([category, items]) => (
+                        <Fragment key={category}>
+                            <li className="Transactionslist__category-group">
+                                <h3 className="expenses-list-item__category">{category}</h3>
+                            </li>
+                            {items.map((item, index) => (
+                                <li key={item.id} className={`expenses-list__item transactionsLog__list${action === "Incomes" ? "--incomes" : ""}`}>
+                                    <span className="expenses-list-item-counter">{index + 1}</span>
+                                    <h3 className={`expenses-list-item__title`}>{item.title}</h3>
+                                    <span className="expenses-list-item__date">{item.date}</span>
+                                    <span className="list-item__amount">{priceFormater(budgetsAmountNum(item.amount))}</span>
+                                    <span className="expenses-list-item__trash" onClick={() => setItemToRemove({Id:item.id,type:action})}><img src={TrashIcon} alt="trash"/></span>
+                                </li>
+                            ))}
+                        </Fragment>
+                    ))
+                    : sortItems(transactions[action],sortBy).map((item , index) => (
+                        <li key={item.id} className={`expenses-list__item transactionsLog__list${action === "Incomes" ? "--incomes" : ""}`}>
+                            <span className="expenses-list-item-counter">{index + 1}</span>
+                            <h3 className={`expenses-list-item__title`}>{item.title}</h3>
+                            <span className="expenses-list-item__date">{item.date}</span>
+                            <span className="list-item__amount">{priceFormater(budgetsAmountNum(item.amount))}</span>
+                            <span className="expenses-list-item__trash" onClick={() => setItemToRemove({Id:item.id,type:action})}><img src={TrashIcon} alt="trash"/></span>
+                        </li>
+                    ))}
                 </ul>
+                : <p className="no-expenses">No {action} yet</p>}
         </div>,
         document.body
     )

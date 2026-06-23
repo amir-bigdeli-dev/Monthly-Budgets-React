@@ -11,3 +11,12 @@ export default function sortItems(items, sortBy) {
      }
  })
 }
+
+export function groupByCategory(items) {
+    return items.reduce((acc, item) => {
+        const key = item.category || "Other";
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(item);
+        return acc;
+    }, {});
+}
