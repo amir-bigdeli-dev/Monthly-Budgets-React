@@ -60,7 +60,7 @@ export default function TransactionsLog({transactions}){
             </div>
                 <ul className="items-container__expenses-list">
                 {transactions[action].map((item , index) => (
-                    <li key={item.id} className={`expenses-list__item transactionsLog__list`}>
+                    <li key={item.id} className={`expenses-list__item transactionsLog__list${action === "Incomes" ? "--incomes" : ""}`}>
                         <span className="expenses-list-item-counter">{index + 1}</span>
                         <h3 className={`expenses-list-item__title`}>{item.title}</h3>
                         <span className="expenses-list-item__date">{item.date}</span>
