@@ -359,6 +359,7 @@ display: flex;
   gap: 0.5rem;
   background: #ffa6a6;
   border-radius: 0.4rem;
+  font-size: smaller;
 }
 .items-container__expenses-list li > *:not(.expenses-list-item__title){
     display: flex;
@@ -723,11 +724,12 @@ display: flex;
   flex-direction: column;
   align-items: center;
   position: absolute;
-  top: 50%;
+  font-family: "DM Sans", sans-serif;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
-    width: 80%;
+    width: 90%;
   background: #ffffff;
   box-shadow: 5px 5px 10px #dedede,-5px -5px 10px #e5e5e5;
   border-radius: 0.5rem;
@@ -753,7 +755,7 @@ display: flex;
   gap: 0.5rem;
 }
 #transactionsLog__actionBar-sortby{
-  outline: none;
+  font-size: small;
   /*border:2px solid red;*/
-  border-radius: 0.3rem;
+  margin-left: auto;
 }
