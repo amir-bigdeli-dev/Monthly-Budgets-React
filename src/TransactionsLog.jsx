@@ -8,9 +8,9 @@ import TransActionsContext from "./contexts.js";
 import sortItems from "./sort_Items.js";
 
 
-export default function TransactionsLog({ status}){
+export default function TransactionsLog({ status , action:initialAction}){
     const sortOptions = ["Date", "Amount", "Category"];
-    const [action,setAction] = useState('Expenses')
+    const [action,setAction] = useState(initialAction || 'Expenses')
     const budgetsAmountNum = (item) => (Number(item.replace(/[^0-9]/g,"")));
     const { removeItems , transactions } = useContext(TransActionsContext)
     const [itemToRemove,setItemToRemove] = useState(null);
@@ -18,6 +18,12 @@ export default function TransactionsLog({ status}){
 
 
     const LogRef = useRef(null)
+
+    useEffect(() => {
+        if (initialAction) {
+            setAction(initialAction);
+        }
+    }, [initialAction]);
 
     useEffect(() => {
         function closeLog(e) {
