@@ -176,6 +176,8 @@ body {
   cursor: pointer;
 }
 .charts__chart {
+  position: relative;
+  direction: ltr;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -212,6 +214,23 @@ body {
 .charts__type-label--budgets-active {
   background: #faeede;
   border: 1px solid #c2ab8e;
+}
+.chart__TimeFilters{
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style-type: none;
+}
+.chart__TimeFilters li {
+  padding: 0.2rem 0.3rem;
+  border-radius: 0.3rem;
+  font-size: small;
+  border: 1px solid rgb(187 187 187 / 0.65);
+  background: #f3f3f3;
 }
 /*Budgets*/
 .budgets {

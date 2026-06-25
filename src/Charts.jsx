@@ -1,35 +1,74 @@
-import { useContext, useState } from "react";
-import {CartesianGrid, Legend, Line, LineChart, BarChart, XAxis, YAxis, ResponsiveContainer, Bar,Tooltip} from 'recharts';
+import { useContext, useState , useMemo } from "react";
+import { Legend, BarChart, XAxis, ResponsiveContainer, Bar, Tooltip } from 'recharts';
 import TransActionsContext from "./contexts.js";
 
-export default function Charts({ types, type_label }) {
-  const [chart_type, setChart_type] = useState("Incomes");
+export default function Charts() {
+    const types = ["Budgets","Incomes/Expenses","Money"];
+    const [chart_type, setChart_type] = useState("Incomes/Expenses");
     const budgetsAmountNum = (item) => (Number(item.replace(/[^0-9]/g,"")))
     const {transactions} = useContext(TransActionsContext);
-  types = types.filter((type) => type !== "MonthlyBudget");
-
-    const getWeekNumber = (dateString) => {
+    const [chartTimeFilterType,setChartTimeFilterType] = useState("monthly");
+    const chartTimeFilterOptions = ["weekly","monthly","yearly"];
+    
+    const getWeekKey = (dateString) => {
         const date = new Date(dateString);
         const startOfYear = new Date(date.getFullYear(), 0, 1);
-        const pastDaysOfYear = (date - startOfYear) / 86400000;
-        return Math.ceil((pastDaysOfYear + startOfYear.getDay() + 1) / 7);
+        const pastDays = (date - startOfYear) / 86400000;
+        const week = Math.ceil((pastDays + startOfYear.getDay() + 1) / 7);
+        return `${date.getFullYear()}-W${String(week).padStart(2, "0")}`;
     };
 
+    const getMonthKey = (dateString) => {
+        const date = new Date(dateString);
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+    };
+
+    // get Data for chart Incomes/Expenses
     function getChartData(){
       const data = {}
         const data_Type = ["Incomes","Expenses","Money"]
         data_Type.forEach((type) => {
             transactions[type].forEach((item) => {
-                if(!data[item.date]) data[item.date] = {date: item.date, Incomes:0, Expenses:0, Money:0}
-                data[item.date][type] += budgetsAmountNum(item.amount)
+                let key;
+                if (chartTimeFilterType === "weekly") key = getWeekKey(item.date);
+                else if (chartTimeFilterType === "monthly") key = getMonthKey(item.date);
+                else key = item.date
+                if(!data[key]) data[key] = {date: key, Incomes:0, Expenses:0, Money:0}
+                data[key][type] += budgetsAmountNum(item.amount)
             })
         })
 
-        return Object.values(data).sort((a,b) => new Date(a.date) - new Date(b.date))
-    }
- 
-    const ChartData = getChartData();
+        if (chartTimeFilterType === "weekly") {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
 
+            let current = new Date(firstDay);
+            while (current <= lastDay) {
+                const key = getWeekKey(current.toISOString().split("T")[0]);
+                if (!data[key]) data[key] = { date: key, Incomes: 0, Expenses: 0, Money: 0 };
+                current.setDate(current.getDate() + 7);
+            }
+        }else if (chartTimeFilterType === "monthly") {
+            const now = new Date();
+            const year = now.getFullYear();
+            const startMonth = now.getMonth() < 6 ? 0 : 6;
+
+            for (let month = startMonth; month < startMonth + 6; month++) {
+                const d = new Date(year, month, 1);
+                const key = getMonthKey(d);
+                if (!data[key]) data[key] = { date: key, Incomes: 0, Expenses: 0, Money: 0 };
+            }
+        }
+        return Object.values(data).sort((a,b) => a.date.localeCompare(b.date))
+    }
+
+    const ChartData = useMemo(() => getChartData(), [transactions, chartTimeFilterType]);
+    // ##################
+    
+    // get Data for chart Budgets
     function getBudgetsChartData(){
         const data = {};
 
@@ -43,19 +82,30 @@ export default function Charts({ types, type_label }) {
     
     const BudgetsChartData = getBudgetsChartData();
     console.log(ChartData,BudgetsChartData)
+    // ############
 
-    const formatXAxis = (dateString) => {
-        if (!dateString) return "";
+    const formatXAxis = (key) => {
+        if (chartTimeFilterType === "weekly") {
+            const weekNum = parseInt(key.split("-W")[1]);
+            const now = new Date();
+            const firstWeekOfMonth = getWeekKey(new Date(now.getFullYear(), now.getMonth(), 1)
+                .toISOString().split("T")[0]);
+            const firstWeekNum = parseInt(firstWeekOfMonth.split("-W")[1]);
 
-        const date = new Date(dateString);
+            const weekIndex = weekNum - firstWeekNum; // 0,1,2,3
+            const start = weekIndex * 7 + 1;
+            const end = Math.min(start + 6, new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate());
 
-        if (isNaN(date.getTime())) return dateString;
-
-        const month = date.getMonth() + 1;
-        const day = date.getDate();
-
-        return `${month}/${day}`; 
+            return `${start}-${end}`;
+        } else if (chartTimeFilterType === "monthly") {
+            const [year, month] = key.split("-");
+            const date = new Date(year, month - 1);
+            return date.toLocaleString("default", { month: "short" });
+        } else {
+            return key;
+        }
     };
+
   return (
     <div className="charts">
       <ul className="charts__type">
@@ -64,15 +114,25 @@ export default function Charts({ types, type_label }) {
           return (
             <li
               key={type}
-              className={`charts__type-label charts__type-label--${type.toLowerCase()}${active ? "-active" : ""}`}
+              className={`charts__type-label charts__type-label--${type.toLowerCase().replaceAll("/","_")}${active ? "-active" : ""}`}
               onClick={() => setChart_type(type)}
             >
-              {type_label[type]}
+              {type}
             </li>
           );
         })}
       </ul>
       <div className="charts__chart">
+          <ul className="chart__TimeFilters">
+              {chartTimeFilterOptions.map((filter) => {
+                  const active = filter === chartTimeFilterType;
+                  return (
+                      <li key={filter} className={`chart__TimeFilters-label chart__TimeFilters-label--${filter}${active ? "-active" : ""}`} onClick={() => setChartTimeFilterType(filter)}>
+                          {filter.slice(0,1).toUpperCase()}
+                      </li>
+                  )
+              })}
+          </ul>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart  data={ChartData} responsive >
             <XAxis dataKey="date" tickFormatter={formatXAxis} tick={{fontSize:12}} />

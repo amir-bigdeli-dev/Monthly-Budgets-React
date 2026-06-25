@@ -43,7 +43,7 @@ const App = () => {
     >
       <div className="App">
         <Header data={TransactionsCalculator} />
-        <Charts types={types} type_label={Types_Labels} />
+        <Charts />
         <Budgets />
         <QuickAccess
           type_label={Types_Labels}
