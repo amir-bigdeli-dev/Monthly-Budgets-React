@@ -24,26 +24,16 @@ export default function Charts() {
     };
 
     // get Data for chart Incomes/Expenses
-    function getChartData(){
-      const data = {}
-        const data_Type = ["Incomes","Expenses","Money"]
-        data_Type.forEach((type) => {
-            transactions[type].forEach((item) => {
-                let key;
-                if (chartTimeFilterType === "weekly") key = getWeekKey(item.date);
-                else if (chartTimeFilterType === "monthly") key = getMonthKey(item.date);
-                else key = item.date
-                if(!data[key]) data[key] = {date: key, Incomes:0, Expenses:0, Money:0}
-                data[key][type] += budgetsAmountNum(item.amount)
-            })
-        })
-
+    function getChartData() {
+        const data = {};
+        const data_Type = ["Incomes", "Expenses", "Money"];
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        
         if (chartTimeFilterType === "weekly") {
-            const now = new Date();
-            const year = now.getFullYear();
             const month = now.getMonth();
-            const firstDay = new Date(year, month, 1);
-            const lastDay = new Date(year, month + 1, 0);
+            const firstDay = new Date(currentYear, month, 1);
+            const lastDay = new Date(currentYear, month + 1, 0);
 
             let current = new Date(firstDay);
             while (current <= lastDay) {
@@ -51,18 +41,63 @@ export default function Charts() {
                 if (!data[key]) data[key] = { date: key, Incomes: 0, Expenses: 0, Money: 0 };
                 current.setDate(current.getDate() + 7);
             }
-        }else if (chartTimeFilterType === "monthly") {
-            const now = new Date();
-            const year = now.getFullYear();
-            const startMonth = now.getMonth() < 6 ? 0 : 6;
+        } else if (chartTimeFilterType === "monthly") {
+            const currentMonth = now.getMonth();
+            const startMonth = currentMonth < 6 ? 0 : 6;
 
             for (let month = startMonth; month < startMonth + 6; month++) {
-                const d = new Date(year, month, 1);
+                const d = new Date(currentYear, month, 1);
                 const key = getMonthKey(d);
                 if (!data[key]) data[key] = { date: key, Incomes: 0, Expenses: 0, Money: 0 };
             }
+        }else if (chartTimeFilterType === "yearly") {
+        let oldestYear = currentYear;
+
+        data_Type.forEach((type) => {
+            if (!transactions[type]) return;
+            transactions[type].forEach((item) => {
+                if (item.date) {
+                    const transactionYear = new Date(item.date).getFullYear();
+                    if (!isNaN(transactionYear) && transactionYear < oldestYear) {
+                        oldestYear = transactionYear;
+                    }
+                }
+            });
+        });
+
+        for (let year = oldestYear; year <= currentYear; year++) {
+            const key = String(year);
+            data[key] = { date: key, Incomes: 0, Expenses: 0, Money: 0 };
         }
-        return Object.values(data).sort((a,b) => a.date.localeCompare(b.date))
+    }
+
+        data_Type.forEach((type) => {
+            if (!transactions[type]) return;
+
+            transactions[type].forEach((item) => {
+                let key;
+                if (chartTimeFilterType === "weekly") key = getWeekKey(item.date);
+                else if (chartTimeFilterType === "monthly") key = getMonthKey(item.date);
+                else if (chartTimeFilterType === "yearly") {
+                    key = item.date.split("-")[0];
+                } else key = item.date;
+
+                if (!data[key]) {
+                    data[key] = { date: key, Incomes: 0, Expenses: 0, Money: 0 };
+                }
+
+                data[key][type] += budgetsAmountNum(item.amount);
+            });
+        });
+
+        return Object.values(data).sort((a, b) => {
+            if (chartTimeFilterType === "weekly") {
+                return a.date.localeCompare(b.date);
+            }
+            const dateA = new Date(a.date.length === 4 ? `${a.date}-01-01` : (a.date.length === 7 ? `${a.date}-01` : a.date));
+            const dateB = new Date(b.date.length === 4 ? `${b.date}-01-01` : (b.date.length === 7 ? `${b.date}-01` : b.date));
+            return dateA - dateB;
+        });
     }
 
     const ChartData = useMemo(() => getChartData(), [transactions, chartTimeFilterType]);
@@ -88,11 +123,10 @@ export default function Charts() {
         if (chartTimeFilterType === "weekly") {
             const weekNum = parseInt(key.split("-W")[1]);
             const now = new Date();
-            const firstWeekOfMonth = getWeekKey(new Date(now.getFullYear(), now.getMonth(), 1)
-                .toISOString().split("T")[0]);
+            const firstWeekOfMonth = getWeekKey(new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split("T")[0]);
             const firstWeekNum = parseInt(firstWeekOfMonth.split("-W")[1]);
 
-            const weekIndex = weekNum - firstWeekNum; // 0,1,2,3
+            const weekIndex = weekNum - firstWeekNum;
             const start = weekIndex * 7 + 1;
             const end = Math.min(start + 6, new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate());
 
@@ -101,6 +135,8 @@ export default function Charts() {
             const [year, month] = key.split("-");
             const date = new Date(year, month - 1);
             return date.toLocaleString("default", { month: "short" });
+        } else if (chartTimeFilterType === "yearly") {
+            return key;
         } else {
             return key;
         }
@@ -137,10 +173,10 @@ export default function Charts() {
           <BarChart  data={ChartData} responsive >
             <XAxis dataKey="date" tickFormatter={formatXAxis} tick={{fontSize:12}} />
             {/*<YAxis width="auto"  />*/}
-              <Tooltip />
+              <Tooltip cursor={{ stroke: 'transparent', strokeWidth: 0, fill: 'transparent' }} labelFormatter={formatXAxis}/>
               <Legend />
-              <Bar dataKey="Expenses" fill="red" radius={[5,5,0,0]} barSize={20} />
-              <Bar dataKey="Incomes" fill="green" radius={[5,5,0,0]} barSize={20}/>
+              <Bar dataKey="Expenses" fill="red" radius={[5,5,0,0]} barSize={20} activeBar={false}/>
+              <Bar dataKey="Incomes" fill="green" radius={[5,5,0,0]} barSize={20} activeBar={false}/>
           </BarChart>
         </ResponsiveContainer>
       </div>
