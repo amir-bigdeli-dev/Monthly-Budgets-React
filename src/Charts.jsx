@@ -7,7 +7,7 @@ export default function Charts() {
     const [chart_type, setChart_type] = useState("Incomes/Expenses");
     const budgetsAmountNum = (item) => (Number(item.replace(/[^0-9]/g,"")))
     const {transactions} = useContext(TransActionsContext);
-    const [chartTimeFilterType,setChartTimeFilterType] = useState("monthly");
+    const [chartTimeFilterType,setChartTimeFilterType] = useState("weekly");
     const chartTimeFilterOptions = ["weekly","monthly","yearly"];
     
     const getWeekKey = (dateString) => {
@@ -169,16 +169,21 @@ export default function Charts() {
                   )
               })}
           </ul>
+          {chart_type === "Incomes/Expenses" ? (
         <ResponsiveContainer width="100%" height="100%">
           <BarChart  data={ChartData} responsive >
             <XAxis dataKey="date" tickFormatter={formatXAxis} tick={{fontSize:12}} />
             {/*<YAxis width="auto"  />*/}
               <Tooltip cursor={{ stroke: 'transparent', strokeWidth: 0, fill: 'transparent' }} labelFormatter={formatXAxis}/>
-              <Legend />
+              <Legend iconType="circle" wrapperStyle={{
+                  fontSize: "14px",
+                  fontFamily: "Vazirmatn, sans-serif",
+              }} />
               <Bar dataKey="Expenses" fill="red" radius={[5,5,0,0]} barSize={20} activeBar={false}/>
               <Bar dataKey="Incomes" fill="green" radius={[5,5,0,0]} barSize={20} activeBar={false}/>
           </BarChart>
         </ResponsiveContainer>
+              ) : null}
       </div>
     </div>
   );
