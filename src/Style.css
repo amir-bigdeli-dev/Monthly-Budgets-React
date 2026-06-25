@@ -176,6 +176,9 @@ body {
   cursor: pointer;
 }
 .charts__chart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 30vh;
   border-radius: 0 0 var(--sections-border-radius) var(--sections-border-radius);
