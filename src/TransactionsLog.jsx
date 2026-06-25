@@ -14,7 +14,7 @@ export default function TransactionsLog({ status , action:initialAction}){
     const budgetsAmountNum = (item) => (Number(item.replace(/[^0-9]/g,"")));
     const { removeItems , transactions } = useContext(TransActionsContext)
     const [itemToRemove,setItemToRemove] = useState(null);
-    const [sortBy,setSortBy] = useState("date");
+    const [sortBy,setSortBy] = useState("Date");
 
 
     const LogRef = useRef(null)
