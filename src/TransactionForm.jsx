@@ -42,7 +42,7 @@ const FIELDS = {
   ],
   MonthlyBudget: [
     { id: "amount", type: "text", label: "Amount" },
-    { id: "date", type: "date", label: "Date" },
+    { id: "date", type: "month", label: "Month" },
   ],
 };
 
@@ -197,7 +197,7 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null }
       >
         {inputError ? <div className="errorAlert">{errorAlert}</div> : null}
         <div className="actionsFrom__form-header">
-          <h2 className="actionsForm-title">Add {formType}</h2>
+          <h2 className="actionsForm-title">{ItemValues || (formType === "MonthlyBudget" && transactions['MonthlyBudget'].length > 0 ) ? "Edit":"Add"} {formType}</h2>
           <span className="actionsForm__close" onClick={handleClose}>
             <img
               className="actionsForm__close-icon"
