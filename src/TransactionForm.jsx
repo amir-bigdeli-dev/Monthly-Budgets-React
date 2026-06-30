@@ -211,7 +211,7 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null }
             <div className={`budget-form-detail ${field.id === "category" ? "budget-form-available-container" : ""}`}>{field.id}:{invalidValue && field.id === "amount" && formType === "Budgets" ? <h4 className="inputInvalidAlert">Exceeds {formType}</h4> : null}{formType === "Budgets" && field.id === "category" ? <h4 className="form-bugdet-available">available: {priceFormater(TransactionsCalculator.MonthlyBudget - TransactionsCalculator.Budgets)}</h4> : null}</div>
             {field.type === "select" ? (
                 <CreatableSelect
-                    options={categoryOptions[formType] || []}
+                    options={formType === 'Expenses' ? categoryOptions['Budgets'] : categoryOptions[formType] || []}
                     value={(categoryOptions[formType].find(opt => opt.value === formValues.category) || null)}
                     onChange={(selected) => handleCategoryChange(selected)}
                     onCreateOption={handleNewOption}

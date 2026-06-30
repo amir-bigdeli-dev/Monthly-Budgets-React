@@ -62,10 +62,17 @@ export default function useTransactions() {
   }
 
   function addCategoryOption(type, option) {
-    setCategoryOptions((prev) => ({
-      ...prev,
-      [type]: [...prev[type], option],
-    }));
+    setCategoryOptions((prev) => {
+      if(type === "Expenses" || type === "Budgets") {
+        return{
+          ...prev,
+          Budgets: [...prev.Budgets, option],
+        }
+      }
+      return {
+        ...prev,
+        [type]: [...prev[type], option],
+      }});
     localStorage.setItem("Categories",JSON.stringify(categoryOptions));
   }
 
