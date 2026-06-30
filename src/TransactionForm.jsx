@@ -62,6 +62,10 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null }
   useEffect(() => {
     if(ItemValues) {
       setFormValues(ItemValues)
+    }else if(formType === "MonthlyBudget" && transactions['MonthlyBudget'].length > 0){
+      setFormValues({ date: getCurrentMonth() })
+    }else{
+      setFormValues({})
     }
   },[ItemValues])
   const cursorRef = useRef(null);
@@ -180,6 +184,13 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null }
       clearTimeout(ErrorRef.current)
       ErrorRef.current = null
     }}, []);
+
+  function getCurrentMonth() {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    return `${year}-${month}`;
+  }
   return (
       <>
         {formType === "Transactions" ?

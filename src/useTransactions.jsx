@@ -55,9 +55,29 @@ export default function useTransactions() {
 
   function addTransaction(type, data) {
     const color = type === "Budgets" ? ColorGenerator() : undefined;
+
+    if (type === "MonthlyBudget") {
+      const isExistingMonth = transactions.MonthlyBudget.some(
+          (item) => item.date === data.date
+      );
+
+      if (isExistingMonth) {
+        setTransactions((prev) => ({
+          ...prev,
+          MonthlyBudget: prev.MonthlyBudget.map((item) =>
+              item.date === data.date ? { ...item, ...data } : item
+          ),
+        }));
+        return;
+      }
+    }
+
     setTransactions((prev) => ({
       ...prev,
-      [type]: [...prev[type], { id: Date.now(), ...(color ? { color } : {}), ...data }],
+      [type]: [
+        ...prev[type],
+        { id: Date.now(), ...(color ? { color } : {}), ...data },
+      ],
     }));
   }
 
