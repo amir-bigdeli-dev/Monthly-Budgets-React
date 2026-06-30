@@ -163,7 +163,7 @@ export default function Charts() {
               {chartTimeFilterOptions.map((filter) => {
                   const active = filter === chartTimeFilterType;
                   return (
-                      <li key={filter} className={`chart__TimeFilters-label chart__TimeFilters-label--${filter}${active ? "-active" : ""}`} onClick={() => setChartTimeFilterType(filter)}>
+                      <li key={filter} className={`chart__TimeFilters-label chart__TimeFilters-label--${active ? "active" : ""}`} onClick={() => setChartTimeFilterType(filter)}>
                           {filter.slice(0,1).toUpperCase()}
                       </li>
                   )
