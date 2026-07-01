@@ -276,8 +276,8 @@ export default function Charts() {
                                     nameKey="name"
                                     cx="50%"
                                     cy="50%"
-                                    outerRadius="80%"
-                                    innerRadius="50%"
+                                    outerRadius="70%"
+                                    innerRadius="40%"
                                     paddingAngle={2}
                                     label={({ name, percent }) => ` ${(percent * 100).toFixed(0)}%`}
                                     labelLine={false}
@@ -313,6 +313,7 @@ export default function Charts() {
                                     wrapperStyle={{
                                         fontSize: "14px",
                                         fontFamily: "Vazirmatn, sans-serif",
+                                        marginTop: "1rem"
                                     }}
                                 />
                             </PieChart>
