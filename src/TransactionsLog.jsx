@@ -62,6 +62,42 @@ export default function TransactionsLog({ status , action:initialAction}){
                     defaultValue={{ value: 'Date', label: 'Date' }}
                     id="transactionsLog__actionBar-sortby"
                     options={sortOptions.map(v => ({ value: v, label: v }))}
+                    styles={{
+                        control: (base) => ({
+                            ...base,
+                            borderRadius: "0.5rem",
+                            padding: "0.2rem",
+                            minHeight: "2rem",
+                            height: "2rem",
+                        }),
+                        menu: (base) => ({
+                            ...base,
+                            borderRadius: "0.5rem",
+                        }),
+                        option: (base, state) => ({
+                            ...base,
+                            backgroundColor: state.isSelected
+                                ? "#908af6"
+                                : state.isFocused
+                                    ? "#e8e7ff"
+                                    : "white",
+                            color: state.isSelected ? "white" : "black",
+                            borderRadius: "0.5rem",
+                            textAlign: "center",
+                        }),
+                        dropdownIndicator: (base) => ({
+                            ...base,
+                            padding: "0",
+                            color: "#908af6",
+                        }),
+                        indicatorSeparator: () => ({
+                            display: "none"
+                        }),
+                        valueContainer: (base) => ({
+                            ...base,
+                            padding: "0 8px",
+                        }),
+                    }}
                 />
             </div>
             {transactions[action].length > 0 ?
