@@ -162,7 +162,7 @@ export default function Charts() {
             budgetItems.push({
                 name: "Unallocated",
                 value: remaining,
-                color: "#dedede",
+                color: "rgb(136 136 136 / 0.47)",
             });
         }
 
