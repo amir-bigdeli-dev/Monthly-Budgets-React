@@ -210,7 +210,8 @@ body {
 }
 .charts__type-label--money-active,
 .charts__type-label--budgets-active,
-.charts__type-label--incomes_expenses-active{
+.charts__type-label--incomes_expenses-active,
+.charts__type-label--monthlybudget-active{
   box-shadow: 3px 3px 5px #dedede;
 }
 .charts__type-label--expenses-active {
@@ -220,6 +221,10 @@ body {
 .charts__type-label--budgets-active {
   background: #faeede;
   border: 1px solid #67563d;
+}
+.charts__type-label--monthlybudget-active {
+  background: #e8fffc;
+  border: 1px solid #9df1ce;
 }
 .charts__type-label--incomes-active{
   background: #f6fdf0;
