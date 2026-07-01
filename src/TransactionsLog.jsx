@@ -6,6 +6,7 @@ import Select from "react-select";
 import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg"
 import TransActionsContext from "./contexts.js";
 import sortItems from "./sort_Items.js";
+import useTitleTooltip from "./useTitleTooltip.js";
 
 
 export default function TransactionsLog({ status , action:initialAction}){
@@ -15,6 +16,8 @@ export default function TransactionsLog({ status , action:initialAction}){
     const { removeItems , transactions } = useContext(TransActionsContext)
     const [itemToRemove,setItemToRemove] = useState(null);
     const [sortBy,setSortBy] = useState("Date");
+
+    const { titleToolTip, ShowFullTitle } = useTitleTooltip();
 
 
     const LogRef = useRef(null)
@@ -48,7 +51,7 @@ export default function TransactionsLog({ status , action:initialAction}){
                     <button className="expenseToRemoveAlert__actions-confirm" onClick={() => {removeItems(itemToRemove);setItemToRemove(null)}}>Confirm</button>
                     <button className="expenseToRemoveAlert__actions-cancel" onClick={() => setItemToRemove(null)}>Cancel</button>
                 </div>
-                </div> : null}
+            </div> : null}
             <span className="transactionsLog__close" onClick={() => {status()}}><img className="actionsForm__close-icon" src={closeIcon} alt="close-icon"/></span>
             <h2 className="transactionsLog__title">Transactions Log</h2>
             <div className="transactionsLog__actionBar">
@@ -59,79 +62,49 @@ export default function TransactionsLog({ status , action:initialAction}){
                     defaultValue={{ value: 'Date', label: 'Date' }}
                     id="transactionsLog__actionBar-sortby"
                     options={sortOptions.map(v => ({ value: v, label: v }))}
-                    styles={{
-                        control: (base) => ({
-                            ...base,
-                            borderRadius: "0.5rem",
-                            padding: "0.2rem",
-                            minHeight: "2rem",
-                            height: "2rem",
-                        }),
-                        menu: (base) => ({
-                            ...base,
-                            borderRadius: "0.5rem",
-                        }),
-                        option: (base, state) => ({
-                            ...base,
-                            backgroundColor: state.isSelected
-                                ? "#908af6"
-                                : state.isFocused
-                                    ? "#e8e7ff"
-                                    : "white",
-                            color: state.isSelected ? "white" : "black",
-                            borderRadius: "0.5rem",
-                            textAlign: "center",
-                        }),
-                        dropdownIndicator: (base) => ({
-                            ...base,
-                            padding: "0",
-                            color: "#908af6",
-                        }),
-                        indicatorSeparator: () => ({
-                            display: "none"
-                        }),
-                        valueContainer: (base) => ({
-                            ...base,
-                            padding: "0 8px",
-                        }),
-                    }}
                 />
             </div>
             {transactions[action].length > 0 ?
                 <ul className="items-container__expenses-list">
-                {sortBy === "Category"
-                    ? Object.entries(
-                        sortItems(transactions[action], sortBy).reduce((groups, item) => {
-                            const category = item.category || "Uncategorized";
-                            if (!groups[category]) groups[category] = [];
-                            groups[category].push(item);
-                            return groups;
-                        }, {})
-                    ).map(([category, items]) => (
-                        <Fragment key={category}>
-                            <li className="Transactionslist__category-group">
-                                <h3 className="expenses-list-item__category">{category}</h3>
-                            </li>
-                            {items.map((item, index) => (
-                                <li key={item.id} className={`expenses-list__item transactionsLog__list${action === "Incomes" ? "--incomes" : ""}`}>
-                                    <span className="expenses-list-item-counter">{index + 1}</span>
-                                    <h3 className={`expenses-list-item__title`}>{item.title}</h3>
-                                    <span className="expenses-list-item__date">{item.date}</span>
-                                    <span className="list-item__amount">{priceFormater(budgetsAmountNum(item.amount))}</span>
-                                    <span className="expenses-list-item__trash" onClick={() => setItemToRemove({Id:item.id,type:action})}><img src={TrashIcon} alt="trash"/></span>
+                    {sortBy === "Category"
+                        ? Object.entries(
+                            sortItems(transactions[action], sortBy).reduce((groups, item) => {
+                                const category = item.category || "Uncategorized";
+                                if (!groups[category]) groups[category] = [];
+                                groups[category].push(item);
+                                return groups;
+                            }, {})
+                        ).map(([category, items]) => (
+                            <Fragment key={category}>
+                                <li className="Transactionslist__category-group">
+                                    <h3 className="expenses-list-item__category">{category}</h3>
                                 </li>
-                            ))}
-                        </Fragment>
-                    ))
-                    : sortItems(transactions[action],sortBy).map((item , index) => (
-                        <li key={item.id} className={`expenses-list__item transactionsLog__list${action === "Incomes" ? "--incomes" : ""}`}>
-                            <span className="expenses-list-item-counter">{index + 1}</span>
-                            <h3 className={`expenses-list-item__title`}>{item.title}</h3>
-                            <span className="expenses-list-item__date">{item.date}</span>
-                            <span className="list-item__amount">{priceFormater(budgetsAmountNum(item.amount))}</span>
-                            <span className="expenses-list-item__trash" onClick={() => setItemToRemove({Id:item.id,type:action})}><img src={TrashIcon} alt="trash"/></span>
-                        </li>
-                    ))}
+                                {items.map((item, index) => (
+                                    <li key={item.id}
+                                        className={`expenses-list__item transactionsLog__list${action === "Incomes" ? "--incomes" : ""} ${titleToolTip === item.id ? "expenses-item__title-tooltip" : ""}`}
+                                        data-full-title={item.title}
+                                    >
+                                        <span className="expenses-list-item-counter">{index + 1}</span>
+                                        <h3 className={`expenses-list-item__title`} onClick={(e) => ShowFullTitle(item.id, e)}>{item.title}</h3>
+                                        <span className="expenses-list-item__date">{item.date}</span>
+                                        <span className="list-item__amount">{priceFormater(budgetsAmountNum(item.amount))}</span>
+                                        <span className="expenses-list-item__trash" onClick={() => setItemToRemove({Id:item.id,type:action})}><img src={TrashIcon} alt="trash"/></span>
+                                    </li>
+                                ))}
+                            </Fragment>
+                        ))
+                        : sortItems(transactions[action],sortBy).map((item , index) => (
+                            <li key={item.id}
+                                className={`expenses-list__item transactionsLog__list${action === "Incomes" ? "--incomes" : ""} ${titleToolTip === item.id ? "expenses-item__title-tooltip" : ""}`}
+                                data-full-title={item.title}
+                            >
+                                <span className="expenses-list-item-counter">{index + 1}</span>
+                                <h3 className={`expenses-list-item__title`} onClick={(e) => ShowFullTitle(item.id, e)}>{item.title}</h3>
+                                <span className="expenses-list-item__date">{item.date}</span>
+                                <span className="list-item__amount">{priceFormater(budgetsAmountNum(item.amount))}</span>
+                                <span className="expenses-list-item__trash" onClick={() => setItemToRemove({Id:item.id,type:action})}><img src={TrashIcon} alt="trash"/></span>
+                            </li>
+                        ))}
                 </ul>
                 : <p className="no-expenses">No {action} yet</p>}
         </div>,

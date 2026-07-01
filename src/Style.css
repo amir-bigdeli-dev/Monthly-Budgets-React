@@ -448,6 +448,7 @@ display: flex;
   padding: 0.5rem;
 }
 .items-container__expenses-list li {
+  position: relative;
   padding: .2rem;
   display: flex;
   width: 100%;

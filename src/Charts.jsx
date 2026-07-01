@@ -209,7 +209,7 @@ export default function Charts() {
                 name: "Unallocated",
                 value: remaining,
                 fill: "rgb(136 136 136 / 0.47)",
-                tooltipColor: "#942121",
+                tooltipColor: "#7c7c7c",
             });
         }
 
@@ -242,7 +242,7 @@ export default function Charts() {
                 <p style={{
                     fontWeight: "800",
                     marginBottom: "0.3rem",
-                    color: isUnallocated ? "#942121" : "#484848",
+                    color: isUnallocated ? "#2a2a2a" : data.fill,
                     display: "flex",
                     alignItems: "center",
                     gap: "0.4rem",
