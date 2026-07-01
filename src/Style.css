@@ -596,8 +596,11 @@ display: flex;
 .quick-access__list-item:last-child {
   border-bottom: none;
 }
-.quick-access__list-item-icon {
+.quick-access__list-item-icon,
+.quick-access__btn-icon {
+  display: block;
   width: 18px;
+  height: 18px;
 }
 /*TransActionForm*/
 .actionsForm {
