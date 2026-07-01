@@ -398,8 +398,8 @@ export default function Charts() {
                                 yAxisId="left"
                                 type="monotone"
                                 dataKey="Money"
-                                stroke="rgb(178 119 16)"
-                                fill="rgba(178, 119, 16, 0.25)"
+                                stroke="rgb(225 152 16)"
+                                fill="rgb(255 222 0 / 0.52)"
                                 strokeWidth={2}
                                 dot={{ r: 3 }}
                                 activeDot={{ r: 4 }}
