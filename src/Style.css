@@ -400,7 +400,7 @@ path.recharts-rectangle,
   box-shadow: 2px 2px 5px rgb(42 42 42 / 0.47);
   border: var(--section-border);
   left:10%;
-  background-color: rgb(255 255 255 / 0.8);
+  background-color: rgb(255 255 255);
   color: #484848;
   z-index: 999999;
 }
