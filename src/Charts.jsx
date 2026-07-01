@@ -1,13 +1,20 @@
-import { useContext, useState , useMemo } from "react";
-import { Legend, ComposedChart, XAxis, YAxis, ResponsiveContainer, Bar, Tooltip, Line, PieChart, Pie, Cell } from 'recharts';import TransActionsContext from "./contexts.js";
+import { useContext, useState, useMemo } from "react";
+import { Legend, ComposedChart, XAxis, YAxis, ResponsiveContainer, Bar, Tooltip, Line, Area, PieChart, Pie } from 'recharts';
+import TransActionsContext from "./contexts.js";
 
 export default function Charts() {
-    const types = ["Budgets","Incomes/Expenses","Money"];
+    const types = ["Budgets", "Incomes/Expenses", "Money"];
     const [chart_type, setChart_type] = useState("Incomes/Expenses");
-    const budgetsAmountNum = (item) => (Number(item.replace(/[^0-9]/g,"")))
-    const {transactions,TransactionsCalculator} = useContext(TransActionsContext);
-    const [chartTimeFilterType,setChartTimeFilterType] = useState("daily");
-    const chartTimeFilterOptions = ["daily","weekly","monthly","yearly"];
+    const budgetsAmountNum = (item) => (Number(item.replace(/[^0-9]/g, "")));
+    const { transactions, TransactionsCalculator } = useContext(TransActionsContext);
+
+    // Time filter for Incomes/Expenses chart
+    const [chartTimeFilterType, setChartTimeFilterType] = useState("daily");
+    const chartTimeFilterOptions = ["daily", "weekly", "monthly", "yearly"];
+
+    // Time filter for Money chart (separate state)
+    const [moneyTimeFilterType, setMoneyTimeFilterType] = useState("monthly");
+    const moneyTimeFilterOptions = ["monthly", "yearly"];
 
     const getWeekKey = (dateString) => {
         const date = new Date(dateString);
@@ -29,18 +36,19 @@ export default function Charts() {
         return dayNames[dayIndex];
     };
 
-    function getChartData() {
+    // Generic chart data builder - now takes filterType as a parameter
+    function getChartData(filterType) {
         const data = {};
         const data_Type = ["Incomes", "Expenses", "Money"];
         const now = new Date();
         const currentYear = now.getFullYear();
 
-        if (chartTimeFilterType === "daily") {
+        if (filterType === "daily") {
             const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
             dayNames.forEach((day) => {
                 data[day] = { date: day, Incomes: 0, Expenses: 0, Money: 0 };
             });
-        } else if (chartTimeFilterType === "weekly") {
+        } else if (filterType === "weekly") {
             const month = now.getMonth();
             const firstDay = new Date(currentYear, month, 1);
             const lastDay = new Date(currentYear, month + 1, 0);
@@ -51,7 +59,7 @@ export default function Charts() {
                 if (!data[key]) data[key] = { date: key, Incomes: 0, Expenses: 0, Money: 0 };
                 current.setDate(current.getDate() + 7);
             }
-        } else if (chartTimeFilterType === "monthly") {
+        } else if (filterType === "monthly") {
             const currentMonth = now.getMonth();
             const startMonth = currentMonth < 6 ? 0 : 6;
 
@@ -60,7 +68,7 @@ export default function Charts() {
                 const key = getMonthKey(d);
                 if (!data[key]) data[key] = { date: key, Incomes: 0, Expenses: 0, Money: 0 };
             }
-        } else if (chartTimeFilterType === "yearly") {
+        } else if (filterType === "yearly") {
             let oldestYear = currentYear;
 
             data_Type.forEach((type) => {
@@ -86,10 +94,10 @@ export default function Charts() {
 
             transactions[type].forEach((item) => {
                 let key;
-                if (chartTimeFilterType === "daily") key = getDayKey(item.date);
-                else if (chartTimeFilterType === "weekly") key = getWeekKey(item.date);
-                else if (chartTimeFilterType === "monthly") key = getMonthKey(item.date);
-                else if (chartTimeFilterType === "yearly") {
+                if (filterType === "daily") key = getDayKey(item.date);
+                else if (filterType === "weekly") key = getWeekKey(item.date);
+                else if (filterType === "monthly") key = getMonthKey(item.date);
+                else if (filterType === "yearly") {
                     key = item.date.split("-")[0];
                 } else key = item.date;
 
@@ -102,11 +110,11 @@ export default function Charts() {
         });
 
         const sortedData = Object.values(data).sort((a, b) => {
-            if (chartTimeFilterType === "daily") {
+            if (filterType === "daily") {
                 const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
                 return dayNames.indexOf(a.date) - dayNames.indexOf(b.date);
             }
-            if (chartTimeFilterType === "weekly") {
+            if (filterType === "weekly") {
                 return a.date.localeCompare(b.date);
             }
             const dateA = new Date(a.date.length === 4 ? `${a.date}-01-01` : (a.date.length === 7 ? `${a.date}-01` : a.date));
@@ -123,12 +131,14 @@ export default function Charts() {
         return sortedData;
     }
 
-    const ChartData = useMemo(() => getChartData(), [transactions, chartTimeFilterType]);
+    const ChartData = useMemo(() => getChartData(chartTimeFilterType), [transactions, chartTimeFilterType]);
+    const MoneyChartData = useMemo(() => getChartData(moneyTimeFilterType), [transactions, moneyTimeFilterType]);
 
-    const formatXAxis = (key) => {
-        if (chartTimeFilterType === "daily") {
+    // Generic X-axis formatter - takes filterType as a parameter
+    const formatXAxis = (key, filterType) => {
+        if (filterType === "daily") {
             return key.slice(0, 3);
-        } else if (chartTimeFilterType === "weekly") {
+        } else if (filterType === "weekly") {
             const weekNum = parseInt(key.split("-W")[1]);
             const now = new Date();
             const firstWeekOfMonth = getWeekKey(new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split("T")[0]);
@@ -139,42 +149,20 @@ export default function Charts() {
             const end = Math.min(start + 6, new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate());
 
             return `${start}-${end}`;
-        } else if (chartTimeFilterType === "monthly") {
+        } else if (filterType === "monthly") {
             const [year, month] = key.split("-");
             const date = new Date(year, month - 1);
             return date.toLocaleString("default", { month: "short" });
-        } else if (chartTimeFilterType === "yearly") {
+        } else if (filterType === "yearly") {
             return key;
         } else {
             return key;
         }
     };
-    function getBudgetsChartData() {
-        const budgetItems = transactions.Budgets.map((item) => ({
-            name: item.category,
-            value: budgetsAmountNum(item.amount),
-            color: item.color,
-        }));
 
-        const remaining = TransactionsCalculator.MonthlyBudget - TransactionsCalculator.Budgets;
-
-        if (remaining > 0) {
-            budgetItems.push({
-                name: "Unallocated",
-                value: remaining,
-                color: "rgb(136 136 136 / 0.47)",
-            });
-        }
-
-        return budgetItems;
-    }
-
-    const BudgetsChartData = useMemo(
-        () => getBudgetsChartData(),
-        [transactions.Budgets, TransactionsCalculator.MonthlyBudget, TransactionsCalculator.Budgets]
-    );
-    const formatTooltipLabel = (key) => {
-        if (chartTimeFilterType === "daily") {
+    // Generic tooltip label formatter - takes filterType as a parameter
+    const formatTooltipLabel = (key, filterType) => {
+        if (filterType === "daily") {
             const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
             const dayIndex = dayNames.indexOf(key);
             const now = new Date();
@@ -184,7 +172,7 @@ export default function Charts() {
             tooltipDate.setDate(tooltipDate.getDate() + daysToAdd);
             const dateStr = tooltipDate.toLocaleDateString("default", { month: "short", day: "numeric" });
             return `${key} - ${dateStr}`;
-        } else if (chartTimeFilterType === "weekly") {
+        } else if (filterType === "weekly") {
             const weekNum = parseInt(key.split("-W")[1]);
             const now = new Date();
             const firstWeekOfMonth = getWeekKey(new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split("T")[0]);
@@ -195,16 +183,87 @@ export default function Charts() {
             const end = Math.min(start + 6, new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate());
 
             return `Week: ${start}-${end}`;
-        } else if (chartTimeFilterType === "monthly") {
+        } else if (filterType === "monthly") {
             const [year, month] = key.split("-");
             const date = new Date(year, month - 1);
             return date.toLocaleString("default", { month: "long", year: "numeric" });
-        } else if (chartTimeFilterType === "yearly") {
+        } else if (filterType === "yearly") {
             return `Year: ${key}`;
         } else {
             return key;
         }
     };
+
+    // Budgets pie chart data
+    function getBudgetsChartData() {
+        const budgetItems = transactions.Budgets.map((item) => ({
+            name: item.category,
+            value: budgetsAmountNum(item.amount),
+            fill: item.color,
+        }));
+
+        const remaining = TransactionsCalculator.MonthlyBudget - TransactionsCalculator.Budgets;
+
+        if (remaining > 0) {
+            budgetItems.push({
+                name: "Unallocated",
+                value: remaining,
+                fill: "rgb(136 136 136 / 0.47)",
+                tooltipColor: "#942121",
+            });
+        }
+
+        return budgetItems;
+    }
+
+    const BudgetsChartData = useMemo(
+        () => getBudgetsChartData(),
+        [transactions.Budgets, TransactionsCalculator.MonthlyBudget, TransactionsCalculator.Budgets]
+    );
+
+    // Custom tooltip for Budgets pie chart - special styling only for "Unallocated"
+    const CustomBudgetsTooltip = ({ active, payload }) => {
+        if (!active || !payload || !payload.length) return null;
+
+        const data = payload[0].payload;
+        const isUnallocated = data.name === "Unallocated";
+        const dotColor = isUnallocated ? data.tooltipColor : data.fill;
+
+        return (
+            <div style={{
+                backgroundColor: "#ffffff",
+                border: "1px solid rgb(187 187 187 / 0.65)",
+                borderRadius: "0.6rem",
+                boxShadow: "3px 3px 10px rgb(197 197 197 / 0.2)",
+                padding: "0.6rem 0.8rem",
+                fontSize: "1rem",
+                fontFamily: "DM Sans, sans-serif",
+            }}>
+                <p style={{
+                    fontWeight: "800",
+                    marginBottom: "0.3rem",
+                    color: isUnallocated ? "#942121" : "#484848",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.4rem",
+                }}>
+                    <span style={{
+                        width: "10px",
+                        height: "10px",
+                        borderRadius: "50%",
+                        backgroundColor: dotColor,
+                        display: "inline-block",
+                        flexShrink: 0,
+                    }} />
+                    {data.name}
+                </p>
+                <p style={{ fontSize: "0.9rem", color: "#666" }}>
+                    {data.value.toLocaleString("en-US")}
+                </p>
+            </div>
+        );
+    };
+
     return (
         <div className="charts">
             <ul className="charts__type">
@@ -213,7 +272,7 @@ export default function Charts() {
                     return (
                         <li
                             key={type}
-                            className={`charts__type-label charts__type-label--${type.toLowerCase().replaceAll("/","_")}${active ? "-active" : ""}`}
+                            className={`charts__type-label charts__type-label--${type.toLowerCase().replaceAll("/", "_")}${active ? "-active" : ""}`}
                             onClick={() => setChart_type(type)}
                         >
                             {type}
@@ -227,27 +286,51 @@ export default function Charts() {
                         {chartTimeFilterOptions.map((filter) => {
                             const active = filter === chartTimeFilterType;
                             return (
-                                <li key={filter} className={`chart__TimeFilters-label chart__TimeFilters-label--${active ? "active" : ""}`} onClick={() => setChartTimeFilterType(filter)}>
-                                    {filter.slice(0,1).toUpperCase()}
+                                <li
+                                    key={filter}
+                                    className={`chart__TimeFilters-label chart__TimeFilters-label--${active ? "active" : ""}`}
+                                    onClick={() => setChartTimeFilterType(filter)}
+                                >
+                                    {filter.slice(0, 1).toUpperCase()}
                                 </li>
-                            )
+                            );
+                        })}
+                    </ul>
+                )}
+
+                {chart_type === "Money" && (
+                    <ul className="chart__TimeFilters">
+                        {moneyTimeFilterOptions.map((filter) => {
+                            const active = filter === moneyTimeFilterType;
+                            return (
+                                <li
+                                    key={filter}
+                                    className={`chart__TimeFilters-label chart__TimeFilters-label--${active ? "active" : ""}`}
+                                    onClick={() => setMoneyTimeFilterType(filter)}
+                                >
+                                    {filter.slice(0, 1).toUpperCase()}
+                                </li>
+                            );
                         })}
                     </ul>
                 )}
 
                 {chart_type === "Incomes/Expenses" ? (
                     <ResponsiveContainer width="100%" height="100%">
-                        <ComposedChart data={ChartData} responsive >
-                            <XAxis dataKey="date" tickFormatter={formatXAxis} tick={{fontSize:12}} />
+                        <ComposedChart data={ChartData} responsive>
+                            <XAxis dataKey="date" tickFormatter={(key) => formatXAxis(key, chartTimeFilterType)} tick={{ fontSize: 12 }} />
                             <YAxis yAxisId="left" hide />
                             <YAxis yAxisId="right" orientation="right" hide />
-                            <Tooltip cursor={{ stroke: 'transparent', strokeWidth: 0, fill: 'transparent' }} labelFormatter={formatTooltipLabel}/>
+                            <Tooltip
+                                cursor={{ stroke: 'transparent', strokeWidth: 0, fill: 'transparent' }}
+                                labelFormatter={(key) => formatTooltipLabel(key, chartTimeFilterType)}
+                            />
                             <Legend iconType="circle" wrapperStyle={{
                                 fontSize: "14px",
                                 fontFamily: "Vazirmatn, sans-serif",
                             }} />
-                            <Bar yAxisId="left" dataKey="Expenses" fill="red" radius={[5,5,0,0]} barSize={20} activeBar={false}/>
-                            <Bar yAxisId="left" dataKey="Incomes" fill="green" radius={[5,5,0,0]} barSize={20} activeBar={false}/>
+                            <Bar yAxisId="left" dataKey="Expenses" fill="red" radius={[5, 5, 0, 0]} barSize={20} activeBar={false} />
+                            <Bar yAxisId="left" dataKey="Incomes" fill="green" radius={[5, 5, 0, 0]} barSize={20} activeBar={false} />
                             <Line
                                 yAxisId="right"
                                 type="monotone"
@@ -274,50 +357,55 @@ export default function Charts() {
                                     dataKey="value"
                                     nameKey="name"
                                     cx="50%"
-                                    cy="45%"
+                                    cy="50%"
                                     outerRadius="65%"
                                     innerRadius="40%"
                                     paddingAngle={2}
-                                    label={({ name, percent }) => ` ${(percent * 100).toFixed(0)}%`}
+                                    label={({ percent }) => ` ${(percent * 100).toFixed(0)}%`}
                                     labelLine={false}
-                                >
-                                    {BudgetsChartData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={entry.color} />
-                                    ))}
-                                </Pie>
+                                />
                                 <Tooltip
                                     cursor={{ stroke: 'transparent', strokeWidth: 0, fill: 'transparent' }}
-                                    labelFormatter={formatTooltipLabel}
-                                    contentStyle={{
-                                        backgroundColor: "#ffffff",
-                                        border: "1px solid rgb(187 187 187 / 0.65)",
-                                        borderRadius: "0.6rem",
-                                        boxShadow: "3px 3px 10px rgb(197 197 197 / 0.2)",
-                                        padding: "0.6rem 0.8rem",
-                                        fontSize: "1rem",
-                                        fontFamily: "DM Sans, sans-serif",
-                                    }}
-                                    labelStyle={{
-                                        fontWeight: "800",
-                                        marginBottom: "0.3rem",
-                                        color: "#484848",
-                                    }}
-                                    itemStyle={{
-                                        fontSize: "1rem",
-                                        padding: "0.1rem 0",
-                                    }}
+                                    content={<CustomBudgetsTooltip />}
                                 />
                                 <Legend
                                     iconType="circle"
                                     wrapperStyle={{
                                         fontSize: "10px",
                                         fontFamily: "Vazirmatn, sans-serif",
-                                        marginTop: "1rem"
+                                        marginTop: "1rem",
                                     }}
                                 />
                             </PieChart>
                         </ResponsiveContainer>
                     )
+                ) : null}
+
+                {chart_type === "Money" ? (
+                    <ResponsiveContainer width="100%" height="100%">
+                        <ComposedChart data={MoneyChartData} responsive>
+                            <XAxis dataKey="date" tickFormatter={(key) => formatXAxis(key, moneyTimeFilterType)} tick={{ fontSize: 12 }} />
+                            <YAxis yAxisId="left" hide />
+                            <Tooltip
+                                cursor={{ stroke: 'transparent', strokeWidth: 0, fill: 'transparent' }}
+                                labelFormatter={(key) => formatTooltipLabel(key, moneyTimeFilterType)}
+                            />
+                            <Legend iconType="circle" wrapperStyle={{
+                                fontSize: "14px",
+                                fontFamily: "Vazirmatn, sans-serif",
+                            }} />
+                            <Area
+                                yAxisId="left"
+                                type="monotone"
+                                dataKey="Money"
+                                stroke="rgb(178 119 16)"
+                                fill="rgba(178, 119, 16, 0.25)"
+                                strokeWidth={2}
+                                dot={{ r: 3 }}
+                                activeDot={{ r: 4 }}
+                            />
+                        </ComposedChart>
+                    </ResponsiveContainer>
                 ) : null}
             </div>
         </div>
