@@ -2,7 +2,7 @@ import {useContext, useState} from "react";
 import formatPrice from "./priceFormater.jsx";
 import downArrow from "./assets/icons/down-arrow-1-svgrepo-com.svg";
 import upArrow from "./assets/icons/down-arrow-1-svgrepo-com (1).svg";
-import moneyIcon from "./assets/icons/icons8-money-25.png";
+import moneyIcon from "./assets/icons/wallet-wallet-svgrepo-com.svg";
 import TransactionsLog from "./TransactionsLog.jsx";
 import TransActionsContext from "./contexts.js";
 import priceFormater from "./priceFormater.jsx";
