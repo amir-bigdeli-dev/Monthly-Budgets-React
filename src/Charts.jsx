@@ -205,7 +205,6 @@ export default function Charts() {
             return key;
         }
     };
-
     return (
         <div className="charts">
             <ul className="charts__type">
@@ -275,8 +274,8 @@ export default function Charts() {
                                     dataKey="value"
                                     nameKey="name"
                                     cx="50%"
-                                    cy="50%"
-                                    outerRadius="70%"
+                                    cy="45%"
+                                    outerRadius="65%"
                                     innerRadius="40%"
                                     paddingAngle={2}
                                     label={({ name, percent }) => ` ${(percent * 100).toFixed(0)}%`}
@@ -311,7 +310,7 @@ export default function Charts() {
                                 <Legend
                                     iconType="circle"
                                     wrapperStyle={{
-                                        fontSize: "14px",
+                                        fontSize: "10px",
                                         fontFamily: "Vazirmatn, sans-serif",
                                         marginTop: "1rem"
                                     }}
