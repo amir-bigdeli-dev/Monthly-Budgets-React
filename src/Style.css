@@ -306,6 +306,7 @@ path.recharts-rectangle,
 .list-items-container{
   display: flex;
   flex-direction: column;
+  align-items: center;
   position: relative;
   box-shadow: var(--boxShadow);
 }
@@ -322,6 +323,7 @@ path.recharts-rectangle,
   z-index: 11;
   background: white;
   cursor: pointer;
+  width: 100%;
 }
 .budget-actions{
   display: flex;
@@ -461,6 +463,7 @@ display: flex;
     justify-content: center;
 }
 .list-item__expenses{
+  width: 99%;
   display: flex;
   flex-direction: column;
   position: relative;
