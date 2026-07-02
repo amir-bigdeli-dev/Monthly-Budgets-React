@@ -43,6 +43,8 @@ export default function Charts() {
         const now = new Date();
         const currentYear = now.getFullYear();
 
+        let windowStart = null;
+
         if (filterType === "daily") {
             const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
             dayNames.forEach((day) => {
@@ -50,6 +52,7 @@ export default function Charts() {
             });
         } else if (filterType === "weekly") {
             const month = now.getMonth();
+            windowStart = new Date(currentYear, month, 1);
             const firstDay = new Date(currentYear, month, 1);
             const lastDay = new Date(currentYear, month + 1, 0);
 
@@ -62,6 +65,7 @@ export default function Charts() {
         } else if (filterType === "monthly") {
             const currentMonth = now.getMonth();
             const startMonth = currentMonth < 6 ? 0 : 6;
+            windowStart = new Date(currentYear, startMonth, 1);
 
             for (let month = startMonth; month < startMonth + 6; month++) {
                 const d = new Date(currentYear, month, 1);
@@ -89,6 +93,22 @@ export default function Charts() {
             }
         }
 
+        let baseBalance = 0;
+        if (windowStart) {
+            data_Type.forEach((type) => {
+                if (!transactions[type]) return;
+                transactions[type].forEach((item) => {
+                    const itemDate = new Date(item.date);
+                    if (itemDate < windowStart) {
+                        const amt = budgetsAmountNum(item.amount);
+                        if (type === "Money") baseBalance += amt;
+                        else if (type === "Incomes") baseBalance += amt;
+                        else if (type === "Expenses") baseBalance -= amt;
+                    }
+                });
+            });
+        }
+
         data_Type.forEach((type) => {
             if (!transactions[type]) return;
 
@@ -102,7 +122,7 @@ export default function Charts() {
                 } else key = item.date;
 
                 if (!data[key]) {
-                    data[key] = { date: key, Incomes: 0, Expenses: 0, Money: 0 };
+                    return;
                 }
 
                 data[key][type] += budgetsAmountNum(item.amount);
@@ -122,7 +142,7 @@ export default function Charts() {
             return dateA - dateB;
         });
 
-        let runningBalance = 0;
+        let runningBalance = baseBalance; 
         sortedData.forEach((period) => {
             runningBalance += (period.Money + period.Incomes - period.Expenses);
             period.Money = runningBalance;
