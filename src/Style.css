@@ -232,11 +232,17 @@ body {
   background: #f6fdf0;
   border: 1px solid #98d762;
 }
+.chart__options{
+  display: flex;
+  flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  width: 100%;
+}
 .chart__TimeFilters{
   /*position: absolute;*/
   /*top: 0.5rem;*/
   /*right: 0.5rem;*/
-  margin-left: auto;
   padding: 0.5rem;
   width: fit-content;
   height: fit-content;
@@ -266,6 +272,28 @@ path.recharts-rectangle,
   outline: none !important;
   box-shadow: none !important;
   -webkit-tap-highlight-color: transparent;
+}
+
+.chart__navigation{
+  position: absolute;
+  right: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+  /*  border: 1px solid red;*/
+  gap: 0.5rem;
+}
+.chart__navigation-btn{
+  padding: 0 0.2rem;
+  border-radius: 0.3rem;
+  font-size: small;
+  border: 1px solid rgb(187 187 187 / 0.65);
+  background: white;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 /*Budgets*/
 .budgets {
