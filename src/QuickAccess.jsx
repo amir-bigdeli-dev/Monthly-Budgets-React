@@ -5,7 +5,7 @@ import incomesIcon from "./assets/icons/down-arrow-1-svgrepo-com.svg?react";
 import expensesIcon from "./assets/icons/down-arrow-1-svgrepo-com (1).svg?react";
 import moneyIcon from "./assets/icons/wallet-wallet-svgrepo-com.svg?react";
 import budgetsIcon from "./assets/icons/budget-cost-svgrepo-com.svg?react";
-import monthlyBudgetIcon from "./assets/icons/monthly-budget-icon.png";
+import monthlyBudgetIcon from "./assets/icons/icons8-calendar(2).svg?react";
 import historyIcon from "./assets/icons/history-svgrepo-com.svg?react"
 import TransActionsContext from "./contexts.js";
 
