@@ -613,6 +613,10 @@ display: flex;
   text-align: center;
   border-bottom: 1px solid rgb(187 187 187 / 0.35);
 }
+.quick-access__list-item--disabled{
+    opacity: 0.5;
+    cursor: not-allowed !important;
+}
 .quick-access__list-item:hover {
   background: rgb(187 187 187 / 0.35);
   border-radius: inherit;
@@ -835,7 +839,10 @@ display: flex;
     width: 100%;
   }
 }
-
+.errorAlert__quickAccess{
+    width: 150% !important;
+    left:0 !important;
+}
 /*TransactionsLog*/
 .transactionsLog{
   display: flex;
