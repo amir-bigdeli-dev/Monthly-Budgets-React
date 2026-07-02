@@ -4,6 +4,21 @@ import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg";
 import CreatableSelect from "react-select/creatable";
 import TransactionsLog from "./TransactionsLog.jsx";
 import priceFormater from "./priceFormater.jsx";
+import incomesIcon from "./assets/icons/down-arrow-1-svgrepo-com.svg?react";
+import expensesIcon from "./assets/icons/down-arrow-1-svgrepo-com (1).svg?react";
+import moneyIcon from "./assets/icons/wallet-wallet-svgrepo-com.svg?react";
+import budgetsIcon from "./assets/icons/budget-cost-svgrepo-com.svg?react";
+import monthlyBudgetIcon from "./assets/icons/icons8-calendar(2).svg?react";
+import historyIcon from "./assets/icons/history-svgrepo-com.svg?react"
+
+const iconMap = {
+  Incomes: incomesIcon,
+  Expenses: expensesIcon,
+  Budgets: budgetsIcon,
+  Money: moneyIcon,
+  MonthlyBudget: monthlyBudgetIcon,
+  Transactions: historyIcon
+};
 
 const FIELDS = {
   Incomes: [
@@ -46,7 +61,7 @@ const FIELDS = {
   ],
 };
 
-export default function TransactionForm({ formType, onClose ,ItemValues = null }) {
+export default function TransactionForm({ formType, onClose ,ItemValues = null , type_label }) {
   const fields = FIELDS[formType] || [];
   const [formIsClosing, setFormIsClosing] = useState(false);
   const [formValues, setFormValues] = useState({});
@@ -58,7 +73,6 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null }
   const [transactionLogOpen,setTransactionLogOpen] = useState(true);
   const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator , transactions , EditItem} =
     useContext(TransActionsContext);
-  
   useEffect(() => {
     if(ItemValues) {
       setFormValues(ItemValues)
@@ -191,6 +205,8 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null }
     const month = String(date.getMonth() + 1).padStart(2, "0");
     return `${year}-${month}`;
   }
+  const Icon = iconMap[formType];
+
   return (
       <>
         {formType === "Transactions" ?
@@ -208,7 +224,7 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null }
       >
         {inputError ? <div className="errorAlert">{errorAlert}</div> : null}
         <div className="actionsFrom__form-header">
-          <h2 className="actionsForm-title">{ItemValues || (formType === "MonthlyBudget" && transactions['MonthlyBudget'].length > 0 ) ? "Edit":"Add"} {formType}</h2>
+          <h2 className="actionsForm-title">{ItemValues || (formType === "MonthlyBudget" && transactions['MonthlyBudget'].length > 0 ) ? "Edit":"Add"} {type_label[formType]} <Icon className="actionsForm-title__icon"/></h2>
           <span className="actionsForm__close" onClick={handleClose}>
             <img
               className="actionsForm__close-icon"

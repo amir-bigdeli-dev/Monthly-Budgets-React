@@ -52,6 +52,7 @@ const App = () => {
         {formType ? (
           <TransactionForm
             formType={formType}
+            type_label={Types_Labels}
             onClose={() => setFormType(null)}
           />
         ) : null}
