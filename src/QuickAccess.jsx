@@ -9,24 +9,13 @@ import monthlyBudgetIcon from "./assets/icons/icons8-calendar(2).svg?react";
 import historyIcon from "./assets/icons/history-svgrepo-com.svg?react"
 import TransActionsContext from "./contexts.js";
 
-function useIsDesktop(breakpoint = 850) {
-  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= breakpoint);
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia(`(min-width: ${breakpoint}px)`);
-    const handler = (event) => setIsDesktop(event.matches);
-    mediaQuery.addEventListener("change", handler);
-    return () => mediaQuery.removeEventListener("change", handler);
-  }, [breakpoint]);
-  return isDesktop
-}
-export default function QuickAccess({onSelect, type_label }) {
+export default function QuickAccess({onSelect, type_label , desktopMode }) {
   let [isOpen, setIsOpen] = useState(false);
   const actions = ["Incomes", "Money", "Expenses", "Budgets", "MonthlyBudget","Transactions"];
   const {transactions} = useContext(TransActionsContext);
   const [DisabledAlert, setDisabledAlert] = useState("");
   const DisableAlertRef = useRef("")
-  const isDesktop = useIsDesktop(850);
 
   const iconMap = {
     Incomes: incomesIcon,
@@ -38,7 +27,7 @@ export default function QuickAccess({onSelect, type_label }) {
   };
   const quickAccessRef = useRef(null);
   useEffect(() => {
-    if(isDesktop) return ;
+    if(desktopMode) return ;
     function closeQuickAccess(e) {
       if (
         quickAccessRef.current &&
@@ -78,7 +67,7 @@ export default function QuickAccess({onSelect, type_label }) {
         setDisabledAlert("")
     },3000)
   }
-  if (isDesktop) {
+  if (desktopMode) {
    return (
        <div className="quick-access" ref={quickAccessRef}>
          {DisabledAlert ?
@@ -114,9 +103,9 @@ export default function QuickAccess({onSelect, type_label }) {
                      </li>
                  )})}
              </ul>
-         {!isDesktop ? <button
+         {!desktopMode ? <button
              className={`quick-access__btn quick-access__btn${isOpen ? "--isOpen" : ""}`}
-             onClick={!isDesktop ? () => setIsOpen(!isOpen) : null}
+             onClick={!desktopMode ? () => setIsOpen(!isOpen) : null}
          >
            <img
                className="quick-access__btn-icon"
@@ -164,7 +153,7 @@ export default function QuickAccess({onSelect, type_label }) {
       ) : null}
       <button
         className={`quick-access__btn quick-access__btn${isOpen ? "--isOpen" : ""}`}
-        onClick={!isDesktop ? () => setIsOpen(!isOpen) : null}
+        onClick={!desktopMode ? () => setIsOpen(!isOpen) : null}
       >
         <img
           className="quick-access__btn-icon"

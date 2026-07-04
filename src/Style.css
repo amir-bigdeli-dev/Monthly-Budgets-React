@@ -957,10 +957,11 @@ display: flex;
   .App {
     display: grid;
     grid-template-columns: auto 1fr 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto 30vh 1fr ;
     grid-template-areas:
       "quick-access header  budget"
-      "quick-access chart   budget";
+      "quick-access chart   budget"
+       "quick-access chart   log";
     align-items: start;
     height: 100vh;
   }
@@ -1037,5 +1038,18 @@ display: flex;
     width: fit-content !important;
     text-align: center;
     padding: 1.5rem;
+  }
+  .transactionsLog {
+    position: relative;
+    transform: none;
+    width: auto;
+    height: 100%;
+    display: flex;
+    grid-area: log;
+    flex-direction: column;
+    top: auto;
+    left: auto;
+    border:var(--section-border);
+    box-shadow: var(--boxShadow);
   }
 }

@@ -7,7 +7,7 @@ import TransactionsLog from "./TransactionsLog.jsx";
 import TransActionsContext from "./contexts.js";
 import priceFormater from "./priceFormater.jsx";
 
-export default function Header({ data }) {
+export default function Header({ data , appRef , desktopMode}) {
   const [showIncomesLog, setShowIncomesLog ] = useState(null);
   const {TransactionsCalculator} = useContext(TransActionsContext)
 
@@ -66,7 +66,7 @@ export default function Header({ data }) {
           </div>
         </div>
       </div>
-      {showIncomesLog ? <TransactionsLog action={showIncomesLog} status={(isOpen) => !isOpen && setShowIncomesLog(null)}/> : null}
+      {showIncomesLog && !desktopMode ? <TransactionsLog action={showIncomesLog} status={(isOpen) => !isOpen && setShowIncomesLog(null)} appRef={appRef}/> : null}
     </>
   );
 }
