@@ -888,8 +888,11 @@ display: flex;
   }
 }
 .errorAlert__quickAccess{
-    width: 150% !important;
-    left:0 !important;
+    top: 0;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: fit-content !important;
 }
 /*TransactionsLog*/
 .transactionsLog{
@@ -970,7 +973,7 @@ display: flex;
     width: 0;
     overflow: hidden;
     white-space: nowrap;
-    transition: width 0.25s ease, opacity 0.25s ease;
+    transition: width 0.5s ease, opacity 0.25s ease;
     opacity: 0;
   }
   .quick-access__list:hover .quick-access__list-item-text {
@@ -999,7 +1002,7 @@ display: flex;
 
   .quick-access {
     grid-area: quick-access;
-    position: sticky;
+    position:inherit;
     bottom: auto;
     right: auto;
     align-self: start;
@@ -1024,5 +1027,15 @@ display: flex;
   }
   .actionsForm--fadeout{
     animation: none;
+  }
+  .errorAlert__quickAccess{
+    position: absolute;
+    top: .5rem;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: fit-content !important;
+    text-align: center;
+    padding: 1.5rem;
   }
 }
