@@ -34,7 +34,12 @@ const App = () => {
   const types = ["Incomes", "Money", "Expenses", "Budgets", "MonthlyBudget"];
   const isDesktop = useIsDesktop(850);
   const [formType, setFormType] = useState(null);
+  const [transactionsRef, setTransactionsRef] = useState(null);
   const appRef = useRef(null);
+
+    useEffect(() => {
+        setTransactionsRef(appRef.current);
+    }, []);
   const {
     transactions,
       EditItem,
