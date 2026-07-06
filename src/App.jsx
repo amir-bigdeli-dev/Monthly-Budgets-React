@@ -4,9 +4,11 @@ import Budgets from "./Budgets.jsx";
 import QuickAccess from "./QuickAccess.jsx";
 import TransactionForm from "./TransactionForm.jsx";
 import TransactionsLog from "./TransactionsLog.jsx";
-import { useState,useEffect,useRef } from "react";
+import {useState, useEffect, useRef, useContext} from "react";
 import TransActionsContext from "./contexts.js";
+import NotificationsContext from "./NotificationsContext.js";
 import useTransactions from "./useTransactions.jsx";
+import useNotification from "./useNotifications.jsx";
 
 
 function useIsDesktop(breakpoint = 850) {
@@ -50,7 +52,9 @@ const App = () => {
     TransactionsCalculator,
   } = useTransactions();
 
+  const {notificationUI,notify} = useNotification()
   return (
+      <NotificationsContext.Provider value={{notify}}>
     <TransActionsContext.Provider
       value={{
           EditItem,
@@ -65,6 +69,7 @@ const App = () => {
       }}
     >
       <div className="App" ref={appRef}>
+          {notificationUI}
         <Header data={TransactionsCalculator} />
         <Charts />
         <Budgets />
@@ -80,6 +85,7 @@ const App = () => {
         ) : null}
       </div>
     </TransActionsContext.Provider>
+      </NotificationsContext.Provider>
   );
 };
 

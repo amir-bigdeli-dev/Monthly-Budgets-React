@@ -847,25 +847,37 @@ path.recharts-rectangle,
   outline:1px solid red !important;
 }
 /*alert*/
-.errorAlert{
+.notification{
   display: flex;
   align-items: center;
   gap: 0.8rem;
   text-align: left;
-  width: 90%;
-  max-height: 400px;
+  width: 95%;
+  max-height: fit-content;
   padding: .8rem 1rem;
   position: absolute;
   border-radius: .5rem;
-  bottom: 105%;
+  font-family: "DM Sans", sans-serif;
+  z-index: 10000;
+  top:1.5rem;
   left: 50%;
   overflow: hidden;
-  z-index: 9999;
   transform: translateX(-50%);
-  background: rgb(215 25 25);
   color: #ffffff;
 }
-.errorAlert::after{
+.notification--error{
+    background: rgb(192 7 7);
+}
+.notification--success{
+    background: rgb(8 110 8);
+}
+.notification--info{
+    background: rgb(25 114 215);
+}
+.notification--warning{
+    background: rgb(168 116 2);
+}
+.notification::after{
   content: "";
   position: absolute;
   bottom: 0;
@@ -874,14 +886,11 @@ path.recharts-rectangle,
   animation: statusBar 3s linear forwards;
   background: rgb(255 255 255 / 0.55);
 }
-.errorAlert::before{
+.notification__icon{
   content: "";
   display: block;
   width: 30px;
   height: 30px;
-  background-image: url(assets/icons/alert-svgrepo-com.svg);
-  background-size: contain;
-  background-repeat: no-repeat;
 }
 @keyframes statusBar {
   from{
@@ -891,7 +900,7 @@ path.recharts-rectangle,
     width: 100%;
   }
 }
-.errorAlert__quickAccess{
+.notification__quickAccess{
   bottom: 100% ;
   left: 50%;
   right: auto;

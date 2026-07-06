@@ -9,7 +9,8 @@ import expensesIcon from "./assets/icons/down-arrow-1-svgrepo-com (1).svg?react"
 import moneyIcon from "./assets/icons/wallet-wallet-svgrepo-com.svg?react";
 import budgetsIcon from "./assets/icons/budget-cost-svgrepo-com.svg?react";
 import monthlyBudgetIcon from "./assets/icons/icons8-calendar(2).svg?react";
-import historyIcon from "./assets/icons/history-svgrepo-com.svg?react"
+import historyIcon from "./assets/icons/history-svgrepo-com.svg?react";
+import NotificationsContext from "./NotificationsContext.js";
 
 const iconMap = {
   Incomes: incomesIcon,
@@ -67,12 +68,12 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null})
   const [formValues, setFormValues] = useState({});
   const [cursorTrigger, setCursorTrigger] = useState(0);
   const [invalidValue,setInvalidValue] = useState(false);
-  const [inputError,setInputError] = useState(false);
-  const [errorAlert,setErrorAlert] = useState("");
+  const notificationMessage = "";
   const [EmptyFields,setEmptyFields] = useState([]);
   const [transactionLogOpen,setTransactionLogOpen] = useState(true);
   const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator , transactions , EditItem , isDesktop,Types_Labels} =
     useContext(TransActionsContext);
+  const {notify} = useContext(NotificationsContext);
   useEffect(() => {
     if(ItemValues) {
       setFormValues(ItemValues)
@@ -105,7 +106,7 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null})
         setFormValues((prev) => ({ ...prev,amount:formatted,percent: `${ValuePercent}%` }));
       }else if (formType === "MonthlyBudget"){
         if(Number(raw) > TransactionsCalculator.Money){
-            errorHandle("Monthly budget cannot exceed total money!");
+            notify("Monthly budget cannot exceed total money!");
             setInvalidValue(true);
             return;
         }
@@ -151,7 +152,7 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null})
   function handleSubmit(e) {
     e.preventDefault();
     const Empty = (fields.filter((field => !formValues[field.id])).map((fields) => fields.id));
-    if (Empty.length > 0) { errorHandle("Fill the Form!!"); setEmptyFields(Empty);return;}
+    if (Empty.length > 0) { notify("Fill the Form!!"); setEmptyFields(Empty);return;}
     if(ItemValues){
         EditItem(ItemValues.id,formType,formValues);
     }else{
@@ -168,37 +169,13 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null})
 
   function handleCategoryChange(selected) {
     if(transactions.Budgets.some(budget => budget.category === selected.value) && formType === "Budgets"){
-      errorHandle("This category already exists as a budget!");
+      notify("This category already exists as a budget!",'error',3000);
       return;
     }
     setFormValues(prev => ({ ...prev, category: selected.value }));
     setEmptyFields(prev => prev.filter(id => id !== "category"));
   }
   
-  const ErrorRef = useRef(null);
-
-  function errorHandle(message) {
-    setInputError(true);
-    setErrorAlert(message);
-
-    ErrorRef.current = setTimeout(() => {
-      setInputError(false);
-      setErrorAlert("");
-    }, 3000);
-    
-  }
-  useEffect(() => {
-    if (inputError && ErrorRef.current) {
-      ErrorRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
-    if (ErrorRef.current) {
-      clearTimeout(ErrorRef.current)
-      ErrorRef.current = null
-    }}, []);
-
   function getCurrentMonth() {
     const date = new Date();
     const year = date.getFullYear();
@@ -223,7 +200,6 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null})
         onSubmit={handleSubmit}
         data-type={formType}
       >
-        {inputError ? <div className="errorAlert">{errorAlert}</div> : null}
         <div className="actionsFrom__form-header">
           <h2 className="actionsForm-title">{ItemValues || (formType === "MonthlyBudget" && transactions['MonthlyBudget'].length > 0 ) ? "Edit":"Add"} {Types_Labels[formType]} <Icon className="actionsForm-title__icon"/></h2>
           <span className="actionsForm__close" onClick={handleClose}>
