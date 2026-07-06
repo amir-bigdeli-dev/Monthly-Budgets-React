@@ -70,6 +70,12 @@ export default function useTransactions() {
         }));
         return;
       }
+    }else if(type === "Money" && transactions.Money.length > 0) {
+      setTransactions((prev) => ({
+        ...prev,
+        Money: [{ id: Date.now(), ...data }],
+      }));
+      return;
     }
 
     setTransactions((prev) => ({
