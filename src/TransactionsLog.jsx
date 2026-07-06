@@ -9,11 +9,11 @@ import sortItems from "./sort_Items.js";
 import useTitleTooltip from "./useTitleTooltip.js";
 
 
-export default function TransactionsLog({ status , action:initialAction , desktopMode , appRef}){
+export default function TransactionsLog({ status , action:initialAction , appRef}){
     const sortOptions = ["Date", "Amount", "Category"];
     const [action,setAction] = useState(initialAction || 'Expenses')
     const budgetsAmountNum = (item) => (Number(item.replace(/[^0-9]/g,"")));
-    const { removeItems , transactions } = useContext(TransActionsContext)
+    const { removeItems , transactions ,isDesktop } = useContext(TransActionsContext)
     const [itemToRemove,setItemToRemove] = useState(null);
     const [sortBy,setSortBy] = useState("Date");
 
@@ -53,7 +53,7 @@ export default function TransactionsLog({ status , action:initialAction , deskto
                     <button className="expenseToRemoveAlert__actions-cancel" onClick={() => setItemToRemove(null)}>Cancel</button>
                 </div>
             </div> : null}
-            {!desktopMode ? <span className="transactionsLog__close" onClick={() => {status()}}><img className="actionsForm__close-icon" src={closeIcon} alt="close-icon"/></span>:null}
+            {!isDesktop ? <span className="transactionsLog__close" onClick={() => {status()}}><img className="actionsForm__close-icon" src={closeIcon} alt="close-icon"/></span>:null}
             <h2 className="transactionsLog__title">Transactions Log</h2>
             <div className="transactionsLog__actionBar">
                 <span onClick={() => setAction('Incomes')} className={`charts__type-label ${action === "Incomes" ? 'charts__type-label charts__type-label--incomes-active':""}`}>Incomes</span>
@@ -148,6 +148,6 @@ export default function TransactionsLog({ status , action:initialAction , deskto
     )
     return createPortal (
        content,
-        desktopMode && appRef?.current ? appRef.current : document.body
+        isDesktop && appRef?.current ? appRef.current : document.body
     )
 }

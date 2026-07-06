@@ -7,9 +7,9 @@ import TransactionsLog from "./TransactionsLog.jsx";
 import TransActionsContext from "./contexts.js";
 import priceFormater from "./priceFormater.jsx";
 
-export default function Header({ data , appRef , desktopMode}) {
+export default function Header({ data , appRef }) {
   const [showIncomesLog, setShowIncomesLog ] = useState(null);
-  const {TransactionsCalculator} = useContext(TransActionsContext)
+  const {TransactionsCalculator,isDesktop} = useContext(TransActionsContext)
 
   const toggleLog = (type) => {
     setShowIncomesLog((current) => (current === type ? null : type));
@@ -66,7 +66,7 @@ export default function Header({ data , appRef , desktopMode}) {
           </div>
         </div>
       </div>
-      {showIncomesLog && !desktopMode ? <TransactionsLog action={showIncomesLog} status={(isOpen) => !isOpen && setShowIncomesLog(null)} appRef={appRef}/> : null}
+      {showIncomesLog && !isDesktop ? <TransactionsLog action={showIncomesLog} status={(isOpen) => !isOpen && setShowIncomesLog(null)} appRef={appRef}/> : null}
     </>
   );
 }

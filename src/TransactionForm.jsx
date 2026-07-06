@@ -61,7 +61,7 @@ const FIELDS = {
   ],
 };
 
-export default function TransactionForm({ formType, onClose ,ItemValues = null , type_label, desktopMode}) {
+export default function TransactionForm({ formType, onClose ,ItemValues = null , type_label}) {
   const fields = FIELDS[formType] || [];
   const [formIsClosing, setFormIsClosing] = useState(false);
   const [formValues, setFormValues] = useState({});
@@ -71,7 +71,7 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null ,
   const [errorAlert,setErrorAlert] = useState("");
   const [EmptyFields,setEmptyFields] = useState([]);
   const [transactionLogOpen,setTransactionLogOpen] = useState(true);
-  const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator , transactions , EditItem} =
+  const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator , transactions , EditItem , isDesktop} =
     useContext(TransActionsContext);
   useEffect(() => {
     if(ItemValues) {
@@ -145,7 +145,7 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null ,
     setTimeout(() => {
       onClose();
       setFormIsClosing(false);
-    }, desktopMode ? 0 : 300);
+    }, isDesktop ? 0 : 300);
   }
 
   function handleSubmit(e) {

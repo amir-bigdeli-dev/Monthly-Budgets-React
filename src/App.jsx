@@ -60,22 +60,21 @@ const App = () => {
         categoryOptions,
         addCategoryOption,
         TransactionsCalculator,
+          isDesktop,
       }}
     >
       <div className="App" ref={appRef}>
-        <Header data={TransactionsCalculator}  desktopMode={isDesktop} />
+        <Header data={TransactionsCalculator} />
         <Charts />
         <Budgets />
-          {isDesktop ? <TransactionsLog status={() => setFormType(null)} action={formType} desktopMode={isDesktop} appRef={appRef} /> : null}
+          {isDesktop ? <TransactionsLog status={() => setFormType(null)} action={formType} appRef={appRef} /> : null}
         <QuickAccess
-            desktopMode={isDesktop}
           type_label={Types_Labels}
           onSelect={setFormType}
         />
         {formType ? (
           <TransactionForm
             formType={formType}
-            desktopMode={isDesktop}
             type_label={Types_Labels}
             onClose={() => setFormType(null)}
           />
