@@ -8,12 +8,14 @@ import budgetsIcon from "./assets/icons/budget-cost-svgrepo-com.svg?react";
 import monthlyBudgetIcon from "./assets/icons/icons8-calendar(2).svg?react";
 import historyIcon from "./assets/icons/history-svgrepo-com.svg?react"
 import TransActionsContext from "./contexts.js";
+import NotificationsContext from "./NotificationsContext.js";
 
 
 export default function QuickAccess({onSelect}) {
   let [isOpen, setIsOpen] = useState(false);
   const actions = ["Incomes", "Money", "Expenses", "Budgets", "MonthlyBudget","Transactions"];
   const {transactions} = useContext(TransActionsContext);
+  const {notify} = useContext(NotificationsContext);
   const [DisabledAlert, setDisabledAlert] = useState("");
   const DisableAlertRef = useRef("")
   const {isDesktop,Types_Labels} = useContext(TransActionsContext);
@@ -58,15 +60,8 @@ export default function QuickAccess({onSelect}) {
   
   function DisabledItemsAlert(type){
     const hasMoney = transactions.Money.length > 0;
-    if(!hasMoney) setDisabledAlert("Please enter the Money amount first!")
-    if(type === "Budgets") setDisabledAlert("Please define Monthly Budget amount first!")
-
-    if(DisableAlertRef.current){
-      clearTimeout(DisableAlertRef.current)
-    }
-    DisableAlertRef.current = setTimeout(() => {
-        setDisabledAlert("")
-    },3000)
+    if(!hasMoney) notify("Please enter the Money amount first!");
+    if(type === "Budgets") notify("Please define Monthly Budget amount first!")
   }
   if (isDesktop) {
    return (
