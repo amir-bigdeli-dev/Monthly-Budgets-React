@@ -61,7 +61,7 @@ const FIELDS = {
   ],
 };
 
-export default function TransactionForm({ formType, onClose ,ItemValues = null , type_label}) {
+export default function TransactionForm({ formType, onClose ,ItemValues = null}) {
   const fields = FIELDS[formType] || [];
   const [formIsClosing, setFormIsClosing] = useState(false);
   const [formValues, setFormValues] = useState({});
@@ -71,7 +71,7 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null ,
   const [errorAlert,setErrorAlert] = useState("");
   const [EmptyFields,setEmptyFields] = useState([]);
   const [transactionLogOpen,setTransactionLogOpen] = useState(true);
-  const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator , transactions , EditItem , isDesktop} =
+  const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator , transactions , EditItem , isDesktop,Types_Labels} =
     useContext(TransActionsContext);
   useEffect(() => {
     if(ItemValues) {
@@ -225,7 +225,7 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null ,
       >
         {inputError ? <div className="errorAlert">{errorAlert}</div> : null}
         <div className="actionsFrom__form-header">
-          <h2 className="actionsForm-title">{ItemValues || (formType === "MonthlyBudget" && transactions['MonthlyBudget'].length > 0 ) ? "Edit":"Add"} {type_label[formType]} <Icon className="actionsForm-title__icon"/></h2>
+          <h2 className="actionsForm-title">{ItemValues || (formType === "MonthlyBudget" && transactions['MonthlyBudget'].length > 0 ) ? "Edit":"Add"} {Types_Labels[formType]} <Icon className="actionsForm-title__icon"/></h2>
           <span className="actionsForm__close" onClick={handleClose}>
             <img
               className="actionsForm__close-icon"

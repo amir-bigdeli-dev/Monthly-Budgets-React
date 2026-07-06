@@ -10,13 +10,13 @@ import historyIcon from "./assets/icons/history-svgrepo-com.svg?react"
 import TransActionsContext from "./contexts.js";
 
 
-export default function QuickAccess({onSelect, type_label  }) {
+export default function QuickAccess({onSelect}) {
   let [isOpen, setIsOpen] = useState(false);
   const actions = ["Incomes", "Money", "Expenses", "Budgets", "MonthlyBudget","Transactions"];
   const {transactions} = useContext(TransActionsContext);
   const [DisabledAlert, setDisabledAlert] = useState("");
   const DisableAlertRef = useRef("")
-  const {isDesktop} = useContext(TransActionsContext);
+  const {isDesktop,Types_Labels} = useContext(TransActionsContext);
 
   const iconMap = {
     Incomes: incomesIcon,
@@ -99,7 +99,7 @@ export default function QuickAccess({onSelect, type_label  }) {
                            />
                        }
                        <span className="quick-access__list-item-text">
-              {type_label[type]}
+              {Types_Labels[type]}
             </span>
                      </li>
                  )})}
@@ -147,7 +147,7 @@ export default function QuickAccess({onSelect, type_label  }) {
                 alt={`${type}Icon`}
               />
               }
-              {type_label[type]}
+              {Types_Labels[type]}
             </li>
           )})}
         </ul>

@@ -61,6 +61,7 @@ const App = () => {
         addCategoryOption,
         TransactionsCalculator,
           isDesktop,
+          Types_Labels,
       }}
     >
       <div className="App" ref={appRef}>
@@ -69,13 +70,11 @@ const App = () => {
         <Budgets />
           {isDesktop ? <TransactionsLog status={() => setFormType(null)} action={formType} appRef={appRef} /> : null}
         <QuickAccess
-          type_label={Types_Labels}
           onSelect={setFormType}
         />
         {formType ? (
           <TransactionForm
             formType={formType}
-            type_label={Types_Labels}
             onClose={() => setFormType(null)}
           />
         ) : null}

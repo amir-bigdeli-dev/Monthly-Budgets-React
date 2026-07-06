@@ -9,7 +9,7 @@ import TransactionForm from "./TransactionForm.jsx";
 import useTitleTooltip from "./useTitleTooltip.js";
 
 export default function Budgets() {
-    const {transactions,removeItems} = useContext(TransActionsContext);
+    const {transactions,removeItems,Types_Labels} = useContext(TransActionsContext);
     const [budgets, setBudgets] = useState(transactions.Budgets);
     const { titleToolTip, ShowFullTitle } = useTitleTooltip();
     const [expensesShow,setExpensesShow] = useState(null);
@@ -47,7 +47,7 @@ export default function Budgets() {
     }
   return (
     <div className="budgets">
-        {itemToEdit ? <TransactionForm formType="Budgets" onClose={() => setItemToEdit(null)} ItemValues={itemToEdit}/> : null}
+        {itemToEdit ? <TransactionForm formType="Budgets" onClose={() => setItemToEdit(null)} ItemValues={itemToEdit} /> : null}
         {itemToRemove ? <div className="expenseToRemoveAlert" onClick={(e) => e.stopPropagation()}>
             <p>Are you sure you want to delete this expense?</p>
             <div className="expenseToRemoveAlert__actions">
