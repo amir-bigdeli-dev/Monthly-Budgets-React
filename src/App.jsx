@@ -75,6 +75,7 @@ const App = () => {
         {formType ? (
           <TransactionForm
             formType={formType}
+            desktopMode={isDesktop}
             type_label={Types_Labels}
             onClose={() => setFormType(null)}
           />

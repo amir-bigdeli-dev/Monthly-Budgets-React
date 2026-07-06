@@ -61,7 +61,7 @@ const FIELDS = {
   ],
 };
 
-export default function TransactionForm({ formType, onClose ,ItemValues = null , type_label }) {
+export default function TransactionForm({ formType, onClose ,ItemValues = null , type_label, desktopMode}) {
   const fields = FIELDS[formType] || [];
   const [formIsClosing, setFormIsClosing] = useState(false);
   const [formValues, setFormValues] = useState({});
@@ -145,7 +145,7 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null ,
     setTimeout(() => {
       onClose();
       setFormIsClosing(false);
-    }, 300);
+    }, desktopMode ? 0 : 300);
   }
 
   function handleSubmit(e) {
@@ -219,6 +219,7 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null ,
       <form
         className={`actionsForm__form actionsForm__form${formIsClosing ? "--close" : ""}`}
         onClick={(e) => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
         onSubmit={handleSubmit}
         data-type={formType}
       >

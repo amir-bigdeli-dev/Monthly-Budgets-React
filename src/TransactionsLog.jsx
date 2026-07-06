@@ -23,7 +23,7 @@ export default function TransactionsLog({ status , action:initialAction , deskto
     const LogRef = useRef(null)
 
     useEffect(() => {
-        if (initialAction) {
+        if (initialAction && initialAction === "Incomes" || initialAction === "Expenses") {
             setAction(initialAction);
         }
     }, [initialAction]);

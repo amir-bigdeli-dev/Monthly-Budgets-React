@@ -1027,6 +1027,7 @@ path.recharts-rectangle,
     left:50%;
     transform: translate(-50%, -50%);
     width: 30%;
+    z-index: 99999;
   }
   .actionsForm__form--close{
     animation: none;
