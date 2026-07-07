@@ -1,4 +1,4 @@
-import { useState, useRef , } from "react";
+import { useState, useRef , useEffect} from "react";
 import {createPortal} from "react-dom";
 import ErrorIcon from "./assets/icons/icons8-error.svg"
 import SuccessIcon from "./assets/icons/icons8-success.svg"
@@ -14,6 +14,13 @@ const iconMap = {
 export default function useNotification() {
     const [notification, setNotification] = useState(null);
     const timerRef = useRef(null);
+    const notificationRef = useRef(null);
+
+    useEffect(() => {
+        if (notification && notificationRef.current) {
+            notificationRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+    }, [notification]);
 
     function notify(message, type = "error", duration = 3000) {
         if(timerRef.current) clearTimeout(timerRef.current);
