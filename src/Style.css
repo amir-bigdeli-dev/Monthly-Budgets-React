@@ -529,16 +529,6 @@ path.recharts-rectangle,
   box-shadow: inset 3px 3px 10px #e8e8e8,
   inset -3px -3px 10px #e8e8e8,0 3px 3px #ababab;
 }
-@keyframes expenses_list_fadeIn {
-  from {
-    max-height: 0;
-    opacity: 0;
-  }
-  to {
-    max-height: 180px;
-    opacity: 1;
-  }
-}
 .expenses-list-item-counter{
   border: 1px solid rgb(192 192 192 / 0.53);
   background: #f6f6f6;
@@ -1092,5 +1082,15 @@ path.recharts-rectangle,
   }
   .budgets__list-item{
     grid-template-columns: auto 1.5fr repeat(3, 1fr) 1rem;
+  }
+  @keyframes expenses_list_fadeIn {
+    from {
+      max-height: 0;
+      opacity: 0;
+    }
+    to {
+      max-height: 180px;
+      opacity: 1;
+    }
   }
 }
