@@ -879,7 +879,7 @@ path.recharts-rectangle,
   position: fixed;
   border-radius: .5rem;
   font-family: "DM Sans", sans-serif;
-  z-index: 10000;
+  z-index: 999999;
   top:1.5rem;
   left: 50%;
   overflow: hidden;
