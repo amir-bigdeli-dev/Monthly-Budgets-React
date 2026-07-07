@@ -12,13 +12,13 @@ import NotificationsContext from "./NotificationsContext.js";
 
 
 export default function QuickAccess({onSelect}) {
+  const {isDesktop,Types_Labels} = useContext(TransActionsContext);
   let [isOpen, setIsOpen] = useState(false);
   const actions = ["Incomes", "Money", "Expenses", "Budgets", "MonthlyBudget","Transactions"];
   const {transactions} = useContext(TransActionsContext);
   const {notify} = useContext(NotificationsContext);
   const [DisabledAlert, setDisabledAlert] = useState("");
   const DisableAlertRef = useRef("")
-  const {isDesktop,Types_Labels} = useContext(TransActionsContext);
 
   const iconMap = {
     Incomes: incomesIcon,
@@ -75,6 +75,7 @@ export default function QuickAccess({onSelect}) {
                  const Icon = iconMap[type];
                  const isSVG = typeof Icon === "function"
                  const isDisabled = isActionDisabled(type);
+                 if(type === "Transactions" && isDesktop) return;
                  return(
                      <li
                          key={type}

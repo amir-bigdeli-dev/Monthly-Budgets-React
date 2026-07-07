@@ -186,8 +186,8 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null})
 
   return (
       <>
-        {formType === "Transactions" ?
-        <TransactionsLog  status={onClose} /> :
+        {formType === "Transactions" && !isDesktop ?
+        <TransactionsLog  status={onClose} /> : 
     <div
       className={`actionsForm actionsForm${formIsClosing ? "--fadeOut" : ""}`}
       ref={el => el?.scrollIntoView({ behavior: "smooth", block: "center" })}
