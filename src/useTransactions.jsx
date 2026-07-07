@@ -25,7 +25,7 @@ const initialCategories = {
   },
 };
 
-export default function useTransactions(notify) {
+export default function useTransactions(notify,Types_Labels) {
   const [transactions, setTransactions] = useState(() => {
     const stored = localStorage.getItem("transactions");
     return stored ? JSON.parse(stored) : initialState;
@@ -67,7 +67,7 @@ export default function useTransactions(notify) {
               item.date === data.date ? { ...item, ...data } : item
           ),
         }));
-        notify("Monthly Budget for this month has been updated.","success");
+        notify(`${Types_Labels[type]} for this month has been updated.`,"success");
         return;
       }
     }else if(type === "Money" && transactions.Money.length > 0) {
@@ -75,7 +75,7 @@ export default function useTransactions(notify) {
         ...prev,
         Money: [{ id: Date.now(), ...data }],
       }));
-      notify("Money amount has been updated.","success");
+      notify(`${Types_Labels[type]} amount has been updated.`,"success");
       return;
     }
 
@@ -86,7 +86,7 @@ export default function useTransactions(notify) {
         { id: Date.now(), ...(color ? { color } : {}), ...data },
       ],
     }));
-    notify("Transaction added successfully.","success");
+    notify(`${Types_Labels[type]} added successfully.`,"success");
   }
 
   function addCategoryOption(type, option) {
@@ -110,7 +110,7 @@ export default function useTransactions(notify) {
       ...prev,
       [type]: prev[type].filter(expense => expense.id !== Id),
     }));
-    notify("Transaction removed successfully.","success");
+    notify(`${Types_Labels[type]} removed successfully.`,"success");
   }
   
   function EditItem(id,type,newData){
@@ -118,7 +118,7 @@ export default function useTransactions(notify) {
         ...prev,
         [type]: prev[type].map(item => item.id === id ? {...item,...newData} : item),
     }))
-    notify("Transaction updated successfully.","success");
+    notify(`${Types_Labels[type]} updated successfully.`,"success");
   }
     const TransactionsCalculator = dataCalculator(transactions);
 

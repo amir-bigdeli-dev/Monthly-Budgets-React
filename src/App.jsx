@@ -51,7 +51,7 @@ const App = () => {
     categoryOptions,
     addCategoryOption,
     TransactionsCalculator,
-  } = useTransactions(notify);
+  } = useTransactions(notify,Types_Labels);
   
   return (
       <NotificationsContext.Provider value={{notify}}>

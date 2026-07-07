@@ -47,6 +47,7 @@ export default function Budgets() {
     }
   return (
     <div className="budgets">
+        { transactions.Budgets.length === 0 ? <div className="Budgets__UnDefined">No budget Found!!</div> :null}
         {itemToEdit ? <TransactionForm formType="Budgets" onClose={() => setItemToEdit(null)} ItemValues={itemToEdit} /> : null}
         {itemToRemove ? <div className="expenseToRemoveAlert" onClick={(e) => e.stopPropagation()}>
             <p>Are you sure you want to delete this expense?</p>
@@ -90,5 +91,5 @@ export default function Budgets() {
           ))}
       </ul>
     </div>
-  );
+ );
 }
