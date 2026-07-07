@@ -855,7 +855,7 @@ path.recharts-rectangle,
   width: clamp(300px, 90%, 500px);
   max-height: fit-content;
   padding: .8rem 1rem;
-  position: absolute;
+  position: fixed;
   border-radius: .5rem;
   font-family: "DM Sans", sans-serif;
   z-index: 10000;
