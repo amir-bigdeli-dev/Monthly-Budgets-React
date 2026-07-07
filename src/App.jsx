@@ -38,6 +38,7 @@ const App = () => {
   const [formType, setFormType] = useState(null);
   const [transactionsRef, setTransactionsRef] = useState(null);
   const appRef = useRef(null);
+  const {notificationUI,notify} = useNotification()
 
     useEffect(() => {
         setTransactionsRef(appRef.current);
@@ -50,9 +51,8 @@ const App = () => {
     categoryOptions,
     addCategoryOption,
     TransactionsCalculator,
-  } = useTransactions();
-
-  const {notificationUI,notify} = useNotification()
+  } = useTransactions(notify);
+  
   return (
       <NotificationsContext.Provider value={{notify}}>
     <TransActionsContext.Provider

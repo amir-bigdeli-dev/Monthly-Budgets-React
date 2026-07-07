@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect, useContext} from "react";
 import dataCalculator from "./DataCalculator.js";
 import ColorGenerator from "./ColorGenerator.js";
 
@@ -25,7 +25,7 @@ const initialCategories = {
   },
 };
 
-export default function useTransactions() {
+export default function useTransactions(notify) {
   const [transactions, setTransactions] = useState(() => {
     const stored = localStorage.getItem("transactions");
     return stored ? JSON.parse(stored) : initialState;
@@ -52,7 +52,6 @@ export default function useTransactions() {
   useEffect(() => {
     localStorage.setItem("Categories", JSON.stringify(categoryOptions));
   }, [categoryOptions]);
-
   function addTransaction(type, data) {
     const color = type === "Budgets" ? ColorGenerator() : undefined;
 
@@ -68,6 +67,7 @@ export default function useTransactions() {
               item.date === data.date ? { ...item, ...data } : item
           ),
         }));
+        notify("Monthly Budget for this month has been updated.","success");
         return;
       }
     }else if(type === "Money" && transactions.Money.length > 0) {
@@ -75,6 +75,7 @@ export default function useTransactions() {
         ...prev,
         Money: [{ id: Date.now(), ...data }],
       }));
+      notify("Money amount has been updated.","success");
       return;
     }
 
@@ -85,6 +86,7 @@ export default function useTransactions() {
         { id: Date.now(), ...(color ? { color } : {}), ...data },
       ],
     }));
+    notify("Transaction added successfully.","success");
   }
 
   function addCategoryOption(type, option) {
@@ -99,6 +101,7 @@ export default function useTransactions() {
         ...prev,
         [type]: [...prev[type], option],
       }});
+    notify("Category added successfully.","success");
     localStorage.setItem("Categories",JSON.stringify(categoryOptions));
   }
 
@@ -107,6 +110,7 @@ export default function useTransactions() {
       ...prev,
       [type]: prev[type].filter(expense => expense.id !== Id),
     }));
+    notify("Transaction removed successfully.","success");
   }
   
   function EditItem(id,type,newData){
@@ -114,6 +118,7 @@ export default function useTransactions() {
         ...prev,
         [type]: prev[type].map(item => item.id === id ? {...item,...newData} : item),
     }))
+    notify("Transaction updated successfully.","success");
   }
     const TransactionsCalculator = dataCalculator(transactions);
 
