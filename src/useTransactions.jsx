@@ -121,7 +121,7 @@ export default function useTransactions(notify,Types_Labels) {
     notify(`${Types_Labels[type]} updated successfully.`,"success");
   }
     const TransactionsCalculator = dataCalculator(transactions);
-
+  
   return {
     EditItem,
     removeItems,

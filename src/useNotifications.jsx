@@ -21,7 +21,7 @@ export default function useNotification(isDesktop) {
         }
     }, [notification]);
 
-    function notify(message, type = "error", duration = 3000,Ref) {
+    function notify({message, type = "error", duration = 3000,Ref}) {
         if(timerRef.current) clearTimeout(timerRef.current);
         setNotification({ message, type , Ref});
 
