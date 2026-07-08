@@ -6,11 +6,12 @@ import TrashIcon from "./assets/icons/trash-bin-trash-svgrepo-com.svg";
 import EditIcon from "./assets/icons/edit-3-svgrepo-com (1).svg";
 import RedTrashIcon from "./assets/icons/red-trash-bin.svg";
 import TransactionForm from "./TransactionForm.jsx";
+import useTitleTooltip from "./useTitleTooltip.js";
 
 export default function Budgets() {
-    const {transactions,removeItems} = useContext(TransActionsContext);
+    const {transactions,removeItems,Types_Labels} = useContext(TransActionsContext);
     const [budgets, setBudgets] = useState(transactions.Budgets);
-    const [titleToolTip,setTitleToolTip] = useState(null);
+    const { titleToolTip, ShowFullTitle } = useTitleTooltip();
     const [expensesShow,setExpensesShow] = useState(null);
     const [itemToRemove,setItemToRemove] = useState(null);
     const [itemToEdit,setItemToEdit] = useState(null)
@@ -26,21 +27,7 @@ export default function Budgets() {
         return (budgetsAmountNum(amount) - expenses)
     };
 
-    const titleTimerRef = useRef(null)
-    function ShowFullTitle(title,e) {
-        e.stopPropagation();
-        if(titleTimerRef.current) {
-            clearTimeout(titleTimerRef.current)
-            titleTimerRef.current = null
-        }
-        const element = e.currentTarget
-        if(element.scrollWidth <= element.clientWidth) return;
-        setTitleToolTip(title)
-        titleTimerRef.current = setTimeout(() => {
-            setTitleToolTip(null)
-        },3000)
-    }
-
+ 
     function ShowExpenses(category) {
         setExpensesShow(expensesShow === category ? null : category)
     }
@@ -60,7 +47,8 @@ export default function Budgets() {
     }
   return (
     <div className="budgets">
-        {itemToEdit ? <TransactionForm formType="Budgets" onClose={() => setItemToEdit(null)} ItemValues={itemToEdit}/> : null}
+        { transactions.Budgets.length === 0 ? <div className="Budgets__UnDefined">No budget Found!!</div> :null}
+        {itemToEdit ? <TransactionForm formType="Budgets" onClose={() => setItemToEdit(null)} ItemValues={itemToEdit} /> : null}
         {itemToRemove ? <div className="expenseToRemoveAlert" onClick={(e) => e.stopPropagation()}>
             <p>Are you sure you want to delete this expense?</p>
             <div className="expenseToRemoveAlert__actions">
@@ -103,5 +91,5 @@ export default function Budgets() {
           ))}
       </ul>
     </div>
-  );
+ );
 }

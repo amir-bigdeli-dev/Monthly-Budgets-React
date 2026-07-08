@@ -3,9 +3,25 @@ import Charts from "./Charts.jsx";
 import Budgets from "./Budgets.jsx";
 import QuickAccess from "./QuickAccess.jsx";
 import TransactionForm from "./TransactionForm.jsx";
-import { useState } from "react";
+import TransactionsLog from "./TransactionsLog.jsx";
+import {useState, useEffect, useRef, useContext} from "react";
 import TransActionsContext from "./contexts.js";
+import NotificationsContext from "./NotificationsContext.js";
 import useTransactions from "./useTransactions.jsx";
+import useNotification from "./useNotifications.jsx";
+
+
+function useIsDesktop(breakpoint = 850) {
+    const [isDesktop, setIsDesktop] = useState(window.innerWidth >= breakpoint);
+
+    useEffect(() => {
+        const mediaQuery = window.matchMedia(`(min-width: ${breakpoint}px)`);
+        const handler = (event) => setIsDesktop(event.matches);
+        mediaQuery.addEventListener("change", handler);
+        return () => mediaQuery.removeEventListener("change", handler);
+    }, [breakpoint]);
+    return isDesktop
+}
 
 const App = () => {
   const Types_Labels = {
@@ -18,7 +34,15 @@ const App = () => {
   };
 
   const types = ["Incomes", "Money", "Expenses", "Budgets", "MonthlyBudget"];
+  const isDesktop = useIsDesktop(850);
   const [formType, setFormType] = useState(null);
+  const [transactionsRef, setTransactionsRef] = useState(null);
+  const appRef = useRef(null);
+  const {notificationUI,notify} = useNotification(isDesktop)
+
+    useEffect(() => {
+        setTransactionsRef(appRef.current);
+    }, []);
   const {
     transactions,
       EditItem,
@@ -27,9 +51,10 @@ const App = () => {
     categoryOptions,
     addCategoryOption,
     TransactionsCalculator,
-  } = useTransactions();
-
+  } = useTransactions(notify,Types_Labels);
+  
   return (
+      <NotificationsContext.Provider value={{notify}}>
     <TransActionsContext.Provider
       value={{
           EditItem,
@@ -39,14 +64,17 @@ const App = () => {
         categoryOptions,
         addCategoryOption,
         TransactionsCalculator,
+          isDesktop,
+          Types_Labels,
       }}
     >
-      <div className="App">
+      <div className="App" ref={appRef}>
+          {notificationUI}
         <Header data={TransactionsCalculator} />
-        <Charts types={types} type_label={Types_Labels} />
+        <Charts />
         <Budgets />
+          {isDesktop ? <TransactionsLog status={() => setFormType(null)} action={formType} appRef={appRef} /> : null}
         <QuickAccess
-          type_label={Types_Labels}
           onSelect={setFormType}
         />
         {formType ? (
@@ -57,6 +85,7 @@ const App = () => {
         ) : null}
       </div>
     </TransActionsContext.Provider>
+      </NotificationsContext.Provider>
   );
 };
 

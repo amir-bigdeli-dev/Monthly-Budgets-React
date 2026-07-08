@@ -1,3 +1,10 @@
+function getCurrentMonth() {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  return `${year}-${month}`;
+}
+
 const parseAmount = (amount) =>
   parseFloat(String(amount).replace(/,/g, "")) || 0;
 
@@ -19,10 +26,7 @@ const dataCalculator = (transactions) => {
     (sum, item) => sum + parseAmount(item.amount),
     0,
   );
-  const MonthlyBudget = transactions.MonthlyBudget.reduce(
-    (sum, item) => sum + parseAmount(item.amount),
-    0,
-  );
+  const MonthlyBudget = parseAmount(transactions.MonthlyBudget.find(item => item.date === getCurrentMonth())?.amount) || 0;
 
   return {
     Incomes: Incomes,

@@ -2,14 +2,14 @@ import {useContext, useState} from "react";
 import formatPrice from "./priceFormater.jsx";
 import downArrow from "./assets/icons/down-arrow-1-svgrepo-com.svg";
 import upArrow from "./assets/icons/down-arrow-1-svgrepo-com (1).svg";
-import moneyIcon from "./assets/icons/icons8-money-25.png";
+import moneyIcon from "./assets/icons/wallet-wallet-svgrepo-com.svg";
 import TransactionsLog from "./TransactionsLog.jsx";
 import TransActionsContext from "./contexts.js";
 import priceFormater from "./priceFormater.jsx";
 
-export default function Header({ data }) {
+export default function Header({ data , appRef }) {
   const [showIncomesLog, setShowIncomesLog ] = useState(null);
-  const {TransactionsCalculator} = useContext(TransActionsContext)
+  const {TransactionsCalculator,isDesktop} = useContext(TransActionsContext)
 
   const toggleLog = (type) => {
     setShowIncomesLog((current) => (current === type ? null : type));
@@ -66,7 +66,7 @@ export default function Header({ data }) {
           </div>
         </div>
       </div>
-      {showIncomesLog ? <TransactionsLog action={showIncomesLog} status={(isOpen) => !isOpen && setShowIncomesLog(null)}/> : null}
+      {showIncomesLog && !isDesktop ? <TransactionsLog action={showIncomesLog} status={(isOpen) => !isOpen && setShowIncomesLog(null)} appRef={appRef}/> : null}
     </>
   );
 }

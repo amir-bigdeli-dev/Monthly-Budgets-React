@@ -4,6 +4,22 @@ import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg";
 import CreatableSelect from "react-select/creatable";
 import TransactionsLog from "./TransactionsLog.jsx";
 import priceFormater from "./priceFormater.jsx";
+import incomesIcon from "./assets/icons/down-arrow-1-svgrepo-com.svg?react";
+import expensesIcon from "./assets/icons/down-arrow-1-svgrepo-com (1).svg?react";
+import moneyIcon from "./assets/icons/wallet-wallet-svgrepo-com.svg?react";
+import budgetsIcon from "./assets/icons/budget-cost-svgrepo-com.svg?react";
+import monthlyBudgetIcon from "./assets/icons/icons8-calendar(2).svg?react";
+import historyIcon from "./assets/icons/history-svgrepo-com.svg?react";
+import NotificationsContext from "./NotificationsContext.js";
+
+const iconMap = {
+  Incomes: incomesIcon,
+  Expenses: expensesIcon,
+  Budgets: budgetsIcon,
+  Money: moneyIcon,
+  MonthlyBudget: monthlyBudgetIcon,
+  Transactions: historyIcon
+};
 
 const FIELDS = {
   Incomes: [
@@ -42,26 +58,37 @@ const FIELDS = {
   ],
   MonthlyBudget: [
     { id: "amount", type: "text", label: "Amount" },
-    { id: "date", type: "date", label: "Date" },
+    { id: "date", type: "month", label: "Month" },
   ],
 };
 
-export default function TransactionForm({ formType, onClose ,ItemValues = null }) {
+export default function TransactionForm({ formType, onClose ,ItemValues = null}) {
   const fields = FIELDS[formType] || [];
   const [formIsClosing, setFormIsClosing] = useState(false);
   const [formValues, setFormValues] = useState({});
   const [cursorTrigger, setCursorTrigger] = useState(0);
   const [invalidValue,setInvalidValue] = useState(false);
-  const [inputError,setInputError] = useState(false);
-  const [errorAlert,setErrorAlert] = useState("");
   const [EmptyFields,setEmptyFields] = useState([]);
-  const [transactionLogOpen,setTransactionLogOpen] = useState(true);
-  const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator , transactions , EditItem} =
+  const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator , transactions , EditItem , isDesktop,Types_Labels} =
     useContext(TransActionsContext);
-  
+  const {notify} = useContext(NotificationsContext);
+  const PortalRef = useRef(null);
+
+  const notifications = {
+    error : {
+      1: {message: "Monthly budget cannot exceed total money!", duration: 3000, Ref: PortalRef.current, type: 'error'},
+      2: {message: "This category already exists as a budget!", duration: 3000, Ref: PortalRef.current, type: 'error'},
+      3: {message: "Fill the Form!!", duration: 3000, Ref: PortalRef.current, type: 'error'},
+      5: {message: "Money amount exceeds total money!", duration: 3000, Ref: PortalRef.current, type: 'error'},
+    }
+  }
   useEffect(() => {
     if(ItemValues) {
       setFormValues(ItemValues)
+    }else if(formType === "MonthlyBudget" && transactions['MonthlyBudget'].length > 0){
+      setFormValues({ date: getCurrentMonth() })
+    }else{
+      setFormValues({})
     }
   },[ItemValues])
   const cursorRef = useRef(null);
@@ -87,7 +114,7 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null }
         setFormValues((prev) => ({ ...prev,amount:formatted,percent: `${ValuePercent}%` }));
       }else if (formType === "MonthlyBudget"){
         if(Number(raw) > TransactionsCalculator.Money){
-            errorHandle("Monthly budget cannot exceed total money!");
+            notify(notifications.error[1]);
             setInvalidValue(true);
             return;
         }
@@ -127,13 +154,13 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null }
     setTimeout(() => {
       onClose();
       setFormIsClosing(false);
-    }, 300);
+    }, isDesktop ? 0 : 300);
   }
 
   function handleSubmit(e) {
     e.preventDefault();
     const Empty = (fields.filter((field => !formValues[field.id])).map((fields) => fields.id));
-    if (Empty.length > 0) { errorHandle("Fill the Form!!"); setEmptyFields(Empty);return;}
+    if (Empty.length > 0) { notify(notifications.error[3]); setEmptyFields(Empty);return;}
     if(ItemValues){
         EditItem(ItemValues.id,formType,formValues);
     }else{
@@ -150,40 +177,25 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null }
 
   function handleCategoryChange(selected) {
     if(transactions.Budgets.some(budget => budget.category === selected.value) && formType === "Budgets"){
-      errorHandle("This category already exists as a budget!");
+      notify(notifications.error[2]);
       return;
     }
     setFormValues(prev => ({ ...prev, category: selected.value }));
     setEmptyFields(prev => prev.filter(id => id !== "category"));
   }
   
-  const ErrorRef = useRef(null);
-
-  function errorHandle(message) {
-    setInputError(true);
-    setErrorAlert(message);
-
-    ErrorRef.current = setTimeout(() => {
-      setInputError(false);
-      setErrorAlert("");
-    }, 3000);
-    
+  function getCurrentMonth() {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    return `${year}-${month}`;
   }
-  useEffect(() => {
-    if (inputError && ErrorRef.current) {
-      ErrorRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
-    if (ErrorRef.current) {
-      clearTimeout(ErrorRef.current)
-      ErrorRef.current = null
-    }}, []);
+  const Icon = iconMap[formType];
+
   return (
       <>
-        {formType === "Transactions" ?
-        <TransactionsLog  status={onClose} /> :
+        {formType === "Transactions" && !isDesktop ?
+        <TransactionsLog  status={onClose} /> : 
     <div
       className={`actionsForm actionsForm${formIsClosing ? "--fadeOut" : ""}`}
       ref={el => el?.scrollIntoView({ behavior: "smooth", block: "center" })}
@@ -192,12 +204,13 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null }
       <form
         className={`actionsForm__form actionsForm__form${formIsClosing ? "--close" : ""}`}
         onClick={(e) => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
         onSubmit={handleSubmit}
         data-type={formType}
+        ref={PortalRef}
       >
-        {inputError ? <div className="errorAlert">{errorAlert}</div> : null}
         <div className="actionsFrom__form-header">
-          <h2 className="actionsForm-title">Add {formType}</h2>
+          <h2 className="actionsForm-title">{ItemValues || (formType === "MonthlyBudget" && transactions['MonthlyBudget'].length > 0 ) ? "Edit":"Add"} {Types_Labels[formType]} <Icon className="actionsForm-title__icon"/></h2>
           <span className="actionsForm__close" onClick={handleClose}>
             <img
               className="actionsForm__close-icon"
@@ -218,6 +231,15 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null }
                     placeholder="Select or add new..."
                     formatCreateLabel={(input) => `+ Add "${input}"`}
                     className={`${EmptyFields.includes("category") ? "EmptyFields" : ""}`}
+                    onFocus={(e) => {
+                      const target = e.target;
+                      setTimeout(() => {
+                        target.scrollIntoView({
+                          behavior: "smooth",
+                          block: "center",
+                        });
+                      }, 300);
+                    }}
                 />
             ) : (
               <input
@@ -228,12 +250,15 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null }
                 type={field.type}
                 key={field.id}
                 onChange={(e) => DisplayValueHandle(field, e.target.value, e)}
-                onFocus={(e) =>
-                  e.target.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                  })
-                }
+                onFocus={(e) => {
+                  const target = e.target;
+                  setTimeout(() => {
+                    target.scrollIntoView({
+                      behavior: "smooth",
+                      block: "center",
+                    });
+                  }, 300);
+                }}
                 className={`${invalidValue && field.id === "amount" ? "inputInvalid" : ""} ${EmptyFields.includes(field.id) ? "EmptyFields" : ""}`}
               />
             )}
