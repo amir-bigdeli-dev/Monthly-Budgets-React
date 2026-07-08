@@ -107,7 +107,7 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null})
         setFormValues((prev) => ({ ...prev,amount:formatted,percent: `${ValuePercent}%` }));
       }else if (formType === "MonthlyBudget"){
         if(Number(raw) > TransactionsCalculator.Money){
-            notify("Monthly budget cannot exceed total money!");
+            notify("Monthly budget cannot exceed total money!","error",3000,PortalRef.current);
             setInvalidValue(true);
             return;
         }
@@ -224,6 +224,15 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null})
                     placeholder="Select or add new..."
                     formatCreateLabel={(input) => `+ Add "${input}"`}
                     className={`${EmptyFields.includes("category") ? "EmptyFields" : ""}`}
+                    onFocus={(e) => {
+                      const target = e.target;
+                      setTimeout(() => {
+                        target.scrollIntoView({
+                          behavior: "smooth",
+                          block: "center",
+                        });
+                      }, 300);
+                    }}
                 />
             ) : (
               <input
@@ -234,12 +243,15 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null})
                 type={field.type}
                 key={field.id}
                 onChange={(e) => DisplayValueHandle(field, e.target.value, e)}
-                onFocus={(e) =>
-                  e.target.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                  })
-                }
+                onFocus={(e) => {
+                  const target = e.target;
+                  setTimeout(() => {
+                    target.scrollIntoView({
+                      behavior: "smooth",
+                      block: "center",
+                    });
+                  }, 300);
+                }}
                 className={`${invalidValue && field.id === "amount" ? "inputInvalid" : ""} ${EmptyFields.includes(field.id) ? "EmptyFields" : ""}`}
               />
             )}
