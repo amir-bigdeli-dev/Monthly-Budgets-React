@@ -93,15 +93,14 @@ export default function useTransactions(notify,Types_Labels) {
     setCategoryOptions((prev) => {
       if(type === "Expenses" || type === "Budgets") {
         return{
-          ...prev,
-          Budgets: [...prev.Budgets, option],
+            ...prev,
+            Budgets: [...prev.Budgets, option],
         }
-      }
+    }
       return {
         ...prev,
         [type]: [...prev[type], option],
       }});
-    notify("Category added successfully.","success");
     localStorage.setItem("Categories",JSON.stringify(categoryOptions));
   }
 
