@@ -7,8 +7,8 @@ const TransActionsContext = createContext([
     categories: {},
     addCategory: () => {},
     TransactionsCalculator: {},
-    removeExpense : () => {},
-    EditItem : () => {}
+    removeExpense: () => {},
+    EditItem: () => {},
   },
   function () {},
 ]);

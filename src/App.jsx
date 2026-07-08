@@ -4,23 +4,22 @@ import Budgets from "./Budgets.jsx";
 import QuickAccess from "./QuickAccess.jsx";
 import TransactionForm from "./TransactionForm.jsx";
 import TransactionsLog from "./TransactionsLog.jsx";
-import {useState, useEffect, useRef, useContext} from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import TransActionsContext from "./contexts.js";
 import NotificationsContext from "./NotificationsContext.js";
 import useTransactions from "./useTransactions.jsx";
 import useNotification from "./useNotifications.jsx";
 
-
 function useIsDesktop(breakpoint = 850) {
-    const [isDesktop, setIsDesktop] = useState(window.innerWidth >= breakpoint);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= breakpoint);
 
-    useEffect(() => {
-        const mediaQuery = window.matchMedia(`(min-width: ${breakpoint}px)`);
-        const handler = (event) => setIsDesktop(event.matches);
-        mediaQuery.addEventListener("change", handler);
-        return () => mediaQuery.removeEventListener("change", handler);
-    }, [breakpoint]);
-    return isDesktop
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(`(min-width: ${breakpoint}px)`);
+    const handler = (event) => setIsDesktop(event.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, [breakpoint]);
+  return isDesktop;
 }
 
 const App = () => {
@@ -30,7 +29,7 @@ const App = () => {
     Money: "Money",
     Budgets: "Budget",
     MonthlyBudget: "Monthly Budget",
-      Transactions : "Transactions"
+    Transactions: "Transactions",
   };
 
   const types = ["Incomes", "Money", "Expenses", "Budgets", "MonthlyBudget"];
@@ -38,54 +37,58 @@ const App = () => {
   const [formType, setFormType] = useState(null);
   const [transactionsRef, setTransactionsRef] = useState(null);
   const appRef = useRef(null);
-  const {notificationUI,notify} = useNotification(isDesktop)
+  const { notificationUI, notify } = useNotification(isDesktop);
 
-    useEffect(() => {
-        setTransactionsRef(appRef.current);
-    }, []);
+  useEffect(() => {
+    setTransactionsRef(appRef.current);
+  }, []);
   const {
     transactions,
-      EditItem,
-      removeItems,
+    EditItem,
+    removeItems,
     addTransaction,
     categoryOptions,
     addCategoryOption,
     TransactionsCalculator,
-  } = useTransactions(notify,Types_Labels);
-  
+  } = useTransactions(notify, Types_Labels);
+
   return (
-      <NotificationsContext.Provider value={{notify}}>
-    <TransActionsContext.Provider
-      value={{
+    <NotificationsContext.Provider value={{ notify }}>
+      <TransActionsContext.Provider
+        value={{
           EditItem,
           removeItems,
-        transactions,
-        addTransaction,
-        categoryOptions,
-        addCategoryOption,
-        TransactionsCalculator,
+          transactions,
+          addTransaction,
+          categoryOptions,
+          addCategoryOption,
+          TransactionsCalculator,
           isDesktop,
           Types_Labels,
-      }}
-    >
-      <div className="App" ref={appRef}>
+        }}
+      >
+        <div className="App" ref={appRef}>
           {notificationUI}
-        <Header data={TransactionsCalculator} />
-        <Charts />
-        <Budgets />
-          {isDesktop ? <TransactionsLog status={() => setFormType(null)} action={formType} appRef={appRef} /> : null}
-        <QuickAccess
-          onSelect={setFormType}
-        />
-        {formType ? (
-          <TransactionForm
-            formType={formType}
-            onClose={() => setFormType(null)}
-          />
-        ) : null}
-      </div>
-    </TransActionsContext.Provider>
-      </NotificationsContext.Provider>
+          <Header data={TransactionsCalculator} />
+          <Charts />
+          <Budgets />
+          {isDesktop ? (
+            <TransactionsLog
+              status={() => setFormType(null)}
+              action={formType}
+              appRef={appRef}
+            />
+          ) : null}
+          <QuickAccess onSelect={setFormType} />
+          {formType ? (
+            <TransactionForm
+              formType={formType}
+              onClose={() => setFormType(null)}
+            />
+          ) : null}
+        </div>
+      </TransActionsContext.Provider>
+    </NotificationsContext.Provider>
   );
 };
 

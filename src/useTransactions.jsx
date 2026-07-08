@@ -1,4 +1,4 @@
-import {useState, useEffect, useContext} from "react";
+import { useState, useEffect, useContext } from "react";
 import dataCalculator from "./DataCalculator.js";
 import ColorGenerator from "./ColorGenerator.js";
 
@@ -25,7 +25,7 @@ const initialCategories = {
   },
 };
 
-export default function useTransactions(notify,Types_Labels) {
+export default function useTransactions(notify, Types_Labels) {
   const [transactions, setTransactions] = useState(() => {
     const stored = localStorage.getItem("transactions");
     return stored ? JSON.parse(stored) : initialState;
@@ -48,7 +48,7 @@ export default function useTransactions(notify,Types_Labels) {
   useEffect(() => {
     localStorage.setItem("transactions", JSON.stringify(transactions));
   }, [transactions]);
-  
+
   useEffect(() => {
     localStorage.setItem("Categories", JSON.stringify(categoryOptions));
   }, [categoryOptions]);
@@ -57,25 +57,28 @@ export default function useTransactions(notify,Types_Labels) {
 
     if (type === "MonthlyBudget") {
       const isExistingMonth = transactions.MonthlyBudget.some(
-          (item) => item.date === data.date
+        (item) => item.date === data.date,
       );
 
       if (isExistingMonth) {
         setTransactions((prev) => ({
           ...prev,
           MonthlyBudget: prev.MonthlyBudget.map((item) =>
-              item.date === data.date ? { ...item, ...data } : item
+            item.date === data.date ? { ...item, ...data } : item,
           ),
         }));
-        notify(`${Types_Labels[type]} for this month has been updated.`,"success");
+        notify(
+          `${Types_Labels[type]} for this month has been updated.`,
+          "success",
+        );
         return;
       }
-    }else if(type === "Money" && transactions.Money.length > 0) {
+    } else if (type === "Money" && transactions.Money.length > 0) {
       setTransactions((prev) => ({
         ...prev,
         Money: [{ id: Date.now(), ...data }],
       }));
-      notify(`${Types_Labels[type]} amount has been updated.`,"success");
+      notify(`${Types_Labels[type]} amount has been updated.`, "success");
       return;
     }
 
@@ -86,41 +89,44 @@ export default function useTransactions(notify,Types_Labels) {
         { id: Date.now(), ...(color ? { color } : {}), ...data },
       ],
     }));
-    notify(`${Types_Labels[type]} added successfully.`,"success");
+    notify(`${Types_Labels[type]} added successfully.`, "success");
   }
 
   function addCategoryOption(type, option) {
     setCategoryOptions((prev) => {
-      if(type === "Expenses" || type === "Budgets") {
-        return{
-            ...prev,
-            Budgets: [...prev.Budgets, option],
-        }
-    }
+      if (type === "Expenses" || type === "Budgets") {
+        return {
+          ...prev,
+          Budgets: [...prev.Budgets, option],
+        };
+      }
       return {
         ...prev,
         [type]: [...prev[type], option],
-      }});
-    localStorage.setItem("Categories",JSON.stringify(categoryOptions));
+      };
+    });
+    localStorage.setItem("Categories", JSON.stringify(categoryOptions));
   }
 
-  function removeItems({Id , type}) {
-    setTransactions(prev => ({
+  function removeItems({ Id, type }) {
+    setTransactions((prev) => ({
       ...prev,
-      [type]: prev[type].filter(expense => expense.id !== Id),
+      [type]: prev[type].filter((expense) => expense.id !== Id),
     }));
-    notify(`${Types_Labels[type]} removed successfully.`,"success");
+    notify(`${Types_Labels[type]} removed successfully.`, "success");
   }
-  
-  function EditItem(id,type,newData){
-    setTransactions(prev => ({
-        ...prev,
-        [type]: prev[type].map(item => item.id === id ? {...item,...newData} : item),
-    }))
-    notify(`${Types_Labels[type]} updated successfully.`,"success");
+
+  function EditItem(id, type, newData) {
+    setTransactions((prev) => ({
+      ...prev,
+      [type]: prev[type].map((item) =>
+        item.id === id ? { ...item, ...newData } : item,
+      ),
+    }));
+    notify(`${Types_Labels[type]} updated successfully.`, "success");
   }
-    const TransactionsCalculator = dataCalculator(transactions);
-  
+  const TransactionsCalculator = dataCalculator(transactions);
+
   return {
     EditItem,
     removeItems,

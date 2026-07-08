@@ -26,7 +26,11 @@ const dataCalculator = (transactions) => {
     (sum, item) => sum + parseAmount(item.amount),
     0,
   );
-  const MonthlyBudget = parseAmount(transactions.MonthlyBudget.find(item => item.date === getCurrentMonth())?.amount) || 0;
+  const MonthlyBudget =
+    parseAmount(
+      transactions.MonthlyBudget.find((item) => item.date === getCurrentMonth())
+        ?.amount,
+    ) || 0;
 
   return {
     Incomes: Incomes,

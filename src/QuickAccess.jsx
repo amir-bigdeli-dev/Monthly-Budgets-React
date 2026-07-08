@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef ,useContext } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import addIcon from "./assets/icons/add-plus-svgrepo-com.svg";
 import closeIcon from "./assets/icons/close-sm-svgrepo-com.svg";
 import incomesIcon from "./assets/icons/down-arrow-1-svgrepo-com.svg?react";
@@ -6,19 +6,25 @@ import expensesIcon from "./assets/icons/down-arrow-1-svgrepo-com (1).svg?react"
 import moneyIcon from "./assets/icons/wallet-wallet-svgrepo-com.svg?react";
 import budgetsIcon from "./assets/icons/budget-cost-svgrepo-com.svg?react";
 import monthlyBudgetIcon from "./assets/icons/icons8-calendar(2).svg?react";
-import historyIcon from "./assets/icons/history-svgrepo-com.svg?react"
+import historyIcon from "./assets/icons/history-svgrepo-com.svg?react";
 import TransActionsContext from "./contexts.js";
 import NotificationsContext from "./NotificationsContext.js";
 
-
-export default function QuickAccess({onSelect}) {
-  const {isDesktop,Types_Labels} = useContext(TransActionsContext);
+export default function QuickAccess({ onSelect }) {
+  const { isDesktop, Types_Labels } = useContext(TransActionsContext);
   let [isOpen, setIsOpen] = useState(false);
-  const actions = ["Incomes", "Money", "Expenses", "Budgets", "MonthlyBudget","Transactions"];
-  const {transactions} = useContext(TransActionsContext);
-  const {notify} = useContext(NotificationsContext);
+  const actions = [
+    "Incomes",
+    "Money",
+    "Expenses",
+    "Budgets",
+    "MonthlyBudget",
+    "Transactions",
+  ];
+  const { transactions } = useContext(TransActionsContext);
+  const { notify } = useContext(NotificationsContext);
   const [DisabledAlert, setDisabledAlert] = useState("");
-  const DisableAlertRef = useRef("")
+  const DisableAlertRef = useRef("");
 
   const iconMap = {
     Incomes: incomesIcon,
@@ -26,11 +32,11 @@ export default function QuickAccess({onSelect}) {
     Budgets: budgetsIcon,
     Money: moneyIcon,
     MonthlyBudget: monthlyBudgetIcon,
-    Transactions: historyIcon
+    Transactions: historyIcon,
   };
   const quickAccessRef = useRef(null);
   useEffect(() => {
-    if(isDesktop) return ;
+    if (isDesktop) return;
     function closeQuickAccess(e) {
       if (
         quickAccessRef.current &&
@@ -45,107 +51,121 @@ export default function QuickAccess({onSelect}) {
       document.removeEventListener("mousedown", closeQuickAccess);
     };
   }, []);
-  
+
   function isActionDisabled(type) {
-    if(type === "Money" || type === "Transactions") return true;
+    if (type === "Money" || type === "Transactions") return true;
     const hasMoney = transactions.Money.length > 0;
     const hasMonthlyBudget = transactions.MonthlyBudget.length > 0;
-    
-    if(!hasMoney) return false;
-    if(type === "Budgets") return hasMonthlyBudget;
+
+    if (!hasMoney) return false;
+    if (type === "Budgets") return hasMonthlyBudget;
 
     return true;
-
   }
-  
-  function DisabledItemsAlert(type){
+
+  function DisabledItemsAlert(type) {
     const hasMoney = transactions.Money.length > 0;
-    if(!hasMoney) notify("Please enter the Money amount first!");
-    if(type === "Budgets") notify("Please define Monthly Budget amount first!")
+    if (!hasMoney) notify("Please enter the Money amount first!");
+    if (type === "Budgets")
+      notify("Please define Monthly Budget amount first!");
   }
   if (isDesktop) {
-   return (
-       <div className="quick-access" ref={quickAccessRef}>
-         {DisabledAlert ?
-             <div className="errorAlert errorAlert__quickAccess">{DisabledAlert}</div>
-             :null
-         }
-             <ul className="quick-access__list">
-               {actions.map((type) =>{
-                 const Icon = iconMap[type];
-                 const isSVG = typeof Icon === "function"
-                 const isDisabled = isActionDisabled(type);
-                 if(type === "Transactions" && isDesktop) return;
-                 return(
-                     <li
-                         key={type}
-                         className={`quick-access__list-item ${!isDisabled ? "quick-access__list-item--disabled" : ""}`}
-                         onClick={isDisabled ? () => {
-                           setIsOpen(false);
-                           onSelect(type);
-                         } : () => DisabledItemsAlert(type)}
-                     >
-                       {isSVG ? (
-                               <Icon className="quick-access__list-item-icon" />
-                           ):
-                           <img
-                               className="quick-access__list-item-icon"
-                               src={iconMap[type]}
-                               alt={`${type}Icon`}
-                           />
-                       }
-                       <span className="quick-access__list-item-text">
-              {Types_Labels[type]}
-            </span>
-                     </li>
-                 )})}
-             </ul>
-         {!isDesktop ? <button
-             className={`quick-access__btn quick-access__btn${isOpen ? "--isOpen" : ""}`}
-             onClick={!isDesktop ? () => setIsOpen(!isOpen) : null}
-         >
-           <img
-               className="quick-access__btn-icon"
-               src={`${isOpen ? closeIcon : addIcon}`}
-               alt="quick-access-icon"
-           />
-         </button> : null}
-       </div>
-   )
+    return (
+      <div className="quick-access" ref={quickAccessRef}>
+        {DisabledAlert ? (
+          <div className="errorAlert errorAlert__quickAccess">
+            {DisabledAlert}
+          </div>
+        ) : null}
+        <ul className="quick-access__list">
+          {actions.map((type) => {
+            const Icon = iconMap[type];
+            const isSVG = typeof Icon === "function";
+            const isDisabled = isActionDisabled(type);
+            if (type === "Transactions" && isDesktop) return;
+            return (
+              <li
+                key={type}
+                className={`quick-access__list-item ${!isDisabled ? "quick-access__list-item--disabled" : ""}`}
+                onClick={
+                  isDisabled
+                    ? () => {
+                        setIsOpen(false);
+                        onSelect(type);
+                      }
+                    : () => DisabledItemsAlert(type)
+                }
+              >
+                {isSVG ? (
+                  <Icon className="quick-access__list-item-icon" />
+                ) : (
+                  <img
+                    className="quick-access__list-item-icon"
+                    src={iconMap[type]}
+                    alt={`${type}Icon`}
+                  />
+                )}
+                <span className="quick-access__list-item-text">
+                  {Types_Labels[type]}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+        {!isDesktop ? (
+          <button
+            className={`quick-access__btn quick-access__btn${isOpen ? "--isOpen" : ""}`}
+            onClick={!isDesktop ? () => setIsOpen(!isOpen) : null}
+          >
+            <img
+              className="quick-access__btn-icon"
+              src={`${isOpen ? closeIcon : addIcon}`}
+              alt="quick-access-icon"
+            />
+          </button>
+        ) : null}
+      </div>
+    );
   }
   return (
     <div className="quick-access" ref={quickAccessRef}>
-      {DisabledAlert ?
-       <div className="errorAlert errorAlert__quickAccess">{DisabledAlert}</div>
-          :null
-      }
+      {DisabledAlert ? (
+        <div className="errorAlert errorAlert__quickAccess">
+          {DisabledAlert}
+        </div>
+      ) : null}
       {isOpen ? (
         <ul className="quick-access__list">
-          {actions.map((type) =>{ 
+          {actions.map((type) => {
             const Icon = iconMap[type];
-            const isSVG = typeof Icon === "function"
+            const isSVG = typeof Icon === "function";
             const isDisabled = isActionDisabled(type);
-            return(
-            <li
-              key={type}
-              className={`quick-access__list-item ${!isDisabled ? "quick-access__list-item--disabled" : ""}`}
-              onClick={isDisabled ? () => {
-                setIsOpen(false);
-                onSelect(type);
-              } : () => DisabledItemsAlert(type)}
-            >
-              {isSVG ? (
+            return (
+              <li
+                key={type}
+                className={`quick-access__list-item ${!isDisabled ? "quick-access__list-item--disabled" : ""}`}
+                onClick={
+                  isDisabled
+                    ? () => {
+                        setIsOpen(false);
+                        onSelect(type);
+                      }
+                    : () => DisabledItemsAlert(type)
+                }
+              >
+                {isSVG ? (
                   <Icon className="quick-access__list-item-icon" />
-              ):
-              <img
-                className="quick-access__list-item-icon"
-                src={iconMap[type]}
-                alt={`${type}Icon`}
-              />
-              }
-              {Types_Labels[type]}
-            </li>
-          )})}
+                ) : (
+                  <img
+                    className="quick-access__list-item-icon"
+                    src={iconMap[type]}
+                    alt={`${type}Icon`}
+                  />
+                )}
+                {Types_Labels[type]}
+              </li>
+            );
+          })}
         </ul>
       ) : null}
       <button
