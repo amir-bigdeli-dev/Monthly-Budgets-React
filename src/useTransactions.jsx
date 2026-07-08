@@ -67,10 +67,10 @@ export default function useTransactions(notify, Types_Labels) {
             item.date === data.date ? { ...item, ...data } : item,
           ),
         }));
-        notify(
-          `${Types_Labels[type]} for this month has been updated.`,
-          "success",
-        );
+        notify({message:
+                `${Types_Labels[type]} for this month has been updated.`,
+            type:"success",
+      });
         return;
       }
     } else if (type === "Money" && transactions.Money.length > 0) {
@@ -78,7 +78,7 @@ export default function useTransactions(notify, Types_Labels) {
         ...prev,
         Money: [{ id: Date.now(), ...data }],
       }));
-      notify(`${Types_Labels[type]} amount has been updated.`, "success");
+      notify({message:`${Types_Labels[type]} amount has been updated.`,type:"success"});
       return;
     }
 
@@ -89,7 +89,7 @@ export default function useTransactions(notify, Types_Labels) {
         { id: Date.now(), ...(color ? { color } : {}), ...data },
       ],
     }));
-    notify(`${Types_Labels[type]} added successfully.`, "success");
+    notify({message:`${Types_Labels[type]} added successfully.`,type:"success"});
   }
 
   function addCategoryOption(type, option) {
@@ -113,7 +113,7 @@ export default function useTransactions(notify, Types_Labels) {
       ...prev,
       [type]: prev[type].filter((expense) => expense.id !== Id),
     }));
-    notify(`${Types_Labels[type]} removed successfully.`, "success");
+    notify({message:`${Types_Labels[type]} removed successfully.`,type:"success"});
   }
 
   function EditItem(id, type, newData) {
@@ -123,7 +123,7 @@ export default function useTransactions(notify, Types_Labels) {
         item.id === id ? { ...item, ...newData } : item,
       ),
     }));
-    notify(`${Types_Labels[type]} updated successfully.`, "success");
+    notify({message:`${Types_Labels[type]} updated successfully.`,type:"success"});
   }
   const TransactionsCalculator = dataCalculator(transactions);
 

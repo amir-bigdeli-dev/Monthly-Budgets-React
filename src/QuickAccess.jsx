@@ -65,9 +65,9 @@ export default function QuickAccess({ onSelect }) {
 
   function DisabledItemsAlert(type) {
     const hasMoney = transactions.Money.length > 0;
-    if (!hasMoney) notify("Please enter the Money amount first!");
+    if (!hasMoney) notify({message:"Please enter the Money amount first!", type:"error"});
     if (type === "Budgets")
-      notify("Please define Monthly Budget amount first!");
+      notify({message:"Please define Monthly Budget amount first!",type:"error"});
   }
   if (isDesktop) {
     return (
