@@ -38,7 +38,7 @@ const App = () => {
   const [formType, setFormType] = useState(null);
   const [transactionsRef, setTransactionsRef] = useState(null);
   const appRef = useRef(null);
-  const {notificationUI,notify} = useNotification()
+  const {notificationUI,notify} = useNotification(isDesktop)
 
     useEffect(() => {
         setTransactionsRef(appRef.current);

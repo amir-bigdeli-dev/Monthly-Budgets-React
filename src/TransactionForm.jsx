@@ -74,6 +74,7 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null})
   const { addTransaction, categoryOptions, addCategoryOption , TransactionsCalculator , transactions , EditItem , isDesktop,Types_Labels} =
     useContext(TransActionsContext);
   const {notify} = useContext(NotificationsContext);
+  const PortalRef = useRef(null);
   useEffect(() => {
     if(ItemValues) {
       setFormValues(ItemValues)
@@ -152,7 +153,7 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null})
   function handleSubmit(e) {
     e.preventDefault();
     const Empty = (fields.filter((field => !formValues[field.id])).map((fields) => fields.id));
-    if (Empty.length > 0) { notify("Fill the Form!!"); setEmptyFields(Empty);return;}
+    if (Empty.length > 0) { notify("Fill the Form!!","error",3000,PortalRef.current); setEmptyFields(Empty);return;}
     if(ItemValues){
         EditItem(ItemValues.id,formType,formValues);
     }else{
@@ -169,7 +170,7 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null})
 
   function handleCategoryChange(selected) {
     if(transactions.Budgets.some(budget => budget.category === selected.value) && formType === "Budgets"){
-      notify("This category already exists as a budget!",'error',3000);
+      notify("This category already exists as a budget!",'error',3000,PortalRef.current);
       return;
     }
     setFormValues(prev => ({ ...prev, category: selected.value }));
@@ -199,6 +200,7 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null})
         onMouseDown={(e) => e.stopPropagation()}
         onSubmit={handleSubmit}
         data-type={formType}
+        ref={PortalRef}
       >
         <div className="actionsFrom__form-header">
           <h2 className="actionsForm-title">{ItemValues || (formType === "MonthlyBudget" && transactions['MonthlyBudget'].length > 0 ) ? "Edit":"Add"} {Types_Labels[formType]} <Icon className="actionsForm-title__icon"/></h2>

@@ -876,6 +876,13 @@ path.recharts-rectangle,
   transform: translateX(-50%);
   color: #ffffff;
 }
+.notification--form {
+  position: absolute;
+  top: -1rem;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  width: 95%;
+}
 .notification--error{
     background: rgb(192 7 7);
 }
