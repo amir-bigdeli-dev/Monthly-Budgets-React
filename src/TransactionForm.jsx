@@ -76,10 +76,10 @@ export default function TransactionForm({ formType, onClose ,ItemValues = null})
 
   const notifications = {
     error : {
-      1: {message: "Monthly budget cannot exceed total money!", duration: 3000, Ref: PortalRef, type: 'error'},
-      2: {message: "This category already exists as a budget!", duration: 3000, Ref: PortalRef, type: 'error'},
-      3: {message: "Fill the Form!!", duration: 3000, Ref: PortalRef, type: 'error'},
-      5: {message: "Money amount exceeds total money!", duration: 3000, Ref: PortalRef, type: 'error'},
+      1: {message: "Monthly budget cannot exceed total money!", duration: 3000, Ref: PortalRef.current, type: 'error'},
+      2: {message: "This category already exists as a budget!", duration: 3000, Ref: PortalRef.current, type: 'error'},
+      3: {message: "Fill the Form!!", duration: 3000, Ref: PortalRef.current, type: 'error'},
+      5: {message: "Money amount exceeds total money!", duration: 3000, Ref: PortalRef.current, type: 'error'},
     }
   }
   useEffect(() => {
